@@ -1315,16 +1315,16 @@ dependencies = [
  "futures 0.3.12",
  "log",
  "parity-scale-codec",
- "sc-client-api",
- "sp-api",
- "sp-block-builder",
- "sp-blockchain",
- "sp-consensus",
- "sp-core",
- "sp-inherents",
- "sp-runtime",
- "sp-timestamp",
- "substrate-prometheus-endpoint",
+ "sc-client-api 3.0.0 (git+https://github.com/boolnetwork/substrate.git?branch=bool-network-v3.0.0)",
+ "sp-api 3.0.0 (git+https://github.com/boolnetwork/substrate.git?branch=bool-network-v3.0.0)",
+ "sp-block-builder 3.0.0 (git+https://github.com/boolnetwork/substrate.git?branch=bool-network-v3.0.0)",
+ "sp-blockchain 3.0.0 (git+https://github.com/boolnetwork/substrate.git?branch=bool-network-v3.0.0)",
+ "sp-consensus 0.9.0 (git+https://github.com/boolnetwork/substrate.git?branch=bool-network-v3.0.0)",
+ "sp-core 3.0.0 (git+https://github.com/boolnetwork/substrate.git?branch=bool-network-v3.0.0)",
+ "sp-inherents 3.0.0 (git+https://github.com/boolnetwork/substrate.git?branch=bool-network-v3.0.0)",
+ "sp-runtime 3.0.0 (git+https://github.com/boolnetwork/substrate.git?branch=bool-network-v3.0.0)",
+ "sp-timestamp 3.0.0 (git+https://github.com/boolnetwork/substrate.git?branch=bool-network-v3.0.0)",
+ "substrate-prometheus-endpoint 0.9.0 (git+https://github.com/boolnetwork/substrate.git?branch=bool-network-v3.0.0)",
 ]
 
 [[package]]
@@ -1335,9 +1335,9 @@ dependencies = [
  "kvdb-rocksdb",
  "parity-scale-codec",
  "parking_lot 0.11.1",
- "sp-core",
- "sp-database",
- "sp-runtime",
+ "sp-core 3.0.0 (git+https://github.com/boolnetwork/substrate.git?branch=bool-network-v3.0.0)",
+ "sp-database 3.0.0 (git+https://github.com/boolnetwork/substrate.git?branch=bool-network-v3.0.0)",
+ "sp-runtime 3.0.0 (git+https://github.com/boolnetwork/substrate.git?branch=bool-network-v3.0.0)",
 ]
 
 [[package]]
@@ -1351,10 +1351,10 @@ dependencies = [
  "futures 0.3.12",
  "futures-timer 3.0.2",
  "log",
- "sc-client-api",
- "sp-api",
- "sp-blockchain",
- "sp-runtime",
+ "sc-client-api 3.0.0 (git+https://github.com/boolnetwork/substrate.git?branch=bool-network-v3.0.0)",
+ "sp-api 3.0.0 (git+https://github.com/boolnetwork/substrate.git?branch=bool-network-v3.0.0)",
+ "sp-blockchain 3.0.0 (git+https://github.com/boolnetwork/substrate.git?branch=bool-network-v3.0.0)",
+ "sp-runtime 3.0.0 (git+https://github.com/boolnetwork/substrate.git?branch=bool-network-v3.0.0)",
 ]
 
 [[package]]
@@ -1384,17 +1384,17 @@ dependencies = [
  "rand 0.7.3",
  "rlp",
  "rustc-hex",
- "sc-client-api",
- "sc-network",
- "sc-rpc",
- "sc-service",
+ "sc-client-api 3.0.0 (git+https://github.com/boolnetwork/substrate.git?branch=bool-network-v3.0.0)",
+ "sc-network 0.9.0 (git+https://github.com/boolnetwork/substrate.git?branch=bool-network-v3.0.0)",
+ "sc-rpc 3.0.0 (git+https://github.com/boolnetwork/substrate.git?branch=bool-network-v3.0.0)",
+ "sc-service 0.9.0 (git+https://github.com/boolnetwork/substrate.git?branch=bool-network-v3.0.0)",
  "sha3 0.8.2",
- "sp-api",
- "sp-blockchain",
- "sp-io",
- "sp-runtime",
- "sp-storage",
- "sp-transaction-pool",
+ "sp-api 3.0.0 (git+https://github.com/boolnetwork/substrate.git?branch=bool-network-v3.0.0)",
+ "sp-blockchain 3.0.0 (git+https://github.com/boolnetwork/substrate.git?branch=bool-network-v3.0.0)",
+ "sp-io 3.0.0 (git+https://github.com/boolnetwork/substrate.git?branch=bool-network-v3.0.0)",
+ "sp-runtime 3.0.0 (git+https://github.com/boolnetwork/substrate.git?branch=bool-network-v3.0.0)",
+ "sp-storage 3.0.0 (git+https://github.com/boolnetwork/substrate.git?branch=bool-network-v3.0.0)",
+ "sp-transaction-pool 3.0.0 (git+https://github.com/boolnetwork/substrate.git?branch=bool-network-v3.0.0)",
 ]
 
 [[package]]
@@ -1418,6 +1418,21 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "2c4c9e43643f5a3be4ca5b67d26b98031ff9db6806c3440ae32e02e3ceac3f1b"
 dependencies = [
  "libc",
+]
+
+[[package]]
+name = "finality-grandpa"
+version = "0.13.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "2cd795898c348a8ec9edc66ec9e014031c764d4c88cc26d09b492cd93eb41339"
+dependencies = [
+ "either",
+ "futures 0.3.12",
+ "futures-timer 3.0.2",
+ "log",
+ "num-traits",
+ "parity-scale-codec",
+ "parking_lot 0.11.1",
 ]
 
 [[package]]
@@ -1475,6 +1490,14 @@ checksum = "3f9eec918d3f24069decb9af1554cad7c880e2da24a9afd88aca000531ab82c1"
 [[package]]
 name = "fork-tree"
 version = "3.0.0"
+source = "git+https://github.com/boolnetwork/substrate.git?branch=bool-network-v3.0.0#efa7baa1cd2b5f1d6ec01da68d8e0c22fadcf260"
+dependencies = [
+ "parity-scale-codec",
+]
+
+[[package]]
+name = "fork-tree"
+version = "3.0.0"
 source = "git+https://github.com/paritytech/substrate.git?branch=frontier#8b3e5bc7cd056112d390920fca5a554b2d0b0475"
 dependencies = [
  "parity-scale-codec",
@@ -1498,9 +1521,9 @@ dependencies = [
  "parity-scale-codec",
  "rlp",
  "sha3 0.8.2",
- "sp-core",
- "sp-runtime",
- "sp-std",
+ "sp-core 3.0.0 (git+https://github.com/boolnetwork/substrate.git?branch=bool-network-v3.0.0)",
+ "sp-runtime 3.0.0 (git+https://github.com/boolnetwork/substrate.git?branch=bool-network-v3.0.0)",
+ "sp-std 3.0.0 (git+https://github.com/boolnetwork/substrate.git?branch=bool-network-v3.0.0)",
 ]
 
 [[package]]
@@ -1511,8 +1534,8 @@ dependencies = [
  "impl-trait-for-tuples 0.1.3",
  "parity-scale-codec",
  "serde",
- "sp-core",
- "sp-std",
+ "sp-core 3.0.0 (git+https://github.com/boolnetwork/substrate.git?branch=bool-network-v3.0.0)",
+ "sp-std 3.0.0 (git+https://github.com/boolnetwork/substrate.git?branch=bool-network-v3.0.0)",
 ]
 
 [[package]]
@@ -1523,11 +1546,11 @@ dependencies = [
  "ethereum-types",
  "fp-evm",
  "parity-scale-codec",
- "sp-api",
- "sp-core",
- "sp-io",
- "sp-runtime",
- "sp-std",
+ "sp-api 3.0.0 (git+https://github.com/boolnetwork/substrate.git?branch=bool-network-v3.0.0)",
+ "sp-core 3.0.0 (git+https://github.com/boolnetwork/substrate.git?branch=bool-network-v3.0.0)",
+ "sp-io 3.0.0 (git+https://github.com/boolnetwork/substrate.git?branch=bool-network-v3.0.0)",
+ "sp-runtime 3.0.0 (git+https://github.com/boolnetwork/substrate.git?branch=bool-network-v3.0.0)",
+ "sp-std 3.0.0 (git+https://github.com/boolnetwork/substrate.git?branch=bool-network-v3.0.0)",
 ]
 
 [[package]]
@@ -1538,10 +1561,10 @@ dependencies = [
  "ethereum-types",
  "fp-evm",
  "parity-scale-codec",
- "sp-api",
- "sp-core",
- "sp-runtime",
- "sp-std",
+ "sp-api 3.0.0 (git+https://github.com/boolnetwork/substrate.git?branch=bool-network-v3.0.0)",
+ "sp-core 3.0.0 (git+https://github.com/boolnetwork/substrate.git?branch=bool-network-v3.0.0)",
+ "sp-runtime 3.0.0 (git+https://github.com/boolnetwork/substrate.git?branch=bool-network-v3.0.0)",
+ "sp-std 3.0.0 (git+https://github.com/boolnetwork/substrate.git?branch=bool-network-v3.0.0)",
 ]
 
 [[package]]
@@ -1555,12 +1578,12 @@ dependencies = [
  "log",
  "parity-scale-codec",
  "paste 1.0.4",
- "sp-api",
- "sp-io",
- "sp-runtime",
- "sp-runtime-interface",
- "sp-std",
- "sp-storage",
+ "sp-api 3.0.0 (git+https://github.com/paritytech/substrate.git?branch=frontier)",
+ "sp-io 3.0.0 (git+https://github.com/paritytech/substrate.git?branch=frontier)",
+ "sp-runtime 3.0.0 (git+https://github.com/paritytech/substrate.git?branch=frontier)",
+ "sp-runtime-interface 3.0.0 (git+https://github.com/paritytech/substrate.git?branch=frontier)",
+ "sp-std 3.0.0 (git+https://github.com/paritytech/substrate.git?branch=frontier)",
+ "sp-storage 3.0.0 (git+https://github.com/paritytech/substrate.git?branch=frontier)",
 ]
 
 [[package]]
@@ -1572,11 +1595,11 @@ dependencies = [
  "frame-system",
  "parity-scale-codec",
  "serde",
- "sp-core",
- "sp-io",
- "sp-runtime",
- "sp-std",
- "sp-tracing",
+ "sp-core 3.0.0 (git+https://github.com/paritytech/substrate.git?branch=frontier)",
+ "sp-io 3.0.0 (git+https://github.com/paritytech/substrate.git?branch=frontier)",
+ "sp-runtime 3.0.0 (git+https://github.com/paritytech/substrate.git?branch=frontier)",
+ "sp-std 3.0.0 (git+https://github.com/paritytech/substrate.git?branch=frontier)",
+ "sp-tracing 3.0.0 (git+https://github.com/paritytech/substrate.git?branch=frontier)",
 ]
 
 [[package]]
@@ -1586,8 +1609,8 @@ source = "git+https://github.com/paritytech/substrate.git?branch=frontier#8b3e5b
 dependencies = [
  "parity-scale-codec",
  "serde",
- "sp-core",
- "sp-std",
+ "sp-core 3.0.0 (git+https://github.com/paritytech/substrate.git?branch=frontier)",
+ "sp-std 3.0.0 (git+https://github.com/paritytech/substrate.git?branch=frontier)",
 ]
 
 [[package]]
@@ -1605,15 +1628,15 @@ dependencies = [
  "paste 1.0.4",
  "serde",
  "smallvec 1.6.1",
- "sp-arithmetic",
- "sp-core",
- "sp-inherents",
- "sp-io",
- "sp-runtime",
- "sp-staking",
- "sp-state-machine",
- "sp-std",
- "sp-tracing",
+ "sp-arithmetic 3.0.0 (git+https://github.com/paritytech/substrate.git?branch=frontier)",
+ "sp-core 3.0.0 (git+https://github.com/paritytech/substrate.git?branch=frontier)",
+ "sp-inherents 3.0.0 (git+https://github.com/paritytech/substrate.git?branch=frontier)",
+ "sp-io 3.0.0 (git+https://github.com/paritytech/substrate.git?branch=frontier)",
+ "sp-runtime 3.0.0 (git+https://github.com/paritytech/substrate.git?branch=frontier)",
+ "sp-staking 3.0.0 (git+https://github.com/paritytech/substrate.git?branch=frontier)",
+ "sp-state-machine 0.9.0 (git+https://github.com/paritytech/substrate.git?branch=frontier)",
+ "sp-std 3.0.0 (git+https://github.com/paritytech/substrate.git?branch=frontier)",
+ "sp-tracing 3.0.0 (git+https://github.com/paritytech/substrate.git?branch=frontier)",
 ]
 
 [[package]]
@@ -1660,11 +1683,11 @@ dependencies = [
  "log",
  "parity-scale-codec",
  "serde",
- "sp-core",
- "sp-io",
- "sp-runtime",
- "sp-std",
- "sp-version",
+ "sp-core 3.0.0 (git+https://github.com/paritytech/substrate.git?branch=frontier)",
+ "sp-io 3.0.0 (git+https://github.com/paritytech/substrate.git?branch=frontier)",
+ "sp-runtime 3.0.0 (git+https://github.com/paritytech/substrate.git?branch=frontier)",
+ "sp-std 3.0.0 (git+https://github.com/paritytech/substrate.git?branch=frontier)",
+ "sp-version 3.0.0 (git+https://github.com/paritytech/substrate.git?branch=frontier)",
 ]
 
 [[package]]
@@ -1673,7 +1696,7 @@ version = "3.0.0"
 source = "git+https://github.com/paritytech/substrate.git?branch=frontier#8b3e5bc7cd056112d390920fca5a554b2d0b0475"
 dependencies = [
  "parity-scale-codec",
- "sp-api",
+ "sp-api 3.0.0 (git+https://github.com/paritytech/substrate.git?branch=frontier)",
 ]
 
 [[package]]
@@ -1697,29 +1720,29 @@ dependencies = [
  "pallet-transaction-payment-rpc",
  "sc-basic-authorship",
  "sc-cli",
- "sc-client-api",
- "sc-consensus",
+ "sc-client-api 3.0.0 (git+https://github.com/paritytech/substrate.git?branch=frontier)",
+ "sc-consensus 0.9.0 (git+https://github.com/paritytech/substrate.git?branch=frontier)",
  "sc-consensus-aura",
  "sc-consensus-manual-seal",
- "sc-executor",
- "sc-finality-grandpa",
- "sc-network",
- "sc-rpc",
- "sc-rpc-api",
- "sc-service",
- "sc-telemetry",
- "sc-transaction-pool",
- "sp-api",
- "sp-block-builder",
- "sp-blockchain",
- "sp-consensus",
+ "sc-executor 0.9.0 (git+https://github.com/paritytech/substrate.git?branch=frontier)",
+ "sc-finality-grandpa 0.9.0 (git+https://github.com/paritytech/substrate.git?branch=frontier)",
+ "sc-network 0.9.0 (git+https://github.com/paritytech/substrate.git?branch=frontier)",
+ "sc-rpc 3.0.0 (git+https://github.com/paritytech/substrate.git?branch=frontier)",
+ "sc-rpc-api 0.9.0 (git+https://github.com/paritytech/substrate.git?branch=frontier)",
+ "sc-service 0.9.0 (git+https://github.com/paritytech/substrate.git?branch=frontier)",
+ "sc-telemetry 3.0.0 (git+https://github.com/paritytech/substrate.git?branch=frontier)",
+ "sc-transaction-pool 3.0.0 (git+https://github.com/paritytech/substrate.git?branch=frontier)",
+ "sp-api 3.0.0 (git+https://github.com/paritytech/substrate.git?branch=frontier)",
+ "sp-block-builder 3.0.0 (git+https://github.com/paritytech/substrate.git?branch=frontier)",
+ "sp-blockchain 3.0.0 (git+https://github.com/paritytech/substrate.git?branch=frontier)",
+ "sp-consensus 0.9.0 (git+https://github.com/paritytech/substrate.git?branch=frontier)",
  "sp-consensus-aura",
- "sp-core",
- "sp-finality-grandpa",
- "sp-inherents",
- "sp-runtime",
- "sp-timestamp",
- "sp-transaction-pool",
+ "sp-core 3.0.0 (git+https://github.com/paritytech/substrate.git?branch=frontier)",
+ "sp-finality-grandpa 3.0.0 (git+https://github.com/paritytech/substrate.git?branch=frontier)",
+ "sp-inherents 3.0.0 (git+https://github.com/paritytech/substrate.git?branch=frontier)",
+ "sp-runtime 3.0.0 (git+https://github.com/paritytech/substrate.git?branch=frontier)",
+ "sp-timestamp 3.0.0 (git+https://github.com/paritytech/substrate.git?branch=frontier)",
+ "sp-transaction-pool 3.0.0 (git+https://github.com/paritytech/substrate.git?branch=frontier)",
  "structopt",
  "substrate-build-script-utils",
  "substrate-frame-rpc-system",
@@ -1748,18 +1771,18 @@ dependencies = [
  "pallet-transaction-payment-rpc-runtime-api",
  "parity-scale-codec",
  "serde",
- "sp-api",
- "sp-block-builder",
+ "sp-api 3.0.0 (git+https://github.com/paritytech/substrate.git?branch=frontier)",
+ "sp-block-builder 3.0.0 (git+https://github.com/paritytech/substrate.git?branch=frontier)",
  "sp-consensus-aura",
- "sp-core",
- "sp-inherents",
- "sp-io",
- "sp-offchain",
- "sp-runtime",
- "sp-session",
- "sp-std",
- "sp-transaction-pool",
- "sp-version",
+ "sp-core 3.0.0 (git+https://github.com/paritytech/substrate.git?branch=frontier)",
+ "sp-inherents 3.0.0 (git+https://github.com/paritytech/substrate.git?branch=frontier)",
+ "sp-io 3.0.0 (git+https://github.com/paritytech/substrate.git?branch=frontier)",
+ "sp-offchain 3.0.0 (git+https://github.com/paritytech/substrate.git?branch=frontier)",
+ "sp-runtime 3.0.0 (git+https://github.com/paritytech/substrate.git?branch=frontier)",
+ "sp-session 3.0.0 (git+https://github.com/paritytech/substrate.git?branch=frontier)",
+ "sp-std 3.0.0 (git+https://github.com/paritytech/substrate.git?branch=frontier)",
+ "sp-transaction-pool 3.0.0 (git+https://github.com/paritytech/substrate.git?branch=frontier)",
+ "sp-version 3.0.0 (git+https://github.com/paritytech/substrate.git?branch=frontier)",
  "substrate-wasm-builder",
 ]
 
@@ -1769,12 +1792,12 @@ version = "0.0.0"
 dependencies = [
  "frontier-template-runtime",
  "parity-scale-codec",
- "sc-client-api",
- "sc-consensus",
- "sc-executor",
- "sc-light",
- "sp-api",
- "sp-runtime",
+ "sc-client-api 3.0.0 (git+https://github.com/paritytech/substrate.git?branch=frontier)",
+ "sc-consensus 0.9.0 (git+https://github.com/paritytech/substrate.git?branch=frontier)",
+ "sc-executor 0.9.0 (git+https://github.com/paritytech/substrate.git?branch=frontier)",
+ "sc-light 3.0.0 (git+https://github.com/paritytech/substrate.git?branch=frontier)",
+ "sp-api 3.0.0 (git+https://github.com/paritytech/substrate.git?branch=frontier)",
+ "sp-runtime 3.0.0 (git+https://github.com/paritytech/substrate.git?branch=frontier)",
  "substrate-test-client",
 ]
 
@@ -2841,6 +2864,44 @@ checksum = "c7d73b3f436185384286bd8098d17ec07c9a7d2388a6599f824d8502b529702a"
 
 [[package]]
 name = "libp2p"
+version = "0.34.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "d5133112ce42be9482f6a87be92a605dd6bbc9e93c297aee77d172ff06908f3a"
+dependencies = [
+ "atomic",
+ "bytes 1.0.1",
+ "futures 0.3.12",
+ "lazy_static",
+ "libp2p-core",
+ "libp2p-core-derive",
+ "libp2p-deflate",
+ "libp2p-dns",
+ "libp2p-floodsub",
+ "libp2p-gossipsub 0.27.0",
+ "libp2p-identify",
+ "libp2p-kad",
+ "libp2p-mdns",
+ "libp2p-mplex",
+ "libp2p-noise",
+ "libp2p-ping",
+ "libp2p-plaintext",
+ "libp2p-pnet",
+ "libp2p-request-response",
+ "libp2p-swarm",
+ "libp2p-tcp",
+ "libp2p-uds",
+ "libp2p-wasm-ext",
+ "libp2p-websocket",
+ "libp2p-yamux",
+ "parity-multiaddr",
+ "parking_lot 0.11.1",
+ "pin-project 1.0.5",
+ "smallvec 1.6.1",
+ "wasm-timer",
+]
+
+[[package]]
+name = "libp2p"
 version = "0.35.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "adc225a49973cf9ab10d0cdd6a4b8f0cda299df9b760824bbb623f15f8f0c95a"
@@ -2853,7 +2914,7 @@ dependencies = [
  "libp2p-deflate",
  "libp2p-dns",
  "libp2p-floodsub",
- "libp2p-gossipsub",
+ "libp2p-gossipsub 0.28.0",
  "libp2p-identify",
  "libp2p-kad",
  "libp2p-mdns",
@@ -2912,6 +2973,16 @@ dependencies = [
 ]
 
 [[package]]
+name = "libp2p-core-derive"
+version = "0.21.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "f4bc40943156e42138d22ed3c57ff0e1a147237742715937622a99b10fbe0156"
+dependencies = [
+ "quote",
+ "syn",
+]
+
+[[package]]
 name = "libp2p-deflate"
 version = "0.27.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -2949,6 +3020,32 @@ dependencies = [
  "prost-build",
  "rand 0.7.3",
  "smallvec 1.6.1",
+]
+
+[[package]]
+name = "libp2p-gossipsub"
+version = "0.27.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "12451ba9493e87c91baf2a6dffce9ddf1fbc807a0861532d7cf477954f8ebbee"
+dependencies = [
+ "asynchronous-codec 0.5.0",
+ "base64 0.13.0",
+ "byteorder",
+ "bytes 1.0.1",
+ "fnv",
+ "futures 0.3.12",
+ "hex_fmt",
+ "libp2p-core",
+ "libp2p-swarm",
+ "log",
+ "prost",
+ "prost-build",
+ "rand 0.7.3",
+ "regex",
+ "sha2 0.9.3",
+ "smallvec 1.6.1",
+ "unsigned-varint 0.6.0",
+ "wasm-timer",
 ]
 
 [[package]]
@@ -3841,11 +3938,11 @@ dependencies = [
  "pallet-timestamp",
  "parity-scale-codec",
  "serde",
- "sp-application-crypto",
+ "sp-application-crypto 3.0.0 (git+https://github.com/paritytech/substrate.git?branch=frontier)",
  "sp-consensus-aura",
- "sp-runtime",
- "sp-std",
- "sp-timestamp",
+ "sp-runtime 3.0.0 (git+https://github.com/paritytech/substrate.git?branch=frontier)",
+ "sp-std 3.0.0 (git+https://github.com/paritytech/substrate.git?branch=frontier)",
+ "sp-timestamp 3.0.0 (git+https://github.com/paritytech/substrate.git?branch=frontier)",
 ]
 
 [[package]]
@@ -3857,10 +3954,10 @@ dependencies = [
  "frame-system",
  "impl-trait-for-tuples 0.2.1",
  "parity-scale-codec",
- "sp-authorship",
- "sp-inherents",
- "sp-runtime",
- "sp-std",
+ "sp-authorship 3.0.0 (git+https://github.com/paritytech/substrate.git?branch=frontier)",
+ "sp-inherents 3.0.0 (git+https://github.com/paritytech/substrate.git?branch=frontier)",
+ "sp-runtime 3.0.0 (git+https://github.com/paritytech/substrate.git?branch=frontier)",
+ "sp-std 3.0.0 (git+https://github.com/paritytech/substrate.git?branch=frontier)",
 ]
 
 [[package]]
@@ -3874,8 +3971,8 @@ dependencies = [
  "log",
  "parity-scale-codec",
  "serde",
- "sp-runtime",
- "sp-std",
+ "sp-runtime 3.0.0 (git+https://github.com/paritytech/substrate.git?branch=frontier)",
+ "sp-std 3.0.0 (git+https://github.com/paritytech/substrate.git?branch=frontier)",
 ]
 
 [[package]]
@@ -3886,10 +3983,10 @@ dependencies = [
  "frame-system",
  "parity-scale-codec",
  "serde",
- "sp-core",
- "sp-inherents",
- "sp-runtime",
- "sp-std",
+ "sp-core 3.0.0 (git+https://github.com/paritytech/substrate.git?branch=frontier)",
+ "sp-inherents 3.0.0 (git+https://github.com/paritytech/substrate.git?branch=frontier)",
+ "sp-runtime 3.0.0 (git+https://github.com/paritytech/substrate.git?branch=frontier)",
+ "sp-std 3.0.0 (git+https://github.com/paritytech/substrate.git?branch=frontier)",
 ]
 
 [[package]]
@@ -3914,10 +4011,10 @@ dependencies = [
  "rustc-hex",
  "serde",
  "sha3 0.8.2",
- "sp-core",
- "sp-io",
- "sp-runtime",
- "sp-std",
+ "sp-core 3.0.0 (git+https://github.com/paritytech/substrate.git?branch=frontier)",
+ "sp-io 3.0.0 (git+https://github.com/paritytech/substrate.git?branch=frontier)",
+ "sp-runtime 3.0.0 (git+https://github.com/paritytech/substrate.git?branch=frontier)",
+ "sp-std 3.0.0 (git+https://github.com/paritytech/substrate.git?branch=frontier)",
 ]
 
 [[package]]
@@ -3938,10 +4035,10 @@ dependencies = [
  "rlp",
  "serde",
  "sha3 0.8.2",
- "sp-core",
- "sp-io",
- "sp-runtime",
- "sp-std",
+ "sp-core 3.0.0 (git+https://github.com/paritytech/substrate.git?branch=frontier)",
+ "sp-io 3.0.0 (git+https://github.com/paritytech/substrate.git?branch=frontier)",
+ "sp-runtime 3.0.0 (git+https://github.com/paritytech/substrate.git?branch=frontier)",
+ "sp-std 3.0.0 (git+https://github.com/paritytech/substrate.git?branch=frontier)",
 ]
 
 [[package]]
@@ -3950,8 +4047,8 @@ version = "1.0.0"
 dependencies = [
  "evm",
  "fp-evm",
- "sp-core",
- "sp-io",
+ "sp-core 3.0.0 (git+https://github.com/paritytech/substrate.git?branch=frontier)",
+ "sp-io 3.0.0 (git+https://github.com/paritytech/substrate.git?branch=frontier)",
 ]
 
 [[package]]
@@ -3960,8 +4057,8 @@ version = "1.0.0"
 dependencies = [
  "evm",
  "fp-evm",
- "sp-core",
- "sp-io",
+ "sp-core 3.0.0 (git+https://github.com/paritytech/substrate.git?branch=frontier)",
+ "sp-io 3.0.0 (git+https://github.com/paritytech/substrate.git?branch=frontier)",
  "substrate-bn",
 ]
 
@@ -3974,8 +4071,8 @@ dependencies = [
  "frame-support",
  "pallet-evm",
  "parity-scale-codec",
- "sp-core",
- "sp-io",
+ "sp-core 3.0.0 (git+https://github.com/paritytech/substrate.git?branch=frontier)",
+ "sp-io 3.0.0 (git+https://github.com/paritytech/substrate.git?branch=frontier)",
 ]
 
 [[package]]
@@ -3985,8 +4082,8 @@ dependencies = [
  "ed25519-dalek",
  "evm",
  "fp-evm",
- "sp-core",
- "sp-io",
+ "sp-core 3.0.0 (git+https://github.com/paritytech/substrate.git?branch=frontier)",
+ "sp-io 3.0.0 (git+https://github.com/paritytech/substrate.git?branch=frontier)",
 ]
 
 [[package]]
@@ -3997,8 +4094,8 @@ dependencies = [
  "fp-evm",
  "hex",
  "num",
- "sp-core",
- "sp-io",
+ "sp-core 3.0.0 (git+https://github.com/paritytech/substrate.git?branch=frontier)",
+ "sp-io 3.0.0 (git+https://github.com/paritytech/substrate.git?branch=frontier)",
 ]
 
 [[package]]
@@ -4007,8 +4104,8 @@ version = "1.0.0"
 dependencies = [
  "evm",
  "fp-evm",
- "sp-core",
- "sp-io",
+ "sp-core 3.0.0 (git+https://github.com/paritytech/substrate.git?branch=frontier)",
+ "sp-io 3.0.0 (git+https://github.com/paritytech/substrate.git?branch=frontier)",
  "tiny-keccak",
 ]
 
@@ -4019,8 +4116,8 @@ dependencies = [
  "evm",
  "fp-evm",
  "ripemd160",
- "sp-core",
- "sp-io",
+ "sp-core 3.0.0 (git+https://github.com/paritytech/substrate.git?branch=frontier)",
+ "sp-io 3.0.0 (git+https://github.com/paritytech/substrate.git?branch=frontier)",
 ]
 
 [[package]]
@@ -4036,13 +4133,13 @@ dependencies = [
  "pallet-session",
  "parity-scale-codec",
  "serde",
- "sp-application-crypto",
- "sp-core",
- "sp-finality-grandpa",
- "sp-runtime",
- "sp-session",
- "sp-staking",
- "sp-std",
+ "sp-application-crypto 3.0.0 (git+https://github.com/paritytech/substrate.git?branch=frontier)",
+ "sp-core 3.0.0 (git+https://github.com/paritytech/substrate.git?branch=frontier)",
+ "sp-finality-grandpa 3.0.0 (git+https://github.com/paritytech/substrate.git?branch=frontier)",
+ "sp-runtime 3.0.0 (git+https://github.com/paritytech/substrate.git?branch=frontier)",
+ "sp-session 3.0.0 (git+https://github.com/paritytech/substrate.git?branch=frontier)",
+ "sp-staking 3.0.0 (git+https://github.com/paritytech/substrate.git?branch=frontier)",
+ "sp-std 3.0.0 (git+https://github.com/paritytech/substrate.git?branch=frontier)",
 ]
 
 [[package]]
@@ -4054,8 +4151,8 @@ dependencies = [
  "frame-system",
  "parity-scale-codec",
  "safe-mix",
- "sp-runtime",
- "sp-std",
+ "sp-runtime 3.0.0 (git+https://github.com/paritytech/substrate.git?branch=frontier)",
+ "sp-std 3.0.0 (git+https://github.com/paritytech/substrate.git?branch=frontier)",
 ]
 
 [[package]]
@@ -4069,13 +4166,13 @@ dependencies = [
  "pallet-timestamp",
  "parity-scale-codec",
  "serde",
- "sp-core",
- "sp-io",
- "sp-runtime",
- "sp-session",
- "sp-staking",
- "sp-std",
- "sp-trie",
+ "sp-core 3.0.0 (git+https://github.com/paritytech/substrate.git?branch=frontier)",
+ "sp-io 3.0.0 (git+https://github.com/paritytech/substrate.git?branch=frontier)",
+ "sp-runtime 3.0.0 (git+https://github.com/paritytech/substrate.git?branch=frontier)",
+ "sp-session 3.0.0 (git+https://github.com/paritytech/substrate.git?branch=frontier)",
+ "sp-staking 3.0.0 (git+https://github.com/paritytech/substrate.git?branch=frontier)",
+ "sp-std 3.0.0 (git+https://github.com/paritytech/substrate.git?branch=frontier)",
+ "sp-trie 3.0.0 (git+https://github.com/paritytech/substrate.git?branch=frontier)",
 ]
 
 [[package]]
@@ -4087,9 +4184,9 @@ dependencies = [
  "frame-system",
  "parity-scale-codec",
  "serde",
- "sp-io",
- "sp-runtime",
- "sp-std",
+ "sp-io 3.0.0 (git+https://github.com/paritytech/substrate.git?branch=frontier)",
+ "sp-runtime 3.0.0 (git+https://github.com/paritytech/substrate.git?branch=frontier)",
+ "sp-std 3.0.0 (git+https://github.com/paritytech/substrate.git?branch=frontier)",
 ]
 
 [[package]]
@@ -4104,10 +4201,10 @@ dependencies = [
  "log",
  "parity-scale-codec",
  "serde",
- "sp-inherents",
- "sp-runtime",
- "sp-std",
- "sp-timestamp",
+ "sp-inherents 3.0.0 (git+https://github.com/paritytech/substrate.git?branch=frontier)",
+ "sp-runtime 3.0.0 (git+https://github.com/paritytech/substrate.git?branch=frontier)",
+ "sp-std 3.0.0 (git+https://github.com/paritytech/substrate.git?branch=frontier)",
+ "sp-timestamp 3.0.0 (git+https://github.com/paritytech/substrate.git?branch=frontier)",
 ]
 
 [[package]]
@@ -4120,10 +4217,10 @@ dependencies = [
  "parity-scale-codec",
  "serde",
  "smallvec 1.6.1",
- "sp-core",
- "sp-io",
- "sp-runtime",
- "sp-std",
+ "sp-core 3.0.0 (git+https://github.com/paritytech/substrate.git?branch=frontier)",
+ "sp-io 3.0.0 (git+https://github.com/paritytech/substrate.git?branch=frontier)",
+ "sp-runtime 3.0.0 (git+https://github.com/paritytech/substrate.git?branch=frontier)",
+ "sp-std 3.0.0 (git+https://github.com/paritytech/substrate.git?branch=frontier)",
 ]
 
 [[package]]
@@ -4136,11 +4233,11 @@ dependencies = [
  "jsonrpc-derive 15.1.0",
  "pallet-transaction-payment-rpc-runtime-api",
  "parity-scale-codec",
- "sp-api",
- "sp-blockchain",
- "sp-core",
- "sp-rpc",
- "sp-runtime",
+ "sp-api 3.0.0 (git+https://github.com/paritytech/substrate.git?branch=frontier)",
+ "sp-blockchain 3.0.0 (git+https://github.com/paritytech/substrate.git?branch=frontier)",
+ "sp-core 3.0.0 (git+https://github.com/paritytech/substrate.git?branch=frontier)",
+ "sp-rpc 3.0.0 (git+https://github.com/paritytech/substrate.git?branch=frontier)",
+ "sp-runtime 3.0.0 (git+https://github.com/paritytech/substrate.git?branch=frontier)",
 ]
 
 [[package]]
@@ -4150,8 +4247,8 @@ source = "git+https://github.com/paritytech/substrate.git?branch=frontier#8b3e5b
 dependencies = [
  "pallet-transaction-payment",
  "parity-scale-codec",
- "sp-api",
- "sp-runtime",
+ "sp-api 3.0.0 (git+https://github.com/paritytech/substrate.git?branch=frontier)",
+ "sp-runtime 3.0.0 (git+https://github.com/paritytech/substrate.git?branch=frontier)",
 ]
 
 [[package]]
@@ -5199,18 +5296,35 @@ dependencies = [
  "futures-timer 3.0.2",
  "log",
  "parity-scale-codec",
- "sc-block-builder",
- "sc-client-api",
+ "sc-block-builder 0.9.0 (git+https://github.com/paritytech/substrate.git?branch=frontier)",
+ "sc-client-api 3.0.0 (git+https://github.com/paritytech/substrate.git?branch=frontier)",
  "sc-proposer-metrics",
- "sc-telemetry",
- "sp-api",
- "sp-blockchain",
- "sp-consensus",
- "sp-core",
- "sp-inherents",
- "sp-runtime",
- "sp-transaction-pool",
- "substrate-prometheus-endpoint",
+ "sc-telemetry 3.0.0 (git+https://github.com/paritytech/substrate.git?branch=frontier)",
+ "sp-api 3.0.0 (git+https://github.com/paritytech/substrate.git?branch=frontier)",
+ "sp-blockchain 3.0.0 (git+https://github.com/paritytech/substrate.git?branch=frontier)",
+ "sp-consensus 0.9.0 (git+https://github.com/paritytech/substrate.git?branch=frontier)",
+ "sp-core 3.0.0 (git+https://github.com/paritytech/substrate.git?branch=frontier)",
+ "sp-inherents 3.0.0 (git+https://github.com/paritytech/substrate.git?branch=frontier)",
+ "sp-runtime 3.0.0 (git+https://github.com/paritytech/substrate.git?branch=frontier)",
+ "sp-transaction-pool 3.0.0 (git+https://github.com/paritytech/substrate.git?branch=frontier)",
+ "substrate-prometheus-endpoint 0.9.0 (git+https://github.com/paritytech/substrate.git?branch=frontier)",
+]
+
+[[package]]
+name = "sc-block-builder"
+version = "0.9.0"
+source = "git+https://github.com/boolnetwork/substrate.git?branch=bool-network-v3.0.0#efa7baa1cd2b5f1d6ec01da68d8e0c22fadcf260"
+dependencies = [
+ "parity-scale-codec",
+ "sc-client-api 3.0.0 (git+https://github.com/boolnetwork/substrate.git?branch=bool-network-v3.0.0)",
+ "sp-api 3.0.0 (git+https://github.com/boolnetwork/substrate.git?branch=bool-network-v3.0.0)",
+ "sp-block-builder 3.0.0 (git+https://github.com/boolnetwork/substrate.git?branch=bool-network-v3.0.0)",
+ "sp-blockchain 3.0.0 (git+https://github.com/boolnetwork/substrate.git?branch=bool-network-v3.0.0)",
+ "sp-consensus 0.9.0 (git+https://github.com/boolnetwork/substrate.git?branch=bool-network-v3.0.0)",
+ "sp-core 3.0.0 (git+https://github.com/boolnetwork/substrate.git?branch=bool-network-v3.0.0)",
+ "sp-inherents 3.0.0 (git+https://github.com/boolnetwork/substrate.git?branch=bool-network-v3.0.0)",
+ "sp-runtime 3.0.0 (git+https://github.com/boolnetwork/substrate.git?branch=bool-network-v3.0.0)",
+ "sp-state-machine 0.9.0 (git+https://github.com/boolnetwork/substrate.git?branch=bool-network-v3.0.0)",
 ]
 
 [[package]]
@@ -5219,14 +5333,35 @@ version = "0.9.0"
 source = "git+https://github.com/paritytech/substrate.git?branch=frontier#8b3e5bc7cd056112d390920fca5a554b2d0b0475"
 dependencies = [
  "parity-scale-codec",
- "sc-client-api",
- "sp-api",
- "sp-block-builder",
- "sp-blockchain",
- "sp-core",
- "sp-inherents",
- "sp-runtime",
- "sp-state-machine",
+ "sc-client-api 3.0.0 (git+https://github.com/paritytech/substrate.git?branch=frontier)",
+ "sp-api 3.0.0 (git+https://github.com/paritytech/substrate.git?branch=frontier)",
+ "sp-block-builder 3.0.0 (git+https://github.com/paritytech/substrate.git?branch=frontier)",
+ "sp-blockchain 3.0.0 (git+https://github.com/paritytech/substrate.git?branch=frontier)",
+ "sp-core 3.0.0 (git+https://github.com/paritytech/substrate.git?branch=frontier)",
+ "sp-inherents 3.0.0 (git+https://github.com/paritytech/substrate.git?branch=frontier)",
+ "sp-runtime 3.0.0 (git+https://github.com/paritytech/substrate.git?branch=frontier)",
+ "sp-state-machine 0.9.0 (git+https://github.com/paritytech/substrate.git?branch=frontier)",
+]
+
+[[package]]
+name = "sc-chain-spec"
+version = "3.0.0"
+source = "git+https://github.com/boolnetwork/substrate.git?branch=bool-network-v3.0.0#efa7baa1cd2b5f1d6ec01da68d8e0c22fadcf260"
+dependencies = [
+ "impl-trait-for-tuples 0.2.1",
+ "parity-scale-codec",
+ "sc-chain-spec-derive 3.0.0 (git+https://github.com/boolnetwork/substrate.git?branch=bool-network-v3.0.0)",
+ "sc-consensus-babe 0.9.0 (git+https://github.com/boolnetwork/substrate.git?branch=bool-network-v3.0.0)",
+ "sc-consensus-epochs 0.9.0 (git+https://github.com/boolnetwork/substrate.git?branch=bool-network-v3.0.0)",
+ "sc-finality-grandpa 0.9.0 (git+https://github.com/boolnetwork/substrate.git?branch=bool-network-v3.0.0)",
+ "sc-network 0.9.0 (git+https://github.com/boolnetwork/substrate.git?branch=bool-network-v3.0.0)",
+ "sc-telemetry 3.0.0 (git+https://github.com/boolnetwork/substrate.git?branch=bool-network-v3.0.0)",
+ "serde",
+ "serde_json",
+ "sp-chain-spec 3.0.0 (git+https://github.com/boolnetwork/substrate.git?branch=bool-network-v3.0.0)",
+ "sp-consensus-babe 0.9.0 (git+https://github.com/boolnetwork/substrate.git?branch=bool-network-v3.0.0)",
+ "sp-core 3.0.0 (git+https://github.com/boolnetwork/substrate.git?branch=bool-network-v3.0.0)",
+ "sp-runtime 3.0.0 (git+https://github.com/boolnetwork/substrate.git?branch=bool-network-v3.0.0)",
 ]
 
 [[package]]
@@ -5236,18 +5371,29 @@ source = "git+https://github.com/paritytech/substrate.git?branch=frontier#8b3e5b
 dependencies = [
  "impl-trait-for-tuples 0.2.1",
  "parity-scale-codec",
- "sc-chain-spec-derive",
- "sc-consensus-babe",
- "sc-consensus-epochs",
- "sc-finality-grandpa",
- "sc-network",
- "sc-telemetry",
+ "sc-chain-spec-derive 3.0.0 (git+https://github.com/paritytech/substrate.git?branch=frontier)",
+ "sc-consensus-babe 0.9.0 (git+https://github.com/paritytech/substrate.git?branch=frontier)",
+ "sc-consensus-epochs 0.9.0 (git+https://github.com/paritytech/substrate.git?branch=frontier)",
+ "sc-finality-grandpa 0.9.0 (git+https://github.com/paritytech/substrate.git?branch=frontier)",
+ "sc-network 0.9.0 (git+https://github.com/paritytech/substrate.git?branch=frontier)",
+ "sc-telemetry 3.0.0 (git+https://github.com/paritytech/substrate.git?branch=frontier)",
  "serde",
  "serde_json",
- "sp-chain-spec",
- "sp-consensus-babe",
- "sp-core",
- "sp-runtime",
+ "sp-chain-spec 3.0.0 (git+https://github.com/paritytech/substrate.git?branch=frontier)",
+ "sp-consensus-babe 0.9.0 (git+https://github.com/paritytech/substrate.git?branch=frontier)",
+ "sp-core 3.0.0 (git+https://github.com/paritytech/substrate.git?branch=frontier)",
+ "sp-runtime 3.0.0 (git+https://github.com/paritytech/substrate.git?branch=frontier)",
+]
+
+[[package]]
+name = "sc-chain-spec-derive"
+version = "3.0.0"
+source = "git+https://github.com/boolnetwork/substrate.git?branch=bool-network-v3.0.0#efa7baa1cd2b5f1d6ec01da68d8e0c22fadcf260"
+dependencies = [
+ "proc-macro-crate 0.1.5",
+ "proc-macro2",
+ "quote",
+ "syn",
 ]
 
 [[package]]
@@ -5270,33 +5416,67 @@ dependencies = [
  "fdlimit",
  "futures 0.3.12",
  "hex",
- "libp2p",
+ "libp2p 0.35.1",
  "log",
  "names",
  "parity-scale-codec",
  "rand 0.7.3",
  "regex",
  "rpassword",
- "sc-client-api",
- "sc-keystore",
- "sc-network",
- "sc-service",
- "sc-telemetry",
- "sc-tracing",
+ "sc-client-api 3.0.0 (git+https://github.com/paritytech/substrate.git?branch=frontier)",
+ "sc-keystore 3.0.0 (git+https://github.com/paritytech/substrate.git?branch=frontier)",
+ "sc-network 0.9.0 (git+https://github.com/paritytech/substrate.git?branch=frontier)",
+ "sc-service 0.9.0 (git+https://github.com/paritytech/substrate.git?branch=frontier)",
+ "sc-telemetry 3.0.0 (git+https://github.com/paritytech/substrate.git?branch=frontier)",
+ "sc-tracing 3.0.0 (git+https://github.com/paritytech/substrate.git?branch=frontier)",
  "serde",
  "serde_json",
- "sp-blockchain",
- "sp-core",
+ "sp-blockchain 3.0.0 (git+https://github.com/paritytech/substrate.git?branch=frontier)",
+ "sp-core 3.0.0 (git+https://github.com/paritytech/substrate.git?branch=frontier)",
  "sp-keyring",
- "sp-keystore",
- "sp-panic-handler",
- "sp-runtime",
- "sp-utils",
- "sp-version",
+ "sp-keystore 0.9.0 (git+https://github.com/paritytech/substrate.git?branch=frontier)",
+ "sp-panic-handler 3.0.0 (git+https://github.com/paritytech/substrate.git?branch=frontier)",
+ "sp-runtime 3.0.0 (git+https://github.com/paritytech/substrate.git?branch=frontier)",
+ "sp-utils 3.0.0 (git+https://github.com/paritytech/substrate.git?branch=frontier)",
+ "sp-version 3.0.0 (git+https://github.com/paritytech/substrate.git?branch=frontier)",
  "structopt",
  "thiserror",
  "tiny-bip39",
  "tokio 0.2.25",
+]
+
+[[package]]
+name = "sc-client-api"
+version = "3.0.0"
+source = "git+https://github.com/boolnetwork/substrate.git?branch=bool-network-v3.0.0#efa7baa1cd2b5f1d6ec01da68d8e0c22fadcf260"
+dependencies = [
+ "derive_more",
+ "fnv",
+ "futures 0.3.12",
+ "hash-db",
+ "kvdb",
+ "lazy_static",
+ "log",
+ "parity-scale-codec",
+ "parking_lot 0.11.1",
+ "sc-executor 0.9.0 (git+https://github.com/boolnetwork/substrate.git?branch=bool-network-v3.0.0)",
+ "sp-api 3.0.0 (git+https://github.com/boolnetwork/substrate.git?branch=bool-network-v3.0.0)",
+ "sp-blockchain 3.0.0 (git+https://github.com/boolnetwork/substrate.git?branch=bool-network-v3.0.0)",
+ "sp-consensus 0.9.0 (git+https://github.com/boolnetwork/substrate.git?branch=bool-network-v3.0.0)",
+ "sp-core 3.0.0 (git+https://github.com/boolnetwork/substrate.git?branch=bool-network-v3.0.0)",
+ "sp-database 3.0.0 (git+https://github.com/boolnetwork/substrate.git?branch=bool-network-v3.0.0)",
+ "sp-externalities 0.9.0 (git+https://github.com/boolnetwork/substrate.git?branch=bool-network-v3.0.0)",
+ "sp-inherents 3.0.0 (git+https://github.com/boolnetwork/substrate.git?branch=bool-network-v3.0.0)",
+ "sp-keystore 0.9.0 (git+https://github.com/boolnetwork/substrate.git?branch=bool-network-v3.0.0)",
+ "sp-runtime 3.0.0 (git+https://github.com/boolnetwork/substrate.git?branch=bool-network-v3.0.0)",
+ "sp-state-machine 0.9.0 (git+https://github.com/boolnetwork/substrate.git?branch=bool-network-v3.0.0)",
+ "sp-std 3.0.0 (git+https://github.com/boolnetwork/substrate.git?branch=bool-network-v3.0.0)",
+ "sp-storage 3.0.0 (git+https://github.com/boolnetwork/substrate.git?branch=bool-network-v3.0.0)",
+ "sp-transaction-pool 3.0.0 (git+https://github.com/boolnetwork/substrate.git?branch=bool-network-v3.0.0)",
+ "sp-trie 3.0.0 (git+https://github.com/boolnetwork/substrate.git?branch=bool-network-v3.0.0)",
+ "sp-utils 3.0.0 (git+https://github.com/boolnetwork/substrate.git?branch=bool-network-v3.0.0)",
+ "sp-version 3.0.0 (git+https://github.com/boolnetwork/substrate.git?branch=bool-network-v3.0.0)",
+ "substrate-prometheus-endpoint 0.9.0 (git+https://github.com/boolnetwork/substrate.git?branch=bool-network-v3.0.0)",
 ]
 
 [[package]]
@@ -5313,24 +5493,54 @@ dependencies = [
  "log",
  "parity-scale-codec",
  "parking_lot 0.11.1",
- "sc-executor",
- "sp-api",
- "sp-blockchain",
- "sp-consensus",
- "sp-core",
- "sp-database",
- "sp-externalities",
- "sp-inherents",
- "sp-keystore",
- "sp-runtime",
- "sp-state-machine",
- "sp-std",
- "sp-storage",
- "sp-transaction-pool",
- "sp-trie",
- "sp-utils",
- "sp-version",
- "substrate-prometheus-endpoint",
+ "sc-executor 0.9.0 (git+https://github.com/paritytech/substrate.git?branch=frontier)",
+ "sp-api 3.0.0 (git+https://github.com/paritytech/substrate.git?branch=frontier)",
+ "sp-blockchain 3.0.0 (git+https://github.com/paritytech/substrate.git?branch=frontier)",
+ "sp-consensus 0.9.0 (git+https://github.com/paritytech/substrate.git?branch=frontier)",
+ "sp-core 3.0.0 (git+https://github.com/paritytech/substrate.git?branch=frontier)",
+ "sp-database 3.0.0 (git+https://github.com/paritytech/substrate.git?branch=frontier)",
+ "sp-externalities 0.9.0 (git+https://github.com/paritytech/substrate.git?branch=frontier)",
+ "sp-inherents 3.0.0 (git+https://github.com/paritytech/substrate.git?branch=frontier)",
+ "sp-keystore 0.9.0 (git+https://github.com/paritytech/substrate.git?branch=frontier)",
+ "sp-runtime 3.0.0 (git+https://github.com/paritytech/substrate.git?branch=frontier)",
+ "sp-state-machine 0.9.0 (git+https://github.com/paritytech/substrate.git?branch=frontier)",
+ "sp-std 3.0.0 (git+https://github.com/paritytech/substrate.git?branch=frontier)",
+ "sp-storage 3.0.0 (git+https://github.com/paritytech/substrate.git?branch=frontier)",
+ "sp-transaction-pool 3.0.0 (git+https://github.com/paritytech/substrate.git?branch=frontier)",
+ "sp-trie 3.0.0 (git+https://github.com/paritytech/substrate.git?branch=frontier)",
+ "sp-utils 3.0.0 (git+https://github.com/paritytech/substrate.git?branch=frontier)",
+ "sp-version 3.0.0 (git+https://github.com/paritytech/substrate.git?branch=frontier)",
+ "substrate-prometheus-endpoint 0.9.0 (git+https://github.com/paritytech/substrate.git?branch=frontier)",
+]
+
+[[package]]
+name = "sc-client-db"
+version = "0.9.0"
+source = "git+https://github.com/boolnetwork/substrate.git?branch=bool-network-v3.0.0#efa7baa1cd2b5f1d6ec01da68d8e0c22fadcf260"
+dependencies = [
+ "blake2-rfc",
+ "hash-db",
+ "kvdb",
+ "kvdb-memorydb",
+ "kvdb-rocksdb",
+ "linked-hash-map",
+ "log",
+ "parity-db",
+ "parity-scale-codec",
+ "parity-util-mem",
+ "parking_lot 0.11.1",
+ "sc-client-api 3.0.0 (git+https://github.com/boolnetwork/substrate.git?branch=bool-network-v3.0.0)",
+ "sc-executor 0.9.0 (git+https://github.com/boolnetwork/substrate.git?branch=bool-network-v3.0.0)",
+ "sc-state-db 0.9.0 (git+https://github.com/boolnetwork/substrate.git?branch=bool-network-v3.0.0)",
+ "sp-arithmetic 3.0.0 (git+https://github.com/boolnetwork/substrate.git?branch=bool-network-v3.0.0)",
+ "sp-blockchain 3.0.0 (git+https://github.com/boolnetwork/substrate.git?branch=bool-network-v3.0.0)",
+ "sp-consensus 0.9.0 (git+https://github.com/boolnetwork/substrate.git?branch=bool-network-v3.0.0)",
+ "sp-core 3.0.0 (git+https://github.com/boolnetwork/substrate.git?branch=bool-network-v3.0.0)",
+ "sp-database 3.0.0 (git+https://github.com/boolnetwork/substrate.git?branch=bool-network-v3.0.0)",
+ "sp-runtime 3.0.0 (git+https://github.com/boolnetwork/substrate.git?branch=bool-network-v3.0.0)",
+ "sp-state-machine 0.9.0 (git+https://github.com/boolnetwork/substrate.git?branch=bool-network-v3.0.0)",
+ "sp-trie 3.0.0 (git+https://github.com/boolnetwork/substrate.git?branch=bool-network-v3.0.0)",
+ "substrate-prometheus-endpoint 0.9.0 (git+https://github.com/boolnetwork/substrate.git?branch=bool-network-v3.0.0)",
 ]
 
 [[package]]
@@ -5349,18 +5559,29 @@ dependencies = [
  "parity-scale-codec",
  "parity-util-mem",
  "parking_lot 0.11.1",
- "sc-client-api",
- "sc-executor",
- "sc-state-db",
- "sp-arithmetic",
- "sp-blockchain",
- "sp-consensus",
- "sp-core",
- "sp-database",
- "sp-runtime",
- "sp-state-machine",
- "sp-trie",
- "substrate-prometheus-endpoint",
+ "sc-client-api 3.0.0 (git+https://github.com/paritytech/substrate.git?branch=frontier)",
+ "sc-executor 0.9.0 (git+https://github.com/paritytech/substrate.git?branch=frontier)",
+ "sc-state-db 0.9.0 (git+https://github.com/paritytech/substrate.git?branch=frontier)",
+ "sp-arithmetic 3.0.0 (git+https://github.com/paritytech/substrate.git?branch=frontier)",
+ "sp-blockchain 3.0.0 (git+https://github.com/paritytech/substrate.git?branch=frontier)",
+ "sp-consensus 0.9.0 (git+https://github.com/paritytech/substrate.git?branch=frontier)",
+ "sp-core 3.0.0 (git+https://github.com/paritytech/substrate.git?branch=frontier)",
+ "sp-database 3.0.0 (git+https://github.com/paritytech/substrate.git?branch=frontier)",
+ "sp-runtime 3.0.0 (git+https://github.com/paritytech/substrate.git?branch=frontier)",
+ "sp-state-machine 0.9.0 (git+https://github.com/paritytech/substrate.git?branch=frontier)",
+ "sp-trie 3.0.0 (git+https://github.com/paritytech/substrate.git?branch=frontier)",
+ "substrate-prometheus-endpoint 0.9.0 (git+https://github.com/paritytech/substrate.git?branch=frontier)",
+]
+
+[[package]]
+name = "sc-consensus"
+version = "0.9.0"
+source = "git+https://github.com/boolnetwork/substrate.git?branch=bool-network-v3.0.0#efa7baa1cd2b5f1d6ec01da68d8e0c22fadcf260"
+dependencies = [
+ "sc-client-api 3.0.0 (git+https://github.com/boolnetwork/substrate.git?branch=bool-network-v3.0.0)",
+ "sp-blockchain 3.0.0 (git+https://github.com/boolnetwork/substrate.git?branch=bool-network-v3.0.0)",
+ "sp-consensus 0.9.0 (git+https://github.com/boolnetwork/substrate.git?branch=bool-network-v3.0.0)",
+ "sp-runtime 3.0.0 (git+https://github.com/boolnetwork/substrate.git?branch=bool-network-v3.0.0)",
 ]
 
 [[package]]
@@ -5368,10 +5589,10 @@ name = "sc-consensus"
 version = "0.9.0"
 source = "git+https://github.com/paritytech/substrate.git?branch=frontier#8b3e5bc7cd056112d390920fca5a554b2d0b0475"
 dependencies = [
- "sc-client-api",
- "sp-blockchain",
- "sp-consensus",
- "sp-runtime",
+ "sc-client-api 3.0.0 (git+https://github.com/paritytech/substrate.git?branch=frontier)",
+ "sp-blockchain 3.0.0 (git+https://github.com/paritytech/substrate.git?branch=frontier)",
+ "sp-consensus 0.9.0 (git+https://github.com/paritytech/substrate.git?branch=frontier)",
+ "sp-runtime 3.0.0 (git+https://github.com/paritytech/substrate.git?branch=frontier)",
 ]
 
 [[package]]
@@ -5385,34 +5606,34 @@ dependencies = [
  "log",
  "parity-scale-codec",
  "parking_lot 0.11.1",
- "sc-block-builder",
- "sc-client-api",
- "sc-consensus-slots",
- "sc-telemetry",
- "sp-api",
- "sp-application-crypto",
- "sp-block-builder",
- "sp-blockchain",
- "sp-consensus",
+ "sc-block-builder 0.9.0 (git+https://github.com/paritytech/substrate.git?branch=frontier)",
+ "sc-client-api 3.0.0 (git+https://github.com/paritytech/substrate.git?branch=frontier)",
+ "sc-consensus-slots 0.9.0 (git+https://github.com/paritytech/substrate.git?branch=frontier)",
+ "sc-telemetry 3.0.0 (git+https://github.com/paritytech/substrate.git?branch=frontier)",
+ "sp-api 3.0.0 (git+https://github.com/paritytech/substrate.git?branch=frontier)",
+ "sp-application-crypto 3.0.0 (git+https://github.com/paritytech/substrate.git?branch=frontier)",
+ "sp-block-builder 3.0.0 (git+https://github.com/paritytech/substrate.git?branch=frontier)",
+ "sp-blockchain 3.0.0 (git+https://github.com/paritytech/substrate.git?branch=frontier)",
+ "sp-consensus 0.9.0 (git+https://github.com/paritytech/substrate.git?branch=frontier)",
  "sp-consensus-aura",
- "sp-consensus-slots",
- "sp-core",
- "sp-inherents",
- "sp-io",
- "sp-keystore",
- "sp-runtime",
- "sp-timestamp",
- "sp-version",
- "substrate-prometheus-endpoint",
+ "sp-consensus-slots 0.9.0 (git+https://github.com/paritytech/substrate.git?branch=frontier)",
+ "sp-core 3.0.0 (git+https://github.com/paritytech/substrate.git?branch=frontier)",
+ "sp-inherents 3.0.0 (git+https://github.com/paritytech/substrate.git?branch=frontier)",
+ "sp-io 3.0.0 (git+https://github.com/paritytech/substrate.git?branch=frontier)",
+ "sp-keystore 0.9.0 (git+https://github.com/paritytech/substrate.git?branch=frontier)",
+ "sp-runtime 3.0.0 (git+https://github.com/paritytech/substrate.git?branch=frontier)",
+ "sp-timestamp 3.0.0 (git+https://github.com/paritytech/substrate.git?branch=frontier)",
+ "sp-version 3.0.0 (git+https://github.com/paritytech/substrate.git?branch=frontier)",
+ "substrate-prometheus-endpoint 0.9.0 (git+https://github.com/paritytech/substrate.git?branch=frontier)",
 ]
 
 [[package]]
 name = "sc-consensus-babe"
 version = "0.9.0"
-source = "git+https://github.com/paritytech/substrate.git?branch=frontier#8b3e5bc7cd056112d390920fca5a554b2d0b0475"
+source = "git+https://github.com/boolnetwork/substrate.git?branch=bool-network-v3.0.0#efa7baa1cd2b5f1d6ec01da68d8e0c22fadcf260"
 dependencies = [
  "derive_more",
- "fork-tree",
+ "fork-tree 3.0.0 (git+https://github.com/boolnetwork/substrate.git?branch=bool-network-v3.0.0)",
  "futures 0.3.12",
  "futures-timer 3.0.2",
  "log",
@@ -5425,31 +5646,90 @@ dependencies = [
  "pdqselect",
  "rand 0.7.3",
  "retain_mut",
- "sc-client-api",
- "sc-consensus-epochs",
- "sc-consensus-slots",
- "sc-consensus-uncles",
- "sc-keystore",
- "sc-telemetry",
+ "sc-client-api 3.0.0 (git+https://github.com/boolnetwork/substrate.git?branch=bool-network-v3.0.0)",
+ "sc-consensus-epochs 0.9.0 (git+https://github.com/boolnetwork/substrate.git?branch=bool-network-v3.0.0)",
+ "sc-consensus-slots 0.9.0 (git+https://github.com/boolnetwork/substrate.git?branch=bool-network-v3.0.0)",
+ "sc-consensus-uncles 0.9.0 (git+https://github.com/boolnetwork/substrate.git?branch=bool-network-v3.0.0)",
+ "sc-keystore 3.0.0 (git+https://github.com/boolnetwork/substrate.git?branch=bool-network-v3.0.0)",
+ "sc-telemetry 3.0.0 (git+https://github.com/boolnetwork/substrate.git?branch=bool-network-v3.0.0)",
  "schnorrkel",
  "serde",
- "sp-api",
- "sp-application-crypto",
- "sp-block-builder",
- "sp-blockchain",
- "sp-consensus",
- "sp-consensus-babe",
- "sp-consensus-slots",
- "sp-consensus-vrf",
- "sp-core",
- "sp-inherents",
- "sp-io",
- "sp-keystore",
- "sp-runtime",
- "sp-timestamp",
- "sp-utils",
- "sp-version",
- "substrate-prometheus-endpoint",
+ "sp-api 3.0.0 (git+https://github.com/boolnetwork/substrate.git?branch=bool-network-v3.0.0)",
+ "sp-application-crypto 3.0.0 (git+https://github.com/boolnetwork/substrate.git?branch=bool-network-v3.0.0)",
+ "sp-block-builder 3.0.0 (git+https://github.com/boolnetwork/substrate.git?branch=bool-network-v3.0.0)",
+ "sp-blockchain 3.0.0 (git+https://github.com/boolnetwork/substrate.git?branch=bool-network-v3.0.0)",
+ "sp-consensus 0.9.0 (git+https://github.com/boolnetwork/substrate.git?branch=bool-network-v3.0.0)",
+ "sp-consensus-babe 0.9.0 (git+https://github.com/boolnetwork/substrate.git?branch=bool-network-v3.0.0)",
+ "sp-consensus-slots 0.9.0 (git+https://github.com/boolnetwork/substrate.git?branch=bool-network-v3.0.0)",
+ "sp-consensus-vrf 0.9.0 (git+https://github.com/boolnetwork/substrate.git?branch=bool-network-v3.0.0)",
+ "sp-core 3.0.0 (git+https://github.com/boolnetwork/substrate.git?branch=bool-network-v3.0.0)",
+ "sp-inherents 3.0.0 (git+https://github.com/boolnetwork/substrate.git?branch=bool-network-v3.0.0)",
+ "sp-io 3.0.0 (git+https://github.com/boolnetwork/substrate.git?branch=bool-network-v3.0.0)",
+ "sp-keystore 0.9.0 (git+https://github.com/boolnetwork/substrate.git?branch=bool-network-v3.0.0)",
+ "sp-runtime 3.0.0 (git+https://github.com/boolnetwork/substrate.git?branch=bool-network-v3.0.0)",
+ "sp-timestamp 3.0.0 (git+https://github.com/boolnetwork/substrate.git?branch=bool-network-v3.0.0)",
+ "sp-utils 3.0.0 (git+https://github.com/boolnetwork/substrate.git?branch=bool-network-v3.0.0)",
+ "sp-version 3.0.0 (git+https://github.com/boolnetwork/substrate.git?branch=bool-network-v3.0.0)",
+ "substrate-prometheus-endpoint 0.9.0 (git+https://github.com/boolnetwork/substrate.git?branch=bool-network-v3.0.0)",
+]
+
+[[package]]
+name = "sc-consensus-babe"
+version = "0.9.0"
+source = "git+https://github.com/paritytech/substrate.git?branch=frontier#8b3e5bc7cd056112d390920fca5a554b2d0b0475"
+dependencies = [
+ "derive_more",
+ "fork-tree 3.0.0 (git+https://github.com/paritytech/substrate.git?branch=frontier)",
+ "futures 0.3.12",
+ "futures-timer 3.0.2",
+ "log",
+ "merlin",
+ "num-bigint 0.2.6",
+ "num-rational 0.2.4",
+ "num-traits",
+ "parity-scale-codec",
+ "parking_lot 0.11.1",
+ "pdqselect",
+ "rand 0.7.3",
+ "retain_mut",
+ "sc-client-api 3.0.0 (git+https://github.com/paritytech/substrate.git?branch=frontier)",
+ "sc-consensus-epochs 0.9.0 (git+https://github.com/paritytech/substrate.git?branch=frontier)",
+ "sc-consensus-slots 0.9.0 (git+https://github.com/paritytech/substrate.git?branch=frontier)",
+ "sc-consensus-uncles 0.9.0 (git+https://github.com/paritytech/substrate.git?branch=frontier)",
+ "sc-keystore 3.0.0 (git+https://github.com/paritytech/substrate.git?branch=frontier)",
+ "sc-telemetry 3.0.0 (git+https://github.com/paritytech/substrate.git?branch=frontier)",
+ "schnorrkel",
+ "serde",
+ "sp-api 3.0.0 (git+https://github.com/paritytech/substrate.git?branch=frontier)",
+ "sp-application-crypto 3.0.0 (git+https://github.com/paritytech/substrate.git?branch=frontier)",
+ "sp-block-builder 3.0.0 (git+https://github.com/paritytech/substrate.git?branch=frontier)",
+ "sp-blockchain 3.0.0 (git+https://github.com/paritytech/substrate.git?branch=frontier)",
+ "sp-consensus 0.9.0 (git+https://github.com/paritytech/substrate.git?branch=frontier)",
+ "sp-consensus-babe 0.9.0 (git+https://github.com/paritytech/substrate.git?branch=frontier)",
+ "sp-consensus-slots 0.9.0 (git+https://github.com/paritytech/substrate.git?branch=frontier)",
+ "sp-consensus-vrf 0.9.0 (git+https://github.com/paritytech/substrate.git?branch=frontier)",
+ "sp-core 3.0.0 (git+https://github.com/paritytech/substrate.git?branch=frontier)",
+ "sp-inherents 3.0.0 (git+https://github.com/paritytech/substrate.git?branch=frontier)",
+ "sp-io 3.0.0 (git+https://github.com/paritytech/substrate.git?branch=frontier)",
+ "sp-keystore 0.9.0 (git+https://github.com/paritytech/substrate.git?branch=frontier)",
+ "sp-runtime 3.0.0 (git+https://github.com/paritytech/substrate.git?branch=frontier)",
+ "sp-timestamp 3.0.0 (git+https://github.com/paritytech/substrate.git?branch=frontier)",
+ "sp-utils 3.0.0 (git+https://github.com/paritytech/substrate.git?branch=frontier)",
+ "sp-version 3.0.0 (git+https://github.com/paritytech/substrate.git?branch=frontier)",
+ "substrate-prometheus-endpoint 0.9.0 (git+https://github.com/paritytech/substrate.git?branch=frontier)",
+]
+
+[[package]]
+name = "sc-consensus-epochs"
+version = "0.9.0"
+source = "git+https://github.com/boolnetwork/substrate.git?branch=bool-network-v3.0.0#efa7baa1cd2b5f1d6ec01da68d8e0c22fadcf260"
+dependencies = [
+ "fork-tree 3.0.0 (git+https://github.com/boolnetwork/substrate.git?branch=bool-network-v3.0.0)",
+ "parity-scale-codec",
+ "parking_lot 0.11.1",
+ "sc-client-api 3.0.0 (git+https://github.com/boolnetwork/substrate.git?branch=bool-network-v3.0.0)",
+ "sp-blockchain 3.0.0 (git+https://github.com/boolnetwork/substrate.git?branch=bool-network-v3.0.0)",
+ "sp-runtime 3.0.0 (git+https://github.com/boolnetwork/substrate.git?branch=bool-network-v3.0.0)",
 ]
 
 [[package]]
@@ -5457,12 +5737,12 @@ name = "sc-consensus-epochs"
 version = "0.9.0"
 source = "git+https://github.com/paritytech/substrate.git?branch=frontier#8b3e5bc7cd056112d390920fca5a554b2d0b0475"
 dependencies = [
- "fork-tree",
+ "fork-tree 3.0.0 (git+https://github.com/paritytech/substrate.git?branch=frontier)",
  "parity-scale-codec",
  "parking_lot 0.11.1",
- "sc-client-api",
- "sp-blockchain",
- "sp-runtime",
+ "sc-client-api 3.0.0 (git+https://github.com/paritytech/substrate.git?branch=frontier)",
+ "sp-blockchain 3.0.0 (git+https://github.com/paritytech/substrate.git?branch=frontier)",
+ "sp-runtime 3.0.0 (git+https://github.com/paritytech/substrate.git?branch=frontier)",
 ]
 
 [[package]]
@@ -5479,24 +5759,50 @@ dependencies = [
  "log",
  "parity-scale-codec",
  "parking_lot 0.11.1",
- "sc-client-api",
- "sc-consensus-babe",
- "sc-consensus-epochs",
- "sc-transaction-pool",
+ "sc-client-api 3.0.0 (git+https://github.com/paritytech/substrate.git?branch=frontier)",
+ "sc-consensus-babe 0.9.0 (git+https://github.com/paritytech/substrate.git?branch=frontier)",
+ "sc-consensus-epochs 0.9.0 (git+https://github.com/paritytech/substrate.git?branch=frontier)",
+ "sc-transaction-pool 3.0.0 (git+https://github.com/paritytech/substrate.git?branch=frontier)",
  "serde",
- "sp-api",
- "sp-blockchain",
- "sp-consensus",
- "sp-consensus-babe",
- "sp-consensus-slots",
- "sp-core",
- "sp-inherents",
+ "sp-api 3.0.0 (git+https://github.com/paritytech/substrate.git?branch=frontier)",
+ "sp-blockchain 3.0.0 (git+https://github.com/paritytech/substrate.git?branch=frontier)",
+ "sp-consensus 0.9.0 (git+https://github.com/paritytech/substrate.git?branch=frontier)",
+ "sp-consensus-babe 0.9.0 (git+https://github.com/paritytech/substrate.git?branch=frontier)",
+ "sp-consensus-slots 0.9.0 (git+https://github.com/paritytech/substrate.git?branch=frontier)",
+ "sp-core 3.0.0 (git+https://github.com/paritytech/substrate.git?branch=frontier)",
+ "sp-inherents 3.0.0 (git+https://github.com/paritytech/substrate.git?branch=frontier)",
  "sp-keyring",
- "sp-keystore",
- "sp-runtime",
- "sp-timestamp",
- "sp-transaction-pool",
- "substrate-prometheus-endpoint",
+ "sp-keystore 0.9.0 (git+https://github.com/paritytech/substrate.git?branch=frontier)",
+ "sp-runtime 3.0.0 (git+https://github.com/paritytech/substrate.git?branch=frontier)",
+ "sp-timestamp 3.0.0 (git+https://github.com/paritytech/substrate.git?branch=frontier)",
+ "sp-transaction-pool 3.0.0 (git+https://github.com/paritytech/substrate.git?branch=frontier)",
+ "substrate-prometheus-endpoint 0.9.0 (git+https://github.com/paritytech/substrate.git?branch=frontier)",
+]
+
+[[package]]
+name = "sc-consensus-slots"
+version = "0.9.0"
+source = "git+https://github.com/boolnetwork/substrate.git?branch=bool-network-v3.0.0#efa7baa1cd2b5f1d6ec01da68d8e0c22fadcf260"
+dependencies = [
+ "futures 0.3.12",
+ "futures-timer 3.0.2",
+ "log",
+ "parity-scale-codec",
+ "parking_lot 0.11.1",
+ "sc-client-api 3.0.0 (git+https://github.com/boolnetwork/substrate.git?branch=bool-network-v3.0.0)",
+ "sc-telemetry 3.0.0 (git+https://github.com/boolnetwork/substrate.git?branch=bool-network-v3.0.0)",
+ "sp-api 3.0.0 (git+https://github.com/boolnetwork/substrate.git?branch=bool-network-v3.0.0)",
+ "sp-application-crypto 3.0.0 (git+https://github.com/boolnetwork/substrate.git?branch=bool-network-v3.0.0)",
+ "sp-arithmetic 3.0.0 (git+https://github.com/boolnetwork/substrate.git?branch=bool-network-v3.0.0)",
+ "sp-blockchain 3.0.0 (git+https://github.com/boolnetwork/substrate.git?branch=bool-network-v3.0.0)",
+ "sp-consensus 0.9.0 (git+https://github.com/boolnetwork/substrate.git?branch=bool-network-v3.0.0)",
+ "sp-consensus-slots 0.9.0 (git+https://github.com/boolnetwork/substrate.git?branch=bool-network-v3.0.0)",
+ "sp-core 3.0.0 (git+https://github.com/boolnetwork/substrate.git?branch=bool-network-v3.0.0)",
+ "sp-inherents 3.0.0 (git+https://github.com/boolnetwork/substrate.git?branch=bool-network-v3.0.0)",
+ "sp-runtime 3.0.0 (git+https://github.com/boolnetwork/substrate.git?branch=bool-network-v3.0.0)",
+ "sp-state-machine 0.9.0 (git+https://github.com/boolnetwork/substrate.git?branch=bool-network-v3.0.0)",
+ "sp-trie 3.0.0 (git+https://github.com/boolnetwork/substrate.git?branch=bool-network-v3.0.0)",
+ "thiserror",
 ]
 
 [[package]]
@@ -5509,20 +5815,34 @@ dependencies = [
  "log",
  "parity-scale-codec",
  "parking_lot 0.11.1",
- "sc-client-api",
- "sc-telemetry",
- "sp-api",
- "sp-application-crypto",
- "sp-arithmetic",
- "sp-blockchain",
- "sp-consensus",
- "sp-consensus-slots",
- "sp-core",
- "sp-inherents",
- "sp-runtime",
- "sp-state-machine",
- "sp-trie",
+ "sc-client-api 3.0.0 (git+https://github.com/paritytech/substrate.git?branch=frontier)",
+ "sc-telemetry 3.0.0 (git+https://github.com/paritytech/substrate.git?branch=frontier)",
+ "sp-api 3.0.0 (git+https://github.com/paritytech/substrate.git?branch=frontier)",
+ "sp-application-crypto 3.0.0 (git+https://github.com/paritytech/substrate.git?branch=frontier)",
+ "sp-arithmetic 3.0.0 (git+https://github.com/paritytech/substrate.git?branch=frontier)",
+ "sp-blockchain 3.0.0 (git+https://github.com/paritytech/substrate.git?branch=frontier)",
+ "sp-consensus 0.9.0 (git+https://github.com/paritytech/substrate.git?branch=frontier)",
+ "sp-consensus-slots 0.9.0 (git+https://github.com/paritytech/substrate.git?branch=frontier)",
+ "sp-core 3.0.0 (git+https://github.com/paritytech/substrate.git?branch=frontier)",
+ "sp-inherents 3.0.0 (git+https://github.com/paritytech/substrate.git?branch=frontier)",
+ "sp-runtime 3.0.0 (git+https://github.com/paritytech/substrate.git?branch=frontier)",
+ "sp-state-machine 0.9.0 (git+https://github.com/paritytech/substrate.git?branch=frontier)",
+ "sp-trie 3.0.0 (git+https://github.com/paritytech/substrate.git?branch=frontier)",
  "thiserror",
+]
+
+[[package]]
+name = "sc-consensus-uncles"
+version = "0.9.0"
+source = "git+https://github.com/boolnetwork/substrate.git?branch=bool-network-v3.0.0#efa7baa1cd2b5f1d6ec01da68d8e0c22fadcf260"
+dependencies = [
+ "log",
+ "sc-client-api 3.0.0 (git+https://github.com/boolnetwork/substrate.git?branch=bool-network-v3.0.0)",
+ "sp-authorship 3.0.0 (git+https://github.com/boolnetwork/substrate.git?branch=bool-network-v3.0.0)",
+ "sp-consensus 0.9.0 (git+https://github.com/boolnetwork/substrate.git?branch=bool-network-v3.0.0)",
+ "sp-core 3.0.0 (git+https://github.com/boolnetwork/substrate.git?branch=bool-network-v3.0.0)",
+ "sp-inherents 3.0.0 (git+https://github.com/boolnetwork/substrate.git?branch=bool-network-v3.0.0)",
+ "sp-runtime 3.0.0 (git+https://github.com/boolnetwork/substrate.git?branch=bool-network-v3.0.0)",
 ]
 
 [[package]]
@@ -5531,12 +5851,40 @@ version = "0.9.0"
 source = "git+https://github.com/paritytech/substrate.git?branch=frontier#8b3e5bc7cd056112d390920fca5a554b2d0b0475"
 dependencies = [
  "log",
- "sc-client-api",
- "sp-authorship",
- "sp-consensus",
- "sp-core",
- "sp-inherents",
- "sp-runtime",
+ "sc-client-api 3.0.0 (git+https://github.com/paritytech/substrate.git?branch=frontier)",
+ "sp-authorship 3.0.0 (git+https://github.com/paritytech/substrate.git?branch=frontier)",
+ "sp-consensus 0.9.0 (git+https://github.com/paritytech/substrate.git?branch=frontier)",
+ "sp-core 3.0.0 (git+https://github.com/paritytech/substrate.git?branch=frontier)",
+ "sp-inherents 3.0.0 (git+https://github.com/paritytech/substrate.git?branch=frontier)",
+ "sp-runtime 3.0.0 (git+https://github.com/paritytech/substrate.git?branch=frontier)",
+]
+
+[[package]]
+name = "sc-executor"
+version = "0.9.0"
+source = "git+https://github.com/boolnetwork/substrate.git?branch=bool-network-v3.0.0#efa7baa1cd2b5f1d6ec01da68d8e0c22fadcf260"
+dependencies = [
+ "derive_more",
+ "lazy_static",
+ "libsecp256k1",
+ "log",
+ "parity-scale-codec",
+ "parity-wasm 0.41.0",
+ "parking_lot 0.11.1",
+ "sc-executor-common 0.9.0 (git+https://github.com/boolnetwork/substrate.git?branch=bool-network-v3.0.0)",
+ "sc-executor-wasmi 0.9.0 (git+https://github.com/boolnetwork/substrate.git?branch=bool-network-v3.0.0)",
+ "sp-api 3.0.0 (git+https://github.com/boolnetwork/substrate.git?branch=bool-network-v3.0.0)",
+ "sp-core 3.0.0 (git+https://github.com/boolnetwork/substrate.git?branch=bool-network-v3.0.0)",
+ "sp-externalities 0.9.0 (git+https://github.com/boolnetwork/substrate.git?branch=bool-network-v3.0.0)",
+ "sp-io 3.0.0 (git+https://github.com/boolnetwork/substrate.git?branch=bool-network-v3.0.0)",
+ "sp-panic-handler 3.0.0 (git+https://github.com/boolnetwork/substrate.git?branch=bool-network-v3.0.0)",
+ "sp-runtime-interface 3.0.0 (git+https://github.com/boolnetwork/substrate.git?branch=bool-network-v3.0.0)",
+ "sp-serializer 3.0.0 (git+https://github.com/boolnetwork/substrate.git?branch=bool-network-v3.0.0)",
+ "sp-tasks 3.0.0 (git+https://github.com/boolnetwork/substrate.git?branch=bool-network-v3.0.0)",
+ "sp-trie 3.0.0 (git+https://github.com/boolnetwork/substrate.git?branch=bool-network-v3.0.0)",
+ "sp-version 3.0.0 (git+https://github.com/boolnetwork/substrate.git?branch=bool-network-v3.0.0)",
+ "sp-wasm-interface 3.0.0 (git+https://github.com/boolnetwork/substrate.git?branch=bool-network-v3.0.0)",
+ "wasmi",
 ]
 
 [[package]]
@@ -5551,19 +5899,35 @@ dependencies = [
  "parity-scale-codec",
  "parity-wasm 0.41.0",
  "parking_lot 0.11.1",
- "sc-executor-common",
- "sc-executor-wasmi",
- "sp-api",
- "sp-core",
- "sp-externalities",
- "sp-io",
- "sp-panic-handler",
- "sp-runtime-interface",
- "sp-serializer",
- "sp-tasks",
- "sp-trie",
- "sp-version",
- "sp-wasm-interface",
+ "sc-executor-common 0.9.0 (git+https://github.com/paritytech/substrate.git?branch=frontier)",
+ "sc-executor-wasmi 0.9.0 (git+https://github.com/paritytech/substrate.git?branch=frontier)",
+ "sp-api 3.0.0 (git+https://github.com/paritytech/substrate.git?branch=frontier)",
+ "sp-core 3.0.0 (git+https://github.com/paritytech/substrate.git?branch=frontier)",
+ "sp-externalities 0.9.0 (git+https://github.com/paritytech/substrate.git?branch=frontier)",
+ "sp-io 3.0.0 (git+https://github.com/paritytech/substrate.git?branch=frontier)",
+ "sp-panic-handler 3.0.0 (git+https://github.com/paritytech/substrate.git?branch=frontier)",
+ "sp-runtime-interface 3.0.0 (git+https://github.com/paritytech/substrate.git?branch=frontier)",
+ "sp-serializer 3.0.0 (git+https://github.com/paritytech/substrate.git?branch=frontier)",
+ "sp-tasks 3.0.0 (git+https://github.com/paritytech/substrate.git?branch=frontier)",
+ "sp-trie 3.0.0 (git+https://github.com/paritytech/substrate.git?branch=frontier)",
+ "sp-version 3.0.0 (git+https://github.com/paritytech/substrate.git?branch=frontier)",
+ "sp-wasm-interface 3.0.0 (git+https://github.com/paritytech/substrate.git?branch=frontier)",
+ "wasmi",
+]
+
+[[package]]
+name = "sc-executor-common"
+version = "0.9.0"
+source = "git+https://github.com/boolnetwork/substrate.git?branch=bool-network-v3.0.0#efa7baa1cd2b5f1d6ec01da68d8e0c22fadcf260"
+dependencies = [
+ "derive_more",
+ "parity-scale-codec",
+ "parity-wasm 0.41.0",
+ "sp-allocator 3.0.0 (git+https://github.com/boolnetwork/substrate.git?branch=bool-network-v3.0.0)",
+ "sp-core 3.0.0 (git+https://github.com/boolnetwork/substrate.git?branch=bool-network-v3.0.0)",
+ "sp-serializer 3.0.0 (git+https://github.com/boolnetwork/substrate.git?branch=bool-network-v3.0.0)",
+ "sp-wasm-interface 3.0.0 (git+https://github.com/boolnetwork/substrate.git?branch=bool-network-v3.0.0)",
+ "thiserror",
  "wasmi",
 ]
 
@@ -5575,11 +5939,26 @@ dependencies = [
  "derive_more",
  "parity-scale-codec",
  "parity-wasm 0.41.0",
- "sp-allocator",
- "sp-core",
- "sp-serializer",
- "sp-wasm-interface",
+ "sp-allocator 3.0.0 (git+https://github.com/paritytech/substrate.git?branch=frontier)",
+ "sp-core 3.0.0 (git+https://github.com/paritytech/substrate.git?branch=frontier)",
+ "sp-serializer 3.0.0 (git+https://github.com/paritytech/substrate.git?branch=frontier)",
+ "sp-wasm-interface 3.0.0 (git+https://github.com/paritytech/substrate.git?branch=frontier)",
  "thiserror",
+ "wasmi",
+]
+
+[[package]]
+name = "sc-executor-wasmi"
+version = "0.9.0"
+source = "git+https://github.com/boolnetwork/substrate.git?branch=bool-network-v3.0.0#efa7baa1cd2b5f1d6ec01da68d8e0c22fadcf260"
+dependencies = [
+ "log",
+ "parity-scale-codec",
+ "sc-executor-common 0.9.0 (git+https://github.com/boolnetwork/substrate.git?branch=bool-network-v3.0.0)",
+ "sp-allocator 3.0.0 (git+https://github.com/boolnetwork/substrate.git?branch=bool-network-v3.0.0)",
+ "sp-core 3.0.0 (git+https://github.com/boolnetwork/substrate.git?branch=bool-network-v3.0.0)",
+ "sp-runtime-interface 3.0.0 (git+https://github.com/boolnetwork/substrate.git?branch=bool-network-v3.0.0)",
+ "sp-wasm-interface 3.0.0 (git+https://github.com/boolnetwork/substrate.git?branch=bool-network-v3.0.0)",
  "wasmi",
 ]
 
@@ -5590,12 +5969,50 @@ source = "git+https://github.com/paritytech/substrate.git?branch=frontier#8b3e5b
 dependencies = [
  "log",
  "parity-scale-codec",
- "sc-executor-common",
- "sp-allocator",
- "sp-core",
- "sp-runtime-interface",
- "sp-wasm-interface",
+ "sc-executor-common 0.9.0 (git+https://github.com/paritytech/substrate.git?branch=frontier)",
+ "sp-allocator 3.0.0 (git+https://github.com/paritytech/substrate.git?branch=frontier)",
+ "sp-core 3.0.0 (git+https://github.com/paritytech/substrate.git?branch=frontier)",
+ "sp-runtime-interface 3.0.0 (git+https://github.com/paritytech/substrate.git?branch=frontier)",
+ "sp-wasm-interface 3.0.0 (git+https://github.com/paritytech/substrate.git?branch=frontier)",
  "wasmi",
+]
+
+[[package]]
+name = "sc-finality-grandpa"
+version = "0.9.0"
+source = "git+https://github.com/boolnetwork/substrate.git?branch=bool-network-v3.0.0#efa7baa1cd2b5f1d6ec01da68d8e0c22fadcf260"
+dependencies = [
+ "derive_more",
+ "finality-grandpa 0.13.0",
+ "fork-tree 3.0.0 (git+https://github.com/boolnetwork/substrate.git?branch=bool-network-v3.0.0)",
+ "futures 0.3.12",
+ "futures-timer 3.0.2",
+ "linked-hash-map",
+ "log",
+ "parity-scale-codec",
+ "parking_lot 0.11.1",
+ "pin-project 1.0.5",
+ "rand 0.7.3",
+ "sc-block-builder 0.9.0 (git+https://github.com/boolnetwork/substrate.git?branch=bool-network-v3.0.0)",
+ "sc-client-api 3.0.0 (git+https://github.com/boolnetwork/substrate.git?branch=bool-network-v3.0.0)",
+ "sc-consensus 0.9.0 (git+https://github.com/boolnetwork/substrate.git?branch=bool-network-v3.0.0)",
+ "sc-keystore 3.0.0 (git+https://github.com/boolnetwork/substrate.git?branch=bool-network-v3.0.0)",
+ "sc-network 0.9.0 (git+https://github.com/boolnetwork/substrate.git?branch=bool-network-v3.0.0)",
+ "sc-network-gossip 0.9.0 (git+https://github.com/boolnetwork/substrate.git?branch=bool-network-v3.0.0)",
+ "sc-telemetry 3.0.0 (git+https://github.com/boolnetwork/substrate.git?branch=bool-network-v3.0.0)",
+ "serde_json",
+ "sp-api 3.0.0 (git+https://github.com/boolnetwork/substrate.git?branch=bool-network-v3.0.0)",
+ "sp-application-crypto 3.0.0 (git+https://github.com/boolnetwork/substrate.git?branch=bool-network-v3.0.0)",
+ "sp-arithmetic 3.0.0 (git+https://github.com/boolnetwork/substrate.git?branch=bool-network-v3.0.0)",
+ "sp-blockchain 3.0.0 (git+https://github.com/boolnetwork/substrate.git?branch=bool-network-v3.0.0)",
+ "sp-consensus 0.9.0 (git+https://github.com/boolnetwork/substrate.git?branch=bool-network-v3.0.0)",
+ "sp-core 3.0.0 (git+https://github.com/boolnetwork/substrate.git?branch=bool-network-v3.0.0)",
+ "sp-finality-grandpa 3.0.0 (git+https://github.com/boolnetwork/substrate.git?branch=bool-network-v3.0.0)",
+ "sp-inherents 3.0.0 (git+https://github.com/boolnetwork/substrate.git?branch=bool-network-v3.0.0)",
+ "sp-keystore 0.9.0 (git+https://github.com/boolnetwork/substrate.git?branch=bool-network-v3.0.0)",
+ "sp-runtime 3.0.0 (git+https://github.com/boolnetwork/substrate.git?branch=bool-network-v3.0.0)",
+ "sp-utils 3.0.0 (git+https://github.com/boolnetwork/substrate.git?branch=bool-network-v3.0.0)",
+ "substrate-prometheus-endpoint 0.9.0 (git+https://github.com/boolnetwork/substrate.git?branch=bool-network-v3.0.0)",
 ]
 
 [[package]]
@@ -5605,8 +6022,8 @@ source = "git+https://github.com/paritytech/substrate.git?branch=frontier#8b3e5b
 dependencies = [
  "derive_more",
  "dyn-clone",
- "finality-grandpa",
- "fork-tree",
+ "finality-grandpa 0.14.0",
+ "fork-tree 3.0.0 (git+https://github.com/paritytech/substrate.git?branch=frontier)",
  "futures 0.3.12",
  "futures-timer 3.0.2",
  "linked-hash-map",
@@ -5615,26 +6032,44 @@ dependencies = [
  "parking_lot 0.11.1",
  "pin-project 1.0.5",
  "rand 0.7.3",
- "sc-block-builder",
- "sc-client-api",
- "sc-consensus",
- "sc-keystore",
- "sc-network",
- "sc-network-gossip",
- "sc-telemetry",
+ "sc-block-builder 0.9.0 (git+https://github.com/paritytech/substrate.git?branch=frontier)",
+ "sc-client-api 3.0.0 (git+https://github.com/paritytech/substrate.git?branch=frontier)",
+ "sc-consensus 0.9.0 (git+https://github.com/paritytech/substrate.git?branch=frontier)",
+ "sc-keystore 3.0.0 (git+https://github.com/paritytech/substrate.git?branch=frontier)",
+ "sc-network 0.9.0 (git+https://github.com/paritytech/substrate.git?branch=frontier)",
+ "sc-network-gossip 0.9.0 (git+https://github.com/paritytech/substrate.git?branch=frontier)",
+ "sc-telemetry 3.0.0 (git+https://github.com/paritytech/substrate.git?branch=frontier)",
  "serde_json",
- "sp-api",
- "sp-application-crypto",
- "sp-arithmetic",
- "sp-blockchain",
- "sp-consensus",
- "sp-core",
- "sp-finality-grandpa",
- "sp-inherents",
- "sp-keystore",
- "sp-runtime",
- "sp-utils",
- "substrate-prometheus-endpoint",
+ "sp-api 3.0.0 (git+https://github.com/paritytech/substrate.git?branch=frontier)",
+ "sp-application-crypto 3.0.0 (git+https://github.com/paritytech/substrate.git?branch=frontier)",
+ "sp-arithmetic 3.0.0 (git+https://github.com/paritytech/substrate.git?branch=frontier)",
+ "sp-blockchain 3.0.0 (git+https://github.com/paritytech/substrate.git?branch=frontier)",
+ "sp-consensus 0.9.0 (git+https://github.com/paritytech/substrate.git?branch=frontier)",
+ "sp-core 3.0.0 (git+https://github.com/paritytech/substrate.git?branch=frontier)",
+ "sp-finality-grandpa 3.0.0 (git+https://github.com/paritytech/substrate.git?branch=frontier)",
+ "sp-inherents 3.0.0 (git+https://github.com/paritytech/substrate.git?branch=frontier)",
+ "sp-keystore 0.9.0 (git+https://github.com/paritytech/substrate.git?branch=frontier)",
+ "sp-runtime 3.0.0 (git+https://github.com/paritytech/substrate.git?branch=frontier)",
+ "sp-utils 3.0.0 (git+https://github.com/paritytech/substrate.git?branch=frontier)",
+ "substrate-prometheus-endpoint 0.9.0 (git+https://github.com/paritytech/substrate.git?branch=frontier)",
+]
+
+[[package]]
+name = "sc-informant"
+version = "0.9.0"
+source = "git+https://github.com/boolnetwork/substrate.git?branch=bool-network-v3.0.0#efa7baa1cd2b5f1d6ec01da68d8e0c22fadcf260"
+dependencies = [
+ "ansi_term 0.12.1",
+ "futures 0.3.12",
+ "log",
+ "parity-util-mem",
+ "sc-client-api 3.0.0 (git+https://github.com/boolnetwork/substrate.git?branch=bool-network-v3.0.0)",
+ "sc-network 0.9.0 (git+https://github.com/boolnetwork/substrate.git?branch=bool-network-v3.0.0)",
+ "sp-blockchain 3.0.0 (git+https://github.com/boolnetwork/substrate.git?branch=bool-network-v3.0.0)",
+ "sp-runtime 3.0.0 (git+https://github.com/boolnetwork/substrate.git?branch=bool-network-v3.0.0)",
+ "sp-transaction-pool 3.0.0 (git+https://github.com/boolnetwork/substrate.git?branch=bool-network-v3.0.0)",
+ "sp-utils 3.0.0 (git+https://github.com/boolnetwork/substrate.git?branch=bool-network-v3.0.0)",
+ "wasm-timer",
 ]
 
 [[package]]
@@ -5646,13 +6081,33 @@ dependencies = [
  "futures 0.3.12",
  "log",
  "parity-util-mem",
- "sc-client-api",
- "sc-network",
- "sp-blockchain",
- "sp-runtime",
- "sp-transaction-pool",
- "sp-utils",
+ "sc-client-api 3.0.0 (git+https://github.com/paritytech/substrate.git?branch=frontier)",
+ "sc-network 0.9.0 (git+https://github.com/paritytech/substrate.git?branch=frontier)",
+ "sp-blockchain 3.0.0 (git+https://github.com/paritytech/substrate.git?branch=frontier)",
+ "sp-runtime 3.0.0 (git+https://github.com/paritytech/substrate.git?branch=frontier)",
+ "sp-transaction-pool 3.0.0 (git+https://github.com/paritytech/substrate.git?branch=frontier)",
+ "sp-utils 3.0.0 (git+https://github.com/paritytech/substrate.git?branch=frontier)",
  "wasm-timer",
+]
+
+[[package]]
+name = "sc-keystore"
+version = "3.0.0"
+source = "git+https://github.com/boolnetwork/substrate.git?branch=bool-network-v3.0.0#efa7baa1cd2b5f1d6ec01da68d8e0c22fadcf260"
+dependencies = [
+ "async-trait",
+ "derive_more",
+ "futures 0.3.12",
+ "futures-util",
+ "hex",
+ "merlin",
+ "parking_lot 0.11.1",
+ "rand 0.7.3",
+ "serde_json",
+ "sp-application-crypto 3.0.0 (git+https://github.com/boolnetwork/substrate.git?branch=bool-network-v3.0.0)",
+ "sp-core 3.0.0 (git+https://github.com/boolnetwork/substrate.git?branch=bool-network-v3.0.0)",
+ "sp-keystore 0.9.0 (git+https://github.com/boolnetwork/substrate.git?branch=bool-network-v3.0.0)",
+ "subtle 2.4.0",
 ]
 
 [[package]]
@@ -5669,10 +6124,29 @@ dependencies = [
  "parking_lot 0.11.1",
  "rand 0.7.3",
  "serde_json",
- "sp-application-crypto",
- "sp-core",
- "sp-keystore",
+ "sp-application-crypto 3.0.0 (git+https://github.com/paritytech/substrate.git?branch=frontier)",
+ "sp-core 3.0.0 (git+https://github.com/paritytech/substrate.git?branch=frontier)",
+ "sp-keystore 0.9.0 (git+https://github.com/paritytech/substrate.git?branch=frontier)",
  "subtle 2.4.0",
+]
+
+[[package]]
+name = "sc-light"
+version = "3.0.0"
+source = "git+https://github.com/boolnetwork/substrate.git?branch=bool-network-v3.0.0#efa7baa1cd2b5f1d6ec01da68d8e0c22fadcf260"
+dependencies = [
+ "hash-db",
+ "lazy_static",
+ "parity-scale-codec",
+ "parking_lot 0.11.1",
+ "sc-client-api 3.0.0 (git+https://github.com/boolnetwork/substrate.git?branch=bool-network-v3.0.0)",
+ "sc-executor 0.9.0 (git+https://github.com/boolnetwork/substrate.git?branch=bool-network-v3.0.0)",
+ "sp-api 3.0.0 (git+https://github.com/boolnetwork/substrate.git?branch=bool-network-v3.0.0)",
+ "sp-blockchain 3.0.0 (git+https://github.com/boolnetwork/substrate.git?branch=bool-network-v3.0.0)",
+ "sp-core 3.0.0 (git+https://github.com/boolnetwork/substrate.git?branch=bool-network-v3.0.0)",
+ "sp-externalities 0.9.0 (git+https://github.com/boolnetwork/substrate.git?branch=bool-network-v3.0.0)",
+ "sp-runtime 3.0.0 (git+https://github.com/boolnetwork/substrate.git?branch=bool-network-v3.0.0)",
+ "sp-state-machine 0.9.0 (git+https://github.com/boolnetwork/substrate.git?branch=bool-network-v3.0.0)",
 ]
 
 [[package]]
@@ -5684,14 +6158,67 @@ dependencies = [
  "lazy_static",
  "parity-scale-codec",
  "parking_lot 0.11.1",
- "sc-client-api",
- "sc-executor",
- "sp-api",
- "sp-blockchain",
- "sp-core",
- "sp-externalities",
- "sp-runtime",
- "sp-state-machine",
+ "sc-client-api 3.0.0 (git+https://github.com/paritytech/substrate.git?branch=frontier)",
+ "sc-executor 0.9.0 (git+https://github.com/paritytech/substrate.git?branch=frontier)",
+ "sp-api 3.0.0 (git+https://github.com/paritytech/substrate.git?branch=frontier)",
+ "sp-blockchain 3.0.0 (git+https://github.com/paritytech/substrate.git?branch=frontier)",
+ "sp-core 3.0.0 (git+https://github.com/paritytech/substrate.git?branch=frontier)",
+ "sp-externalities 0.9.0 (git+https://github.com/paritytech/substrate.git?branch=frontier)",
+ "sp-runtime 3.0.0 (git+https://github.com/paritytech/substrate.git?branch=frontier)",
+ "sp-state-machine 0.9.0 (git+https://github.com/paritytech/substrate.git?branch=frontier)",
+]
+
+[[package]]
+name = "sc-network"
+version = "0.9.0"
+source = "git+https://github.com/boolnetwork/substrate.git?branch=bool-network-v3.0.0#efa7baa1cd2b5f1d6ec01da68d8e0c22fadcf260"
+dependencies = [
+ "async-std",
+ "async-trait",
+ "asynchronous-codec 0.5.0",
+ "bitflags",
+ "bs58",
+ "bytes 1.0.1",
+ "cid",
+ "derive_more",
+ "either",
+ "erased-serde",
+ "fnv",
+ "fork-tree 3.0.0 (git+https://github.com/boolnetwork/substrate.git?branch=bool-network-v3.0.0)",
+ "futures 0.3.12",
+ "futures-timer 3.0.2",
+ "hex",
+ "ip_network",
+ "libp2p 0.34.0",
+ "linked-hash-map",
+ "linked_hash_set",
+ "log",
+ "lru",
+ "nohash-hasher",
+ "parity-scale-codec",
+ "parking_lot 0.11.1",
+ "pin-project 1.0.5",
+ "prost",
+ "prost-build",
+ "rand 0.7.3",
+ "sc-block-builder 0.9.0 (git+https://github.com/boolnetwork/substrate.git?branch=bool-network-v3.0.0)",
+ "sc-client-api 3.0.0 (git+https://github.com/boolnetwork/substrate.git?branch=bool-network-v3.0.0)",
+ "sc-peerset 3.0.0 (git+https://github.com/boolnetwork/substrate.git?branch=bool-network-v3.0.0)",
+ "serde",
+ "serde_json",
+ "smallvec 1.6.1",
+ "sp-arithmetic 3.0.0 (git+https://github.com/boolnetwork/substrate.git?branch=bool-network-v3.0.0)",
+ "sp-blockchain 3.0.0 (git+https://github.com/boolnetwork/substrate.git?branch=bool-network-v3.0.0)",
+ "sp-consensus 0.9.0 (git+https://github.com/boolnetwork/substrate.git?branch=bool-network-v3.0.0)",
+ "sp-core 3.0.0 (git+https://github.com/boolnetwork/substrate.git?branch=bool-network-v3.0.0)",
+ "sp-runtime 3.0.0 (git+https://github.com/boolnetwork/substrate.git?branch=bool-network-v3.0.0)",
+ "sp-utils 3.0.0 (git+https://github.com/boolnetwork/substrate.git?branch=bool-network-v3.0.0)",
+ "substrate-prometheus-endpoint 0.9.0 (git+https://github.com/boolnetwork/substrate.git?branch=bool-network-v3.0.0)",
+ "thiserror",
+ "unsigned-varint 0.6.0",
+ "void",
+ "wasm-timer",
+ "zeroize",
 ]
 
 [[package]]
@@ -5710,12 +6237,12 @@ dependencies = [
  "either",
  "erased-serde",
  "fnv",
- "fork-tree",
+ "fork-tree 3.0.0 (git+https://github.com/paritytech/substrate.git?branch=frontier)",
  "futures 0.3.12",
  "futures-timer 3.0.2",
  "hex",
  "ip_network",
- "libp2p",
+ "libp2p 0.35.1",
  "linked-hash-map",
  "linked_hash_set",
  "log",
@@ -5727,19 +6254,19 @@ dependencies = [
  "prost",
  "prost-build",
  "rand 0.7.3",
- "sc-block-builder",
- "sc-client-api",
- "sc-peerset",
+ "sc-block-builder 0.9.0 (git+https://github.com/paritytech/substrate.git?branch=frontier)",
+ "sc-client-api 3.0.0 (git+https://github.com/paritytech/substrate.git?branch=frontier)",
+ "sc-peerset 3.0.0 (git+https://github.com/paritytech/substrate.git?branch=frontier)",
  "serde",
  "serde_json",
  "smallvec 1.6.1",
- "sp-arithmetic",
- "sp-blockchain",
- "sp-consensus",
- "sp-core",
- "sp-runtime",
- "sp-utils",
- "substrate-prometheus-endpoint",
+ "sp-arithmetic 3.0.0 (git+https://github.com/paritytech/substrate.git?branch=frontier)",
+ "sp-blockchain 3.0.0 (git+https://github.com/paritytech/substrate.git?branch=frontier)",
+ "sp-consensus 0.9.0 (git+https://github.com/paritytech/substrate.git?branch=frontier)",
+ "sp-core 3.0.0 (git+https://github.com/paritytech/substrate.git?branch=frontier)",
+ "sp-runtime 3.0.0 (git+https://github.com/paritytech/substrate.git?branch=frontier)",
+ "sp-utils 3.0.0 (git+https://github.com/paritytech/substrate.git?branch=frontier)",
+ "substrate-prometheus-endpoint 0.9.0 (git+https://github.com/paritytech/substrate.git?branch=frontier)",
  "thiserror",
  "unsigned-varint 0.6.0",
  "void",
@@ -5750,17 +6277,60 @@ dependencies = [
 [[package]]
 name = "sc-network-gossip"
 version = "0.9.0"
+source = "git+https://github.com/boolnetwork/substrate.git?branch=bool-network-v3.0.0#efa7baa1cd2b5f1d6ec01da68d8e0c22fadcf260"
+dependencies = [
+ "futures 0.3.12",
+ "futures-timer 3.0.2",
+ "libp2p 0.34.0",
+ "log",
+ "lru",
+ "sc-network 0.9.0 (git+https://github.com/boolnetwork/substrate.git?branch=bool-network-v3.0.0)",
+ "sp-runtime 3.0.0 (git+https://github.com/boolnetwork/substrate.git?branch=bool-network-v3.0.0)",
+ "substrate-prometheus-endpoint 0.9.0 (git+https://github.com/boolnetwork/substrate.git?branch=bool-network-v3.0.0)",
+ "wasm-timer",
+]
+
+[[package]]
+name = "sc-network-gossip"
+version = "0.9.0"
 source = "git+https://github.com/paritytech/substrate.git?branch=frontier#8b3e5bc7cd056112d390920fca5a554b2d0b0475"
 dependencies = [
  "futures 0.3.12",
  "futures-timer 3.0.2",
- "libp2p",
+ "libp2p 0.35.1",
  "log",
  "lru",
- "sc-network",
- "sp-runtime",
- "substrate-prometheus-endpoint",
+ "sc-network 0.9.0 (git+https://github.com/paritytech/substrate.git?branch=frontier)",
+ "sp-runtime 3.0.0 (git+https://github.com/paritytech/substrate.git?branch=frontier)",
+ "substrate-prometheus-endpoint 0.9.0 (git+https://github.com/paritytech/substrate.git?branch=frontier)",
  "wasm-timer",
+]
+
+[[package]]
+name = "sc-offchain"
+version = "3.0.0"
+source = "git+https://github.com/boolnetwork/substrate.git?branch=bool-network-v3.0.0#efa7baa1cd2b5f1d6ec01da68d8e0c22fadcf260"
+dependencies = [
+ "bytes 0.5.6",
+ "fnv",
+ "futures 0.3.12",
+ "futures-timer 3.0.2",
+ "hyper 0.13.9",
+ "hyper-rustls",
+ "log",
+ "num_cpus",
+ "parity-scale-codec",
+ "parking_lot 0.11.1",
+ "rand 0.7.3",
+ "sc-client-api 3.0.0 (git+https://github.com/boolnetwork/substrate.git?branch=bool-network-v3.0.0)",
+ "sc-keystore 3.0.0 (git+https://github.com/boolnetwork/substrate.git?branch=bool-network-v3.0.0)",
+ "sc-network 0.9.0 (git+https://github.com/boolnetwork/substrate.git?branch=bool-network-v3.0.0)",
+ "sp-api 3.0.0 (git+https://github.com/boolnetwork/substrate.git?branch=bool-network-v3.0.0)",
+ "sp-core 3.0.0 (git+https://github.com/boolnetwork/substrate.git?branch=bool-network-v3.0.0)",
+ "sp-offchain 3.0.0 (git+https://github.com/boolnetwork/substrate.git?branch=bool-network-v3.0.0)",
+ "sp-runtime 3.0.0 (git+https://github.com/boolnetwork/substrate.git?branch=bool-network-v3.0.0)",
+ "sp-utils 3.0.0 (git+https://github.com/boolnetwork/substrate.git?branch=bool-network-v3.0.0)",
+ "threadpool",
 ]
 
 [[package]]
@@ -5780,15 +6350,28 @@ dependencies = [
  "parity-scale-codec",
  "parking_lot 0.11.1",
  "rand 0.7.3",
- "sc-client-api",
- "sc-keystore",
- "sc-network",
- "sp-api",
- "sp-core",
- "sp-offchain",
- "sp-runtime",
- "sp-utils",
+ "sc-client-api 3.0.0 (git+https://github.com/paritytech/substrate.git?branch=frontier)",
+ "sc-keystore 3.0.0 (git+https://github.com/paritytech/substrate.git?branch=frontier)",
+ "sc-network 0.9.0 (git+https://github.com/paritytech/substrate.git?branch=frontier)",
+ "sp-api 3.0.0 (git+https://github.com/paritytech/substrate.git?branch=frontier)",
+ "sp-core 3.0.0 (git+https://github.com/paritytech/substrate.git?branch=frontier)",
+ "sp-offchain 3.0.0 (git+https://github.com/paritytech/substrate.git?branch=frontier)",
+ "sp-runtime 3.0.0 (git+https://github.com/paritytech/substrate.git?branch=frontier)",
+ "sp-utils 3.0.0 (git+https://github.com/paritytech/substrate.git?branch=frontier)",
  "threadpool",
+]
+
+[[package]]
+name = "sc-peerset"
+version = "3.0.0"
+source = "git+https://github.com/boolnetwork/substrate.git?branch=bool-network-v3.0.0#efa7baa1cd2b5f1d6ec01da68d8e0c22fadcf260"
+dependencies = [
+ "futures 0.3.12",
+ "libp2p 0.34.0",
+ "log",
+ "serde_json",
+ "sp-utils 3.0.0 (git+https://github.com/boolnetwork/substrate.git?branch=bool-network-v3.0.0)",
+ "wasm-timer",
 ]
 
 [[package]]
@@ -5797,10 +6380,10 @@ version = "3.0.0"
 source = "git+https://github.com/paritytech/substrate.git?branch=frontier#8b3e5bc7cd056112d390920fca5a554b2d0b0475"
 dependencies = [
  "futures 0.3.12",
- "libp2p",
+ "libp2p 0.35.1",
  "log",
  "serde_json",
- "sp-utils",
+ "sp-utils 3.0.0 (git+https://github.com/paritytech/substrate.git?branch=frontier)",
  "wasm-timer",
 ]
 
@@ -5810,7 +6393,41 @@ version = "0.9.0"
 source = "git+https://github.com/paritytech/substrate.git?branch=frontier#8b3e5bc7cd056112d390920fca5a554b2d0b0475"
 dependencies = [
  "log",
- "substrate-prometheus-endpoint",
+ "substrate-prometheus-endpoint 0.9.0 (git+https://github.com/paritytech/substrate.git?branch=frontier)",
+]
+
+[[package]]
+name = "sc-rpc"
+version = "3.0.0"
+source = "git+https://github.com/boolnetwork/substrate.git?branch=bool-network-v3.0.0#efa7baa1cd2b5f1d6ec01da68d8e0c22fadcf260"
+dependencies = [
+ "futures 0.3.12",
+ "hash-db",
+ "jsonrpc-core 15.1.0",
+ "jsonrpc-pubsub 15.1.0",
+ "log",
+ "parity-scale-codec",
+ "parking_lot 0.11.1",
+ "sc-block-builder 0.9.0 (git+https://github.com/boolnetwork/substrate.git?branch=bool-network-v3.0.0)",
+ "sc-client-api 3.0.0 (git+https://github.com/boolnetwork/substrate.git?branch=bool-network-v3.0.0)",
+ "sc-executor 0.9.0 (git+https://github.com/boolnetwork/substrate.git?branch=bool-network-v3.0.0)",
+ "sc-keystore 3.0.0 (git+https://github.com/boolnetwork/substrate.git?branch=bool-network-v3.0.0)",
+ "sc-rpc-api 0.9.0 (git+https://github.com/boolnetwork/substrate.git?branch=bool-network-v3.0.0)",
+ "sc-tracing 3.0.0 (git+https://github.com/boolnetwork/substrate.git?branch=bool-network-v3.0.0)",
+ "serde_json",
+ "sp-api 3.0.0 (git+https://github.com/boolnetwork/substrate.git?branch=bool-network-v3.0.0)",
+ "sp-blockchain 3.0.0 (git+https://github.com/boolnetwork/substrate.git?branch=bool-network-v3.0.0)",
+ "sp-chain-spec 3.0.0 (git+https://github.com/boolnetwork/substrate.git?branch=bool-network-v3.0.0)",
+ "sp-core 3.0.0 (git+https://github.com/boolnetwork/substrate.git?branch=bool-network-v3.0.0)",
+ "sp-keystore 0.9.0 (git+https://github.com/boolnetwork/substrate.git?branch=bool-network-v3.0.0)",
+ "sp-offchain 3.0.0 (git+https://github.com/boolnetwork/substrate.git?branch=bool-network-v3.0.0)",
+ "sp-rpc 3.0.0 (git+https://github.com/boolnetwork/substrate.git?branch=bool-network-v3.0.0)",
+ "sp-runtime 3.0.0 (git+https://github.com/boolnetwork/substrate.git?branch=bool-network-v3.0.0)",
+ "sp-session 3.0.0 (git+https://github.com/boolnetwork/substrate.git?branch=bool-network-v3.0.0)",
+ "sp-state-machine 0.9.0 (git+https://github.com/boolnetwork/substrate.git?branch=bool-network-v3.0.0)",
+ "sp-transaction-pool 3.0.0 (git+https://github.com/boolnetwork/substrate.git?branch=bool-network-v3.0.0)",
+ "sp-utils 3.0.0 (git+https://github.com/boolnetwork/substrate.git?branch=bool-network-v3.0.0)",
+ "sp-version 3.0.0 (git+https://github.com/boolnetwork/substrate.git?branch=bool-network-v3.0.0)",
 ]
 
 [[package]]
@@ -5825,26 +6442,50 @@ dependencies = [
  "log",
  "parity-scale-codec",
  "parking_lot 0.11.1",
- "sc-block-builder",
- "sc-client-api",
- "sc-executor",
- "sc-keystore",
- "sc-rpc-api",
- "sc-tracing",
+ "sc-block-builder 0.9.0 (git+https://github.com/paritytech/substrate.git?branch=frontier)",
+ "sc-client-api 3.0.0 (git+https://github.com/paritytech/substrate.git?branch=frontier)",
+ "sc-executor 0.9.0 (git+https://github.com/paritytech/substrate.git?branch=frontier)",
+ "sc-keystore 3.0.0 (git+https://github.com/paritytech/substrate.git?branch=frontier)",
+ "sc-rpc-api 0.9.0 (git+https://github.com/paritytech/substrate.git?branch=frontier)",
+ "sc-tracing 3.0.0 (git+https://github.com/paritytech/substrate.git?branch=frontier)",
  "serde_json",
- "sp-api",
- "sp-blockchain",
- "sp-chain-spec",
- "sp-core",
- "sp-keystore",
- "sp-offchain",
- "sp-rpc",
- "sp-runtime",
- "sp-session",
- "sp-state-machine",
- "sp-transaction-pool",
- "sp-utils",
- "sp-version",
+ "sp-api 3.0.0 (git+https://github.com/paritytech/substrate.git?branch=frontier)",
+ "sp-blockchain 3.0.0 (git+https://github.com/paritytech/substrate.git?branch=frontier)",
+ "sp-chain-spec 3.0.0 (git+https://github.com/paritytech/substrate.git?branch=frontier)",
+ "sp-core 3.0.0 (git+https://github.com/paritytech/substrate.git?branch=frontier)",
+ "sp-keystore 0.9.0 (git+https://github.com/paritytech/substrate.git?branch=frontier)",
+ "sp-offchain 3.0.0 (git+https://github.com/paritytech/substrate.git?branch=frontier)",
+ "sp-rpc 3.0.0 (git+https://github.com/paritytech/substrate.git?branch=frontier)",
+ "sp-runtime 3.0.0 (git+https://github.com/paritytech/substrate.git?branch=frontier)",
+ "sp-session 3.0.0 (git+https://github.com/paritytech/substrate.git?branch=frontier)",
+ "sp-state-machine 0.9.0 (git+https://github.com/paritytech/substrate.git?branch=frontier)",
+ "sp-transaction-pool 3.0.0 (git+https://github.com/paritytech/substrate.git?branch=frontier)",
+ "sp-utils 3.0.0 (git+https://github.com/paritytech/substrate.git?branch=frontier)",
+ "sp-version 3.0.0 (git+https://github.com/paritytech/substrate.git?branch=frontier)",
+]
+
+[[package]]
+name = "sc-rpc-api"
+version = "0.9.0"
+source = "git+https://github.com/boolnetwork/substrate.git?branch=bool-network-v3.0.0#efa7baa1cd2b5f1d6ec01da68d8e0c22fadcf260"
+dependencies = [
+ "derive_more",
+ "futures 0.3.12",
+ "jsonrpc-core 15.1.0",
+ "jsonrpc-core-client 15.1.0",
+ "jsonrpc-derive 15.1.0",
+ "jsonrpc-pubsub 15.1.0",
+ "log",
+ "parity-scale-codec",
+ "parking_lot 0.11.1",
+ "serde",
+ "serde_json",
+ "sp-chain-spec 3.0.0 (git+https://github.com/boolnetwork/substrate.git?branch=bool-network-v3.0.0)",
+ "sp-core 3.0.0 (git+https://github.com/boolnetwork/substrate.git?branch=bool-network-v3.0.0)",
+ "sp-rpc 3.0.0 (git+https://github.com/boolnetwork/substrate.git?branch=bool-network-v3.0.0)",
+ "sp-runtime 3.0.0 (git+https://github.com/boolnetwork/substrate.git?branch=bool-network-v3.0.0)",
+ "sp-transaction-pool 3.0.0 (git+https://github.com/boolnetwork/substrate.git?branch=bool-network-v3.0.0)",
+ "sp-version 3.0.0 (git+https://github.com/boolnetwork/substrate.git?branch=bool-network-v3.0.0)",
 ]
 
 [[package]]
@@ -5863,12 +6504,30 @@ dependencies = [
  "parking_lot 0.11.1",
  "serde",
  "serde_json",
- "sp-chain-spec",
- "sp-core",
- "sp-rpc",
- "sp-runtime",
- "sp-transaction-pool",
- "sp-version",
+ "sp-chain-spec 3.0.0 (git+https://github.com/paritytech/substrate.git?branch=frontier)",
+ "sp-core 3.0.0 (git+https://github.com/paritytech/substrate.git?branch=frontier)",
+ "sp-rpc 3.0.0 (git+https://github.com/paritytech/substrate.git?branch=frontier)",
+ "sp-runtime 3.0.0 (git+https://github.com/paritytech/substrate.git?branch=frontier)",
+ "sp-transaction-pool 3.0.0 (git+https://github.com/paritytech/substrate.git?branch=frontier)",
+ "sp-version 3.0.0 (git+https://github.com/paritytech/substrate.git?branch=frontier)",
+]
+
+[[package]]
+name = "sc-rpc-server"
+version = "3.0.0"
+source = "git+https://github.com/boolnetwork/substrate.git?branch=bool-network-v3.0.0#efa7baa1cd2b5f1d6ec01da68d8e0c22fadcf260"
+dependencies = [
+ "futures 0.1.30",
+ "jsonrpc-core 15.1.0",
+ "jsonrpc-http-server",
+ "jsonrpc-ipc-server",
+ "jsonrpc-pubsub 15.1.0",
+ "jsonrpc-ws-server",
+ "log",
+ "serde",
+ "serde_json",
+ "sp-runtime 3.0.0 (git+https://github.com/boolnetwork/substrate.git?branch=bool-network-v3.0.0)",
+ "substrate-prometheus-endpoint 0.9.0 (git+https://github.com/boolnetwork/substrate.git?branch=bool-network-v3.0.0)",
 ]
 
 [[package]]
@@ -5885,8 +6544,71 @@ dependencies = [
  "log",
  "serde",
  "serde_json",
- "sp-runtime",
- "substrate-prometheus-endpoint",
+ "sp-runtime 3.0.0 (git+https://github.com/paritytech/substrate.git?branch=frontier)",
+ "substrate-prometheus-endpoint 0.9.0 (git+https://github.com/paritytech/substrate.git?branch=frontier)",
+]
+
+[[package]]
+name = "sc-service"
+version = "0.9.0"
+source = "git+https://github.com/boolnetwork/substrate.git?branch=bool-network-v3.0.0#efa7baa1cd2b5f1d6ec01da68d8e0c22fadcf260"
+dependencies = [
+ "directories",
+ "exit-future",
+ "futures 0.1.30",
+ "futures 0.3.12",
+ "futures-timer 3.0.2",
+ "hash-db",
+ "jsonrpc-core 15.1.0",
+ "jsonrpc-pubsub 15.1.0",
+ "lazy_static",
+ "log",
+ "parity-scale-codec",
+ "parity-util-mem",
+ "parking_lot 0.11.1",
+ "pin-project 1.0.5",
+ "rand 0.7.3",
+ "sc-block-builder 0.9.0 (git+https://github.com/boolnetwork/substrate.git?branch=bool-network-v3.0.0)",
+ "sc-chain-spec 3.0.0 (git+https://github.com/boolnetwork/substrate.git?branch=bool-network-v3.0.0)",
+ "sc-client-api 3.0.0 (git+https://github.com/boolnetwork/substrate.git?branch=bool-network-v3.0.0)",
+ "sc-client-db 0.9.0 (git+https://github.com/boolnetwork/substrate.git?branch=bool-network-v3.0.0)",
+ "sc-executor 0.9.0 (git+https://github.com/boolnetwork/substrate.git?branch=bool-network-v3.0.0)",
+ "sc-informant 0.9.0 (git+https://github.com/boolnetwork/substrate.git?branch=bool-network-v3.0.0)",
+ "sc-keystore 3.0.0 (git+https://github.com/boolnetwork/substrate.git?branch=bool-network-v3.0.0)",
+ "sc-light 3.0.0 (git+https://github.com/boolnetwork/substrate.git?branch=bool-network-v3.0.0)",
+ "sc-network 0.9.0 (git+https://github.com/boolnetwork/substrate.git?branch=bool-network-v3.0.0)",
+ "sc-offchain 3.0.0 (git+https://github.com/boolnetwork/substrate.git?branch=bool-network-v3.0.0)",
+ "sc-rpc 3.0.0 (git+https://github.com/boolnetwork/substrate.git?branch=bool-network-v3.0.0)",
+ "sc-rpc-server 3.0.0 (git+https://github.com/boolnetwork/substrate.git?branch=bool-network-v3.0.0)",
+ "sc-telemetry 3.0.0 (git+https://github.com/boolnetwork/substrate.git?branch=bool-network-v3.0.0)",
+ "sc-tracing 3.0.0 (git+https://github.com/boolnetwork/substrate.git?branch=bool-network-v3.0.0)",
+ "sc-transaction-pool 3.0.0 (git+https://github.com/boolnetwork/substrate.git?branch=bool-network-v3.0.0)",
+ "serde",
+ "serde_json",
+ "sp-api 3.0.0 (git+https://github.com/boolnetwork/substrate.git?branch=bool-network-v3.0.0)",
+ "sp-application-crypto 3.0.0 (git+https://github.com/boolnetwork/substrate.git?branch=bool-network-v3.0.0)",
+ "sp-block-builder 3.0.0 (git+https://github.com/boolnetwork/substrate.git?branch=bool-network-v3.0.0)",
+ "sp-blockchain 3.0.0 (git+https://github.com/boolnetwork/substrate.git?branch=bool-network-v3.0.0)",
+ "sp-consensus 0.9.0 (git+https://github.com/boolnetwork/substrate.git?branch=bool-network-v3.0.0)",
+ "sp-core 3.0.0 (git+https://github.com/boolnetwork/substrate.git?branch=bool-network-v3.0.0)",
+ "sp-externalities 0.9.0 (git+https://github.com/boolnetwork/substrate.git?branch=bool-network-v3.0.0)",
+ "sp-inherents 3.0.0 (git+https://github.com/boolnetwork/substrate.git?branch=bool-network-v3.0.0)",
+ "sp-io 3.0.0 (git+https://github.com/boolnetwork/substrate.git?branch=bool-network-v3.0.0)",
+ "sp-keystore 0.9.0 (git+https://github.com/boolnetwork/substrate.git?branch=bool-network-v3.0.0)",
+ "sp-runtime 3.0.0 (git+https://github.com/boolnetwork/substrate.git?branch=bool-network-v3.0.0)",
+ "sp-session 3.0.0 (git+https://github.com/boolnetwork/substrate.git?branch=bool-network-v3.0.0)",
+ "sp-state-machine 0.9.0 (git+https://github.com/boolnetwork/substrate.git?branch=bool-network-v3.0.0)",
+ "sp-tracing 3.0.0 (git+https://github.com/boolnetwork/substrate.git?branch=bool-network-v3.0.0)",
+ "sp-transaction-pool 3.0.0 (git+https://github.com/boolnetwork/substrate.git?branch=bool-network-v3.0.0)",
+ "sp-trie 3.0.0 (git+https://github.com/boolnetwork/substrate.git?branch=bool-network-v3.0.0)",
+ "sp-utils 3.0.0 (git+https://github.com/boolnetwork/substrate.git?branch=bool-network-v3.0.0)",
+ "sp-version 3.0.0 (git+https://github.com/boolnetwork/substrate.git?branch=bool-network-v3.0.0)",
+ "substrate-prometheus-endpoint 0.9.0 (git+https://github.com/boolnetwork/substrate.git?branch=bool-network-v3.0.0)",
+ "tempfile",
+ "thiserror",
+ "tracing",
+ "tracing-futures",
+ "wasm-timer",
 ]
 
 [[package]]
@@ -5909,47 +6631,62 @@ dependencies = [
  "parking_lot 0.11.1",
  "pin-project 1.0.5",
  "rand 0.7.3",
- "sc-block-builder",
- "sc-chain-spec",
- "sc-client-api",
- "sc-client-db",
- "sc-executor",
- "sc-informant",
- "sc-keystore",
- "sc-light",
- "sc-network",
- "sc-offchain",
- "sc-rpc",
- "sc-rpc-server",
- "sc-telemetry",
- "sc-tracing",
- "sc-transaction-pool",
+ "sc-block-builder 0.9.0 (git+https://github.com/paritytech/substrate.git?branch=frontier)",
+ "sc-chain-spec 3.0.0 (git+https://github.com/paritytech/substrate.git?branch=frontier)",
+ "sc-client-api 3.0.0 (git+https://github.com/paritytech/substrate.git?branch=frontier)",
+ "sc-client-db 0.9.0 (git+https://github.com/paritytech/substrate.git?branch=frontier)",
+ "sc-executor 0.9.0 (git+https://github.com/paritytech/substrate.git?branch=frontier)",
+ "sc-informant 0.9.0 (git+https://github.com/paritytech/substrate.git?branch=frontier)",
+ "sc-keystore 3.0.0 (git+https://github.com/paritytech/substrate.git?branch=frontier)",
+ "sc-light 3.0.0 (git+https://github.com/paritytech/substrate.git?branch=frontier)",
+ "sc-network 0.9.0 (git+https://github.com/paritytech/substrate.git?branch=frontier)",
+ "sc-offchain 3.0.0 (git+https://github.com/paritytech/substrate.git?branch=frontier)",
+ "sc-rpc 3.0.0 (git+https://github.com/paritytech/substrate.git?branch=frontier)",
+ "sc-rpc-server 3.0.0 (git+https://github.com/paritytech/substrate.git?branch=frontier)",
+ "sc-telemetry 3.0.0 (git+https://github.com/paritytech/substrate.git?branch=frontier)",
+ "sc-tracing 3.0.0 (git+https://github.com/paritytech/substrate.git?branch=frontier)",
+ "sc-transaction-pool 3.0.0 (git+https://github.com/paritytech/substrate.git?branch=frontier)",
  "serde",
  "serde_json",
- "sp-api",
- "sp-application-crypto",
- "sp-block-builder",
- "sp-blockchain",
- "sp-consensus",
- "sp-core",
- "sp-externalities",
- "sp-inherents",
- "sp-io",
- "sp-keystore",
- "sp-runtime",
- "sp-session",
- "sp-state-machine",
- "sp-tracing",
- "sp-transaction-pool",
- "sp-trie",
- "sp-utils",
- "sp-version",
- "substrate-prometheus-endpoint",
+ "sp-api 3.0.0 (git+https://github.com/paritytech/substrate.git?branch=frontier)",
+ "sp-application-crypto 3.0.0 (git+https://github.com/paritytech/substrate.git?branch=frontier)",
+ "sp-block-builder 3.0.0 (git+https://github.com/paritytech/substrate.git?branch=frontier)",
+ "sp-blockchain 3.0.0 (git+https://github.com/paritytech/substrate.git?branch=frontier)",
+ "sp-consensus 0.9.0 (git+https://github.com/paritytech/substrate.git?branch=frontier)",
+ "sp-core 3.0.0 (git+https://github.com/paritytech/substrate.git?branch=frontier)",
+ "sp-externalities 0.9.0 (git+https://github.com/paritytech/substrate.git?branch=frontier)",
+ "sp-inherents 3.0.0 (git+https://github.com/paritytech/substrate.git?branch=frontier)",
+ "sp-io 3.0.0 (git+https://github.com/paritytech/substrate.git?branch=frontier)",
+ "sp-keystore 0.9.0 (git+https://github.com/paritytech/substrate.git?branch=frontier)",
+ "sp-runtime 3.0.0 (git+https://github.com/paritytech/substrate.git?branch=frontier)",
+ "sp-session 3.0.0 (git+https://github.com/paritytech/substrate.git?branch=frontier)",
+ "sp-state-machine 0.9.0 (git+https://github.com/paritytech/substrate.git?branch=frontier)",
+ "sp-tracing 3.0.0 (git+https://github.com/paritytech/substrate.git?branch=frontier)",
+ "sp-transaction-pool 3.0.0 (git+https://github.com/paritytech/substrate.git?branch=frontier)",
+ "sp-trie 3.0.0 (git+https://github.com/paritytech/substrate.git?branch=frontier)",
+ "sp-utils 3.0.0 (git+https://github.com/paritytech/substrate.git?branch=frontier)",
+ "sp-version 3.0.0 (git+https://github.com/paritytech/substrate.git?branch=frontier)",
+ "substrate-prometheus-endpoint 0.9.0 (git+https://github.com/paritytech/substrate.git?branch=frontier)",
  "tempfile",
  "thiserror",
  "tracing",
  "tracing-futures",
  "wasm-timer",
+]
+
+[[package]]
+name = "sc-state-db"
+version = "0.9.0"
+source = "git+https://github.com/boolnetwork/substrate.git?branch=bool-network-v3.0.0#efa7baa1cd2b5f1d6ec01da68d8e0c22fadcf260"
+dependencies = [
+ "log",
+ "parity-scale-codec",
+ "parity-util-mem",
+ "parity-util-mem-derive",
+ "parking_lot 0.11.1",
+ "sc-client-api 3.0.0 (git+https://github.com/boolnetwork/substrate.git?branch=bool-network-v3.0.0)",
+ "sp-core 3.0.0 (git+https://github.com/boolnetwork/substrate.git?branch=bool-network-v3.0.0)",
+ "thiserror",
 ]
 
 [[package]]
@@ -5962,9 +6699,31 @@ dependencies = [
  "parity-util-mem",
  "parity-util-mem-derive",
  "parking_lot 0.11.1",
- "sc-client-api",
- "sp-core",
+ "sc-client-api 3.0.0 (git+https://github.com/paritytech/substrate.git?branch=frontier)",
+ "sp-core 3.0.0 (git+https://github.com/paritytech/substrate.git?branch=frontier)",
  "thiserror",
+]
+
+[[package]]
+name = "sc-telemetry"
+version = "3.0.0"
+source = "git+https://github.com/boolnetwork/substrate.git?branch=bool-network-v3.0.0#efa7baa1cd2b5f1d6ec01da68d8e0c22fadcf260"
+dependencies = [
+ "chrono",
+ "futures 0.3.12",
+ "libp2p 0.34.0",
+ "log",
+ "parking_lot 0.11.1",
+ "pin-project 1.0.5",
+ "rand 0.7.3",
+ "serde",
+ "serde_json",
+ "sp-utils 3.0.0 (git+https://github.com/boolnetwork/substrate.git?branch=bool-network-v3.0.0)",
+ "take_mut",
+ "tracing",
+ "tracing-subscriber",
+ "void",
+ "wasm-timer",
 ]
 
 [[package]]
@@ -5974,7 +6733,7 @@ source = "git+https://github.com/paritytech/substrate.git?branch=frontier#8b3e5b
 dependencies = [
  "chrono",
  "futures 0.3.12",
- "libp2p",
+ "libp2p 0.35.1",
  "log",
  "parking_lot 0.11.1",
  "pin-project 1.0.5",
@@ -5985,6 +6744,34 @@ dependencies = [
  "thiserror",
  "void",
  "wasm-timer",
+]
+
+[[package]]
+name = "sc-tracing"
+version = "3.0.0"
+source = "git+https://github.com/boolnetwork/substrate.git?branch=bool-network-v3.0.0#efa7baa1cd2b5f1d6ec01da68d8e0c22fadcf260"
+dependencies = [
+ "ansi_term 0.12.1",
+ "atty",
+ "erased-serde",
+ "lazy_static",
+ "log",
+ "once_cell",
+ "parking_lot 0.11.1",
+ "regex",
+ "rustc-hash",
+ "sc-telemetry 3.0.0 (git+https://github.com/boolnetwork/substrate.git?branch=bool-network-v3.0.0)",
+ "sc-tracing-proc-macro 3.0.0 (git+https://github.com/boolnetwork/substrate.git?branch=bool-network-v3.0.0)",
+ "serde",
+ "serde_json",
+ "sp-tracing 3.0.0 (git+https://github.com/boolnetwork/substrate.git?branch=bool-network-v3.0.0)",
+ "thiserror",
+ "tracing",
+ "tracing-core",
+ "tracing-log",
+ "tracing-subscriber",
+ "wasm-bindgen",
+ "web-sys",
 ]
 
 [[package]]
@@ -6001,10 +6788,10 @@ dependencies = [
  "parking_lot 0.11.1",
  "regex",
  "rustc-hash",
- "sc-tracing-proc-macro",
+ "sc-tracing-proc-macro 3.0.0 (git+https://github.com/paritytech/substrate.git?branch=frontier)",
  "serde",
  "serde_json",
- "sp-tracing",
+ "sp-tracing 3.0.0 (git+https://github.com/paritytech/substrate.git?branch=frontier)",
  "thiserror",
  "tracing",
  "tracing-core",
@@ -6012,6 +6799,17 @@ dependencies = [
  "tracing-subscriber",
  "wasm-bindgen",
  "web-sys",
+]
+
+[[package]]
+name = "sc-tracing-proc-macro"
+version = "3.0.0"
+source = "git+https://github.com/boolnetwork/substrate.git?branch=bool-network-v3.0.0#efa7baa1cd2b5f1d6ec01da68d8e0c22fadcf260"
+dependencies = [
+ "proc-macro-crate 0.1.5",
+ "proc-macro2",
+ "quote",
+ "syn",
 ]
 
 [[package]]
@@ -6028,6 +6826,28 @@ dependencies = [
 [[package]]
 name = "sc-transaction-graph"
 version = "3.0.0"
+source = "git+https://github.com/boolnetwork/substrate.git?branch=bool-network-v3.0.0#efa7baa1cd2b5f1d6ec01da68d8e0c22fadcf260"
+dependencies = [
+ "derive_more",
+ "futures 0.3.12",
+ "linked-hash-map",
+ "log",
+ "parity-util-mem",
+ "parking_lot 0.11.1",
+ "retain_mut",
+ "serde",
+ "sp-blockchain 3.0.0 (git+https://github.com/boolnetwork/substrate.git?branch=bool-network-v3.0.0)",
+ "sp-core 3.0.0 (git+https://github.com/boolnetwork/substrate.git?branch=bool-network-v3.0.0)",
+ "sp-runtime 3.0.0 (git+https://github.com/boolnetwork/substrate.git?branch=bool-network-v3.0.0)",
+ "sp-transaction-pool 3.0.0 (git+https://github.com/boolnetwork/substrate.git?branch=bool-network-v3.0.0)",
+ "sp-utils 3.0.0 (git+https://github.com/boolnetwork/substrate.git?branch=bool-network-v3.0.0)",
+ "thiserror",
+ "wasm-timer",
+]
+
+[[package]]
+name = "sc-transaction-graph"
+version = "3.0.0"
 source = "git+https://github.com/paritytech/substrate.git?branch=frontier#8b3e5bc7cd056112d390920fca5a554b2d0b0475"
 dependencies = [
  "derive_more",
@@ -6038,11 +6858,37 @@ dependencies = [
  "parking_lot 0.11.1",
  "retain_mut",
  "serde",
- "sp-blockchain",
- "sp-core",
- "sp-runtime",
- "sp-transaction-pool",
- "sp-utils",
+ "sp-blockchain 3.0.0 (git+https://github.com/paritytech/substrate.git?branch=frontier)",
+ "sp-core 3.0.0 (git+https://github.com/paritytech/substrate.git?branch=frontier)",
+ "sp-runtime 3.0.0 (git+https://github.com/paritytech/substrate.git?branch=frontier)",
+ "sp-transaction-pool 3.0.0 (git+https://github.com/paritytech/substrate.git?branch=frontier)",
+ "sp-utils 3.0.0 (git+https://github.com/paritytech/substrate.git?branch=frontier)",
+ "thiserror",
+ "wasm-timer",
+]
+
+[[package]]
+name = "sc-transaction-pool"
+version = "3.0.0"
+source = "git+https://github.com/boolnetwork/substrate.git?branch=bool-network-v3.0.0#efa7baa1cd2b5f1d6ec01da68d8e0c22fadcf260"
+dependencies = [
+ "futures 0.3.12",
+ "futures-diagnose",
+ "intervalier",
+ "log",
+ "parity-scale-codec",
+ "parity-util-mem",
+ "parking_lot 0.11.1",
+ "sc-client-api 3.0.0 (git+https://github.com/boolnetwork/substrate.git?branch=bool-network-v3.0.0)",
+ "sc-transaction-graph 3.0.0 (git+https://github.com/boolnetwork/substrate.git?branch=bool-network-v3.0.0)",
+ "sp-api 3.0.0 (git+https://github.com/boolnetwork/substrate.git?branch=bool-network-v3.0.0)",
+ "sp-blockchain 3.0.0 (git+https://github.com/boolnetwork/substrate.git?branch=bool-network-v3.0.0)",
+ "sp-core 3.0.0 (git+https://github.com/boolnetwork/substrate.git?branch=bool-network-v3.0.0)",
+ "sp-runtime 3.0.0 (git+https://github.com/boolnetwork/substrate.git?branch=bool-network-v3.0.0)",
+ "sp-tracing 3.0.0 (git+https://github.com/boolnetwork/substrate.git?branch=bool-network-v3.0.0)",
+ "sp-transaction-pool 3.0.0 (git+https://github.com/boolnetwork/substrate.git?branch=bool-network-v3.0.0)",
+ "sp-utils 3.0.0 (git+https://github.com/boolnetwork/substrate.git?branch=bool-network-v3.0.0)",
+ "substrate-prometheus-endpoint 0.9.0 (git+https://github.com/boolnetwork/substrate.git?branch=bool-network-v3.0.0)",
  "thiserror",
  "wasm-timer",
 ]
@@ -6059,16 +6905,16 @@ dependencies = [
  "parity-scale-codec",
  "parity-util-mem",
  "parking_lot 0.11.1",
- "sc-client-api",
- "sc-transaction-graph",
- "sp-api",
- "sp-blockchain",
- "sp-core",
- "sp-runtime",
- "sp-tracing",
- "sp-transaction-pool",
- "sp-utils",
- "substrate-prometheus-endpoint",
+ "sc-client-api 3.0.0 (git+https://github.com/paritytech/substrate.git?branch=frontier)",
+ "sc-transaction-graph 3.0.0 (git+https://github.com/paritytech/substrate.git?branch=frontier)",
+ "sp-api 3.0.0 (git+https://github.com/paritytech/substrate.git?branch=frontier)",
+ "sp-blockchain 3.0.0 (git+https://github.com/paritytech/substrate.git?branch=frontier)",
+ "sp-core 3.0.0 (git+https://github.com/paritytech/substrate.git?branch=frontier)",
+ "sp-runtime 3.0.0 (git+https://github.com/paritytech/substrate.git?branch=frontier)",
+ "sp-tracing 3.0.0 (git+https://github.com/paritytech/substrate.git?branch=frontier)",
+ "sp-transaction-pool 3.0.0 (git+https://github.com/paritytech/substrate.git?branch=frontier)",
+ "sp-utils 3.0.0 (git+https://github.com/paritytech/substrate.git?branch=frontier)",
+ "substrate-prometheus-endpoint 0.9.0 (git+https://github.com/paritytech/substrate.git?branch=frontier)",
  "thiserror",
  "wasm-timer",
 ]
@@ -6420,12 +7266,40 @@ dependencies = [
 [[package]]
 name = "sp-allocator"
 version = "3.0.0"
+source = "git+https://github.com/boolnetwork/substrate.git?branch=bool-network-v3.0.0#efa7baa1cd2b5f1d6ec01da68d8e0c22fadcf260"
+dependencies = [
+ "log",
+ "sp-core 3.0.0 (git+https://github.com/boolnetwork/substrate.git?branch=bool-network-v3.0.0)",
+ "sp-std 3.0.0 (git+https://github.com/boolnetwork/substrate.git?branch=bool-network-v3.0.0)",
+ "sp-wasm-interface 3.0.0 (git+https://github.com/boolnetwork/substrate.git?branch=bool-network-v3.0.0)",
+ "thiserror",
+]
+
+[[package]]
+name = "sp-allocator"
+version = "3.0.0"
 source = "git+https://github.com/paritytech/substrate.git?branch=frontier#8b3e5bc7cd056112d390920fca5a554b2d0b0475"
 dependencies = [
  "log",
- "sp-core",
- "sp-std",
- "sp-wasm-interface",
+ "sp-core 3.0.0 (git+https://github.com/paritytech/substrate.git?branch=frontier)",
+ "sp-std 3.0.0 (git+https://github.com/paritytech/substrate.git?branch=frontier)",
+ "sp-wasm-interface 3.0.0 (git+https://github.com/paritytech/substrate.git?branch=frontier)",
+ "thiserror",
+]
+
+[[package]]
+name = "sp-api"
+version = "3.0.0"
+source = "git+https://github.com/boolnetwork/substrate.git?branch=bool-network-v3.0.0#efa7baa1cd2b5f1d6ec01da68d8e0c22fadcf260"
+dependencies = [
+ "hash-db",
+ "parity-scale-codec",
+ "sp-api-proc-macro 3.0.0 (git+https://github.com/boolnetwork/substrate.git?branch=bool-network-v3.0.0)",
+ "sp-core 3.0.0 (git+https://github.com/boolnetwork/substrate.git?branch=bool-network-v3.0.0)",
+ "sp-runtime 3.0.0 (git+https://github.com/boolnetwork/substrate.git?branch=bool-network-v3.0.0)",
+ "sp-state-machine 0.9.0 (git+https://github.com/boolnetwork/substrate.git?branch=bool-network-v3.0.0)",
+ "sp-std 3.0.0 (git+https://github.com/boolnetwork/substrate.git?branch=bool-network-v3.0.0)",
+ "sp-version 3.0.0 (git+https://github.com/boolnetwork/substrate.git?branch=bool-network-v3.0.0)",
  "thiserror",
 ]
 
@@ -6437,13 +7311,25 @@ dependencies = [
  "hash-db",
  "log",
  "parity-scale-codec",
- "sp-api-proc-macro",
- "sp-core",
- "sp-runtime",
- "sp-state-machine",
- "sp-std",
- "sp-version",
+ "sp-api-proc-macro 3.0.0 (git+https://github.com/paritytech/substrate.git?branch=frontier)",
+ "sp-core 3.0.0 (git+https://github.com/paritytech/substrate.git?branch=frontier)",
+ "sp-runtime 3.0.0 (git+https://github.com/paritytech/substrate.git?branch=frontier)",
+ "sp-state-machine 0.9.0 (git+https://github.com/paritytech/substrate.git?branch=frontier)",
+ "sp-std 3.0.0 (git+https://github.com/paritytech/substrate.git?branch=frontier)",
+ "sp-version 3.0.0 (git+https://github.com/paritytech/substrate.git?branch=frontier)",
  "thiserror",
+]
+
+[[package]]
+name = "sp-api-proc-macro"
+version = "3.0.0"
+source = "git+https://github.com/boolnetwork/substrate.git?branch=bool-network-v3.0.0#efa7baa1cd2b5f1d6ec01da68d8e0c22fadcf260"
+dependencies = [
+ "blake2-rfc",
+ "proc-macro-crate 0.1.5",
+ "proc-macro2",
+ "quote",
+ "syn",
 ]
 
 [[package]]
@@ -6461,13 +7347,38 @@ dependencies = [
 [[package]]
 name = "sp-application-crypto"
 version = "3.0.0"
+source = "git+https://github.com/boolnetwork/substrate.git?branch=bool-network-v3.0.0#efa7baa1cd2b5f1d6ec01da68d8e0c22fadcf260"
+dependencies = [
+ "parity-scale-codec",
+ "serde",
+ "sp-core 3.0.0 (git+https://github.com/boolnetwork/substrate.git?branch=bool-network-v3.0.0)",
+ "sp-io 3.0.0 (git+https://github.com/boolnetwork/substrate.git?branch=bool-network-v3.0.0)",
+ "sp-std 3.0.0 (git+https://github.com/boolnetwork/substrate.git?branch=bool-network-v3.0.0)",
+]
+
+[[package]]
+name = "sp-application-crypto"
+version = "3.0.0"
 source = "git+https://github.com/paritytech/substrate.git?branch=frontier#8b3e5bc7cd056112d390920fca5a554b2d0b0475"
 dependencies = [
  "parity-scale-codec",
  "serde",
- "sp-core",
- "sp-io",
- "sp-std",
+ "sp-core 3.0.0 (git+https://github.com/paritytech/substrate.git?branch=frontier)",
+ "sp-io 3.0.0 (git+https://github.com/paritytech/substrate.git?branch=frontier)",
+ "sp-std 3.0.0 (git+https://github.com/paritytech/substrate.git?branch=frontier)",
+]
+
+[[package]]
+name = "sp-arithmetic"
+version = "3.0.0"
+source = "git+https://github.com/boolnetwork/substrate.git?branch=bool-network-v3.0.0#efa7baa1cd2b5f1d6ec01da68d8e0c22fadcf260"
+dependencies = [
+ "integer-sqrt",
+ "num-traits",
+ "parity-scale-codec",
+ "serde",
+ "sp-debug-derive 3.0.0 (git+https://github.com/boolnetwork/substrate.git?branch=bool-network-v3.0.0)",
+ "sp-std 3.0.0 (git+https://github.com/boolnetwork/substrate.git?branch=bool-network-v3.0.0)",
 ]
 
 [[package]]
@@ -6479,8 +7390,19 @@ dependencies = [
  "num-traits",
  "parity-scale-codec",
  "serde",
- "sp-debug-derive",
- "sp-std",
+ "sp-debug-derive 3.0.0 (git+https://github.com/paritytech/substrate.git?branch=frontier)",
+ "sp-std 3.0.0 (git+https://github.com/paritytech/substrate.git?branch=frontier)",
+]
+
+[[package]]
+name = "sp-authorship"
+version = "3.0.0"
+source = "git+https://github.com/boolnetwork/substrate.git?branch=bool-network-v3.0.0#efa7baa1cd2b5f1d6ec01da68d8e0c22fadcf260"
+dependencies = [
+ "parity-scale-codec",
+ "sp-inherents 3.0.0 (git+https://github.com/boolnetwork/substrate.git?branch=bool-network-v3.0.0)",
+ "sp-runtime 3.0.0 (git+https://github.com/boolnetwork/substrate.git?branch=bool-network-v3.0.0)",
+ "sp-std 3.0.0 (git+https://github.com/boolnetwork/substrate.git?branch=bool-network-v3.0.0)",
 ]
 
 [[package]]
@@ -6489,9 +7411,21 @@ version = "3.0.0"
 source = "git+https://github.com/paritytech/substrate.git?branch=frontier#8b3e5bc7cd056112d390920fca5a554b2d0b0475"
 dependencies = [
  "parity-scale-codec",
- "sp-inherents",
- "sp-runtime",
- "sp-std",
+ "sp-inherents 3.0.0 (git+https://github.com/paritytech/substrate.git?branch=frontier)",
+ "sp-runtime 3.0.0 (git+https://github.com/paritytech/substrate.git?branch=frontier)",
+ "sp-std 3.0.0 (git+https://github.com/paritytech/substrate.git?branch=frontier)",
+]
+
+[[package]]
+name = "sp-block-builder"
+version = "3.0.0"
+source = "git+https://github.com/boolnetwork/substrate.git?branch=bool-network-v3.0.0#efa7baa1cd2b5f1d6ec01da68d8e0c22fadcf260"
+dependencies = [
+ "parity-scale-codec",
+ "sp-api 3.0.0 (git+https://github.com/boolnetwork/substrate.git?branch=bool-network-v3.0.0)",
+ "sp-inherents 3.0.0 (git+https://github.com/boolnetwork/substrate.git?branch=bool-network-v3.0.0)",
+ "sp-runtime 3.0.0 (git+https://github.com/boolnetwork/substrate.git?branch=bool-network-v3.0.0)",
+ "sp-std 3.0.0 (git+https://github.com/boolnetwork/substrate.git?branch=bool-network-v3.0.0)",
 ]
 
 [[package]]
@@ -6500,10 +7434,28 @@ version = "3.0.0"
 source = "git+https://github.com/paritytech/substrate.git?branch=frontier#8b3e5bc7cd056112d390920fca5a554b2d0b0475"
 dependencies = [
  "parity-scale-codec",
- "sp-api",
- "sp-inherents",
- "sp-runtime",
- "sp-std",
+ "sp-api 3.0.0 (git+https://github.com/paritytech/substrate.git?branch=frontier)",
+ "sp-inherents 3.0.0 (git+https://github.com/paritytech/substrate.git?branch=frontier)",
+ "sp-runtime 3.0.0 (git+https://github.com/paritytech/substrate.git?branch=frontier)",
+ "sp-std 3.0.0 (git+https://github.com/paritytech/substrate.git?branch=frontier)",
+]
+
+[[package]]
+name = "sp-blockchain"
+version = "3.0.0"
+source = "git+https://github.com/boolnetwork/substrate.git?branch=bool-network-v3.0.0#efa7baa1cd2b5f1d6ec01da68d8e0c22fadcf260"
+dependencies = [
+ "futures 0.3.12",
+ "log",
+ "lru",
+ "parity-scale-codec",
+ "parking_lot 0.11.1",
+ "sp-api 3.0.0 (git+https://github.com/boolnetwork/substrate.git?branch=bool-network-v3.0.0)",
+ "sp-consensus 0.9.0 (git+https://github.com/boolnetwork/substrate.git?branch=bool-network-v3.0.0)",
+ "sp-database 3.0.0 (git+https://github.com/boolnetwork/substrate.git?branch=bool-network-v3.0.0)",
+ "sp-runtime 3.0.0 (git+https://github.com/boolnetwork/substrate.git?branch=bool-network-v3.0.0)",
+ "sp-state-machine 0.9.0 (git+https://github.com/boolnetwork/substrate.git?branch=bool-network-v3.0.0)",
+ "thiserror",
 ]
 
 [[package]]
@@ -6516,12 +7468,21 @@ dependencies = [
  "lru",
  "parity-scale-codec",
  "parking_lot 0.11.1",
- "sp-api",
- "sp-consensus",
- "sp-database",
- "sp-runtime",
- "sp-state-machine",
+ "sp-api 3.0.0 (git+https://github.com/paritytech/substrate.git?branch=frontier)",
+ "sp-consensus 0.9.0 (git+https://github.com/paritytech/substrate.git?branch=frontier)",
+ "sp-database 3.0.0 (git+https://github.com/paritytech/substrate.git?branch=frontier)",
+ "sp-runtime 3.0.0 (git+https://github.com/paritytech/substrate.git?branch=frontier)",
+ "sp-state-machine 0.9.0 (git+https://github.com/paritytech/substrate.git?branch=frontier)",
  "thiserror",
+]
+
+[[package]]
+name = "sp-chain-spec"
+version = "3.0.0"
+source = "git+https://github.com/boolnetwork/substrate.git?branch=bool-network-v3.0.0#efa7baa1cd2b5f1d6ec01da68d8e0c22fadcf260"
+dependencies = [
+ "serde",
+ "serde_json",
 ]
 
 [[package]]
@@ -6536,25 +7497,51 @@ dependencies = [
 [[package]]
 name = "sp-consensus"
 version = "0.9.0"
-source = "git+https://github.com/paritytech/substrate.git?branch=frontier#8b3e5bc7cd056112d390920fca5a554b2d0b0475"
+source = "git+https://github.com/boolnetwork/substrate.git?branch=bool-network-v3.0.0#efa7baa1cd2b5f1d6ec01da68d8e0c22fadcf260"
 dependencies = [
  "futures 0.3.12",
  "futures-timer 3.0.2",
- "libp2p",
+ "libp2p 0.34.0",
  "log",
  "parity-scale-codec",
  "parking_lot 0.11.1",
  "serde",
- "sp-api",
- "sp-core",
- "sp-inherents",
- "sp-runtime",
- "sp-state-machine",
- "sp-std",
- "sp-trie",
- "sp-utils",
- "sp-version",
- "substrate-prometheus-endpoint",
+ "sp-api 3.0.0 (git+https://github.com/boolnetwork/substrate.git?branch=bool-network-v3.0.0)",
+ "sp-core 3.0.0 (git+https://github.com/boolnetwork/substrate.git?branch=bool-network-v3.0.0)",
+ "sp-inherents 3.0.0 (git+https://github.com/boolnetwork/substrate.git?branch=bool-network-v3.0.0)",
+ "sp-runtime 3.0.0 (git+https://github.com/boolnetwork/substrate.git?branch=bool-network-v3.0.0)",
+ "sp-state-machine 0.9.0 (git+https://github.com/boolnetwork/substrate.git?branch=bool-network-v3.0.0)",
+ "sp-std 3.0.0 (git+https://github.com/boolnetwork/substrate.git?branch=bool-network-v3.0.0)",
+ "sp-trie 3.0.0 (git+https://github.com/boolnetwork/substrate.git?branch=bool-network-v3.0.0)",
+ "sp-utils 3.0.0 (git+https://github.com/boolnetwork/substrate.git?branch=bool-network-v3.0.0)",
+ "sp-version 3.0.0 (git+https://github.com/boolnetwork/substrate.git?branch=bool-network-v3.0.0)",
+ "substrate-prometheus-endpoint 0.9.0 (git+https://github.com/boolnetwork/substrate.git?branch=bool-network-v3.0.0)",
+ "thiserror",
+ "wasm-timer",
+]
+
+[[package]]
+name = "sp-consensus"
+version = "0.9.0"
+source = "git+https://github.com/paritytech/substrate.git?branch=frontier#8b3e5bc7cd056112d390920fca5a554b2d0b0475"
+dependencies = [
+ "futures 0.3.12",
+ "futures-timer 3.0.2",
+ "libp2p 0.35.1",
+ "log",
+ "parity-scale-codec",
+ "parking_lot 0.11.1",
+ "serde",
+ "sp-api 3.0.0 (git+https://github.com/paritytech/substrate.git?branch=frontier)",
+ "sp-core 3.0.0 (git+https://github.com/paritytech/substrate.git?branch=frontier)",
+ "sp-inherents 3.0.0 (git+https://github.com/paritytech/substrate.git?branch=frontier)",
+ "sp-runtime 3.0.0 (git+https://github.com/paritytech/substrate.git?branch=frontier)",
+ "sp-state-machine 0.9.0 (git+https://github.com/paritytech/substrate.git?branch=frontier)",
+ "sp-std 3.0.0 (git+https://github.com/paritytech/substrate.git?branch=frontier)",
+ "sp-trie 3.0.0 (git+https://github.com/paritytech/substrate.git?branch=frontier)",
+ "sp-utils 3.0.0 (git+https://github.com/paritytech/substrate.git?branch=frontier)",
+ "sp-version 3.0.0 (git+https://github.com/paritytech/substrate.git?branch=frontier)",
+ "substrate-prometheus-endpoint 0.9.0 (git+https://github.com/paritytech/substrate.git?branch=frontier)",
  "thiserror",
  "wasm-timer",
 ]
@@ -6565,13 +7552,33 @@ version = "0.9.0"
 source = "git+https://github.com/paritytech/substrate.git?branch=frontier#8b3e5bc7cd056112d390920fca5a554b2d0b0475"
 dependencies = [
  "parity-scale-codec",
- "sp-api",
- "sp-application-crypto",
- "sp-consensus-slots",
- "sp-inherents",
- "sp-runtime",
- "sp-std",
- "sp-timestamp",
+ "sp-api 3.0.0 (git+https://github.com/paritytech/substrate.git?branch=frontier)",
+ "sp-application-crypto 3.0.0 (git+https://github.com/paritytech/substrate.git?branch=frontier)",
+ "sp-consensus-slots 0.9.0 (git+https://github.com/paritytech/substrate.git?branch=frontier)",
+ "sp-inherents 3.0.0 (git+https://github.com/paritytech/substrate.git?branch=frontier)",
+ "sp-runtime 3.0.0 (git+https://github.com/paritytech/substrate.git?branch=frontier)",
+ "sp-std 3.0.0 (git+https://github.com/paritytech/substrate.git?branch=frontier)",
+ "sp-timestamp 3.0.0 (git+https://github.com/paritytech/substrate.git?branch=frontier)",
+]
+
+[[package]]
+name = "sp-consensus-babe"
+version = "0.9.0"
+source = "git+https://github.com/boolnetwork/substrate.git?branch=bool-network-v3.0.0#efa7baa1cd2b5f1d6ec01da68d8e0c22fadcf260"
+dependencies = [
+ "merlin",
+ "parity-scale-codec",
+ "sp-api 3.0.0 (git+https://github.com/boolnetwork/substrate.git?branch=bool-network-v3.0.0)",
+ "sp-application-crypto 3.0.0 (git+https://github.com/boolnetwork/substrate.git?branch=bool-network-v3.0.0)",
+ "sp-consensus 0.9.0 (git+https://github.com/boolnetwork/substrate.git?branch=bool-network-v3.0.0)",
+ "sp-consensus-slots 0.9.0 (git+https://github.com/boolnetwork/substrate.git?branch=bool-network-v3.0.0)",
+ "sp-consensus-vrf 0.9.0 (git+https://github.com/boolnetwork/substrate.git?branch=bool-network-v3.0.0)",
+ "sp-core 3.0.0 (git+https://github.com/boolnetwork/substrate.git?branch=bool-network-v3.0.0)",
+ "sp-inherents 3.0.0 (git+https://github.com/boolnetwork/substrate.git?branch=bool-network-v3.0.0)",
+ "sp-keystore 0.9.0 (git+https://github.com/boolnetwork/substrate.git?branch=bool-network-v3.0.0)",
+ "sp-runtime 3.0.0 (git+https://github.com/boolnetwork/substrate.git?branch=bool-network-v3.0.0)",
+ "sp-std 3.0.0 (git+https://github.com/boolnetwork/substrate.git?branch=bool-network-v3.0.0)",
+ "sp-timestamp 3.0.0 (git+https://github.com/boolnetwork/substrate.git?branch=bool-network-v3.0.0)",
 ]
 
 [[package]]
@@ -6582,17 +7589,27 @@ dependencies = [
  "merlin",
  "parity-scale-codec",
  "serde",
- "sp-api",
- "sp-application-crypto",
- "sp-consensus",
- "sp-consensus-slots",
- "sp-consensus-vrf",
- "sp-core",
- "sp-inherents",
- "sp-keystore",
- "sp-runtime",
- "sp-std",
- "sp-timestamp",
+ "sp-api 3.0.0 (git+https://github.com/paritytech/substrate.git?branch=frontier)",
+ "sp-application-crypto 3.0.0 (git+https://github.com/paritytech/substrate.git?branch=frontier)",
+ "sp-consensus 0.9.0 (git+https://github.com/paritytech/substrate.git?branch=frontier)",
+ "sp-consensus-slots 0.9.0 (git+https://github.com/paritytech/substrate.git?branch=frontier)",
+ "sp-consensus-vrf 0.9.0 (git+https://github.com/paritytech/substrate.git?branch=frontier)",
+ "sp-core 3.0.0 (git+https://github.com/paritytech/substrate.git?branch=frontier)",
+ "sp-inherents 3.0.0 (git+https://github.com/paritytech/substrate.git?branch=frontier)",
+ "sp-keystore 0.9.0 (git+https://github.com/paritytech/substrate.git?branch=frontier)",
+ "sp-runtime 3.0.0 (git+https://github.com/paritytech/substrate.git?branch=frontier)",
+ "sp-std 3.0.0 (git+https://github.com/paritytech/substrate.git?branch=frontier)",
+ "sp-timestamp 3.0.0 (git+https://github.com/paritytech/substrate.git?branch=frontier)",
+]
+
+[[package]]
+name = "sp-consensus-slots"
+version = "0.9.0"
+source = "git+https://github.com/boolnetwork/substrate.git?branch=bool-network-v3.0.0#efa7baa1cd2b5f1d6ec01da68d8e0c22fadcf260"
+dependencies = [
+ "parity-scale-codec",
+ "sp-arithmetic 3.0.0 (git+https://github.com/boolnetwork/substrate.git?branch=bool-network-v3.0.0)",
+ "sp-runtime 3.0.0 (git+https://github.com/boolnetwork/substrate.git?branch=bool-network-v3.0.0)",
 ]
 
 [[package]]
@@ -6601,8 +7618,20 @@ version = "0.9.0"
 source = "git+https://github.com/paritytech/substrate.git?branch=frontier#8b3e5bc7cd056112d390920fca5a554b2d0b0475"
 dependencies = [
  "parity-scale-codec",
- "sp-arithmetic",
- "sp-runtime",
+ "sp-arithmetic 3.0.0 (git+https://github.com/paritytech/substrate.git?branch=frontier)",
+ "sp-runtime 3.0.0 (git+https://github.com/paritytech/substrate.git?branch=frontier)",
+]
+
+[[package]]
+name = "sp-consensus-vrf"
+version = "0.9.0"
+source = "git+https://github.com/boolnetwork/substrate.git?branch=bool-network-v3.0.0#efa7baa1cd2b5f1d6ec01da68d8e0c22fadcf260"
+dependencies = [
+ "parity-scale-codec",
+ "schnorrkel",
+ "sp-core 3.0.0 (git+https://github.com/boolnetwork/substrate.git?branch=bool-network-v3.0.0)",
+ "sp-runtime 3.0.0 (git+https://github.com/boolnetwork/substrate.git?branch=bool-network-v3.0.0)",
+ "sp-std 3.0.0 (git+https://github.com/boolnetwork/substrate.git?branch=bool-network-v3.0.0)",
 ]
 
 [[package]]
@@ -6612,9 +7641,53 @@ source = "git+https://github.com/paritytech/substrate.git?branch=frontier#8b3e5b
 dependencies = [
  "parity-scale-codec",
  "schnorrkel",
- "sp-core",
- "sp-runtime",
- "sp-std",
+ "sp-core 3.0.0 (git+https://github.com/paritytech/substrate.git?branch=frontier)",
+ "sp-runtime 3.0.0 (git+https://github.com/paritytech/substrate.git?branch=frontier)",
+ "sp-std 3.0.0 (git+https://github.com/paritytech/substrate.git?branch=frontier)",
+]
+
+[[package]]
+name = "sp-core"
+version = "3.0.0"
+source = "git+https://github.com/boolnetwork/substrate.git?branch=bool-network-v3.0.0#efa7baa1cd2b5f1d6ec01da68d8e0c22fadcf260"
+dependencies = [
+ "base58",
+ "blake2-rfc",
+ "byteorder",
+ "dyn-clonable",
+ "ed25519-dalek",
+ "futures 0.3.12",
+ "hash-db",
+ "hash256-std-hasher",
+ "hex",
+ "impl-serde",
+ "lazy_static",
+ "libsecp256k1",
+ "log",
+ "merlin",
+ "num-traits",
+ "parity-scale-codec",
+ "parity-util-mem",
+ "parking_lot 0.11.1",
+ "primitive-types",
+ "rand 0.7.3",
+ "regex",
+ "schnorrkel",
+ "secrecy",
+ "serde",
+ "sha2 0.9.3",
+ "sp-debug-derive 3.0.0 (git+https://github.com/boolnetwork/substrate.git?branch=bool-network-v3.0.0)",
+ "sp-externalities 0.9.0 (git+https://github.com/boolnetwork/substrate.git?branch=bool-network-v3.0.0)",
+ "sp-runtime-interface 3.0.0 (git+https://github.com/boolnetwork/substrate.git?branch=bool-network-v3.0.0)",
+ "sp-std 3.0.0 (git+https://github.com/boolnetwork/substrate.git?branch=bool-network-v3.0.0)",
+ "sp-storage 3.0.0 (git+https://github.com/boolnetwork/substrate.git?branch=bool-network-v3.0.0)",
+ "substrate-bip39",
+ "thiserror",
+ "tiny-bip39",
+ "tiny-keccak",
+ "twox-hash",
+ "wasmi",
+ "zeroize",
 ]
 
 [[package]]
@@ -6647,11 +7720,11 @@ dependencies = [
  "secrecy",
  "serde",
  "sha2 0.9.3",
- "sp-debug-derive",
- "sp-externalities",
- "sp-runtime-interface",
- "sp-std",
- "sp-storage",
+ "sp-debug-derive 3.0.0 (git+https://github.com/paritytech/substrate.git?branch=frontier)",
+ "sp-externalities 0.9.0 (git+https://github.com/paritytech/substrate.git?branch=frontier)",
+ "sp-runtime-interface 3.0.0 (git+https://github.com/paritytech/substrate.git?branch=frontier)",
+ "sp-std 3.0.0 (git+https://github.com/paritytech/substrate.git?branch=frontier)",
+ "sp-storage 3.0.0 (git+https://github.com/paritytech/substrate.git?branch=frontier)",
  "substrate-bip39",
  "thiserror",
  "tiny-bip39",
@@ -6664,10 +7737,29 @@ dependencies = [
 [[package]]
 name = "sp-database"
 version = "3.0.0"
+source = "git+https://github.com/boolnetwork/substrate.git?branch=bool-network-v3.0.0#efa7baa1cd2b5f1d6ec01da68d8e0c22fadcf260"
+dependencies = [
+ "kvdb",
+ "parking_lot 0.11.1",
+]
+
+[[package]]
+name = "sp-database"
+version = "3.0.0"
 source = "git+https://github.com/paritytech/substrate.git?branch=frontier#8b3e5bc7cd056112d390920fca5a554b2d0b0475"
 dependencies = [
  "kvdb",
  "parking_lot 0.11.1",
+]
+
+[[package]]
+name = "sp-debug-derive"
+version = "3.0.0"
+source = "git+https://github.com/boolnetwork/substrate.git?branch=bool-network-v3.0.0#efa7baa1cd2b5f1d6ec01da68d8e0c22fadcf260"
+dependencies = [
+ "proc-macro2",
+ "quote",
+ "syn",
 ]
 
 [[package]]
@@ -6683,12 +7775,40 @@ dependencies = [
 [[package]]
 name = "sp-externalities"
 version = "0.9.0"
+source = "git+https://github.com/boolnetwork/substrate.git?branch=bool-network-v3.0.0#efa7baa1cd2b5f1d6ec01da68d8e0c22fadcf260"
+dependencies = [
+ "environmental",
+ "parity-scale-codec",
+ "sp-std 3.0.0 (git+https://github.com/boolnetwork/substrate.git?branch=bool-network-v3.0.0)",
+ "sp-storage 3.0.0 (git+https://github.com/boolnetwork/substrate.git?branch=bool-network-v3.0.0)",
+]
+
+[[package]]
+name = "sp-externalities"
+version = "0.9.0"
 source = "git+https://github.com/paritytech/substrate.git?branch=frontier#8b3e5bc7cd056112d390920fca5a554b2d0b0475"
 dependencies = [
  "environmental",
  "parity-scale-codec",
- "sp-std",
- "sp-storage",
+ "sp-std 3.0.0 (git+https://github.com/paritytech/substrate.git?branch=frontier)",
+ "sp-storage 3.0.0 (git+https://github.com/paritytech/substrate.git?branch=frontier)",
+]
+
+[[package]]
+name = "sp-finality-grandpa"
+version = "3.0.0"
+source = "git+https://github.com/boolnetwork/substrate.git?branch=bool-network-v3.0.0#efa7baa1cd2b5f1d6ec01da68d8e0c22fadcf260"
+dependencies = [
+ "finality-grandpa 0.13.0",
+ "log",
+ "parity-scale-codec",
+ "serde",
+ "sp-api 3.0.0 (git+https://github.com/boolnetwork/substrate.git?branch=bool-network-v3.0.0)",
+ "sp-application-crypto 3.0.0 (git+https://github.com/boolnetwork/substrate.git?branch=bool-network-v3.0.0)",
+ "sp-core 3.0.0 (git+https://github.com/boolnetwork/substrate.git?branch=bool-network-v3.0.0)",
+ "sp-keystore 0.9.0 (git+https://github.com/boolnetwork/substrate.git?branch=bool-network-v3.0.0)",
+ "sp-runtime 3.0.0 (git+https://github.com/boolnetwork/substrate.git?branch=bool-network-v3.0.0)",
+ "sp-std 3.0.0 (git+https://github.com/boolnetwork/substrate.git?branch=bool-network-v3.0.0)",
 ]
 
 [[package]]
@@ -6696,16 +7816,28 @@ name = "sp-finality-grandpa"
 version = "3.0.0"
 source = "git+https://github.com/paritytech/substrate.git?branch=frontier#8b3e5bc7cd056112d390920fca5a554b2d0b0475"
 dependencies = [
- "finality-grandpa",
+ "finality-grandpa 0.14.0",
  "log",
  "parity-scale-codec",
  "serde",
- "sp-api",
- "sp-application-crypto",
- "sp-core",
- "sp-keystore",
- "sp-runtime",
- "sp-std",
+ "sp-api 3.0.0 (git+https://github.com/paritytech/substrate.git?branch=frontier)",
+ "sp-application-crypto 3.0.0 (git+https://github.com/paritytech/substrate.git?branch=frontier)",
+ "sp-core 3.0.0 (git+https://github.com/paritytech/substrate.git?branch=frontier)",
+ "sp-keystore 0.9.0 (git+https://github.com/paritytech/substrate.git?branch=frontier)",
+ "sp-runtime 3.0.0 (git+https://github.com/paritytech/substrate.git?branch=frontier)",
+ "sp-std 3.0.0 (git+https://github.com/paritytech/substrate.git?branch=frontier)",
+]
+
+[[package]]
+name = "sp-inherents"
+version = "3.0.0"
+source = "git+https://github.com/boolnetwork/substrate.git?branch=bool-network-v3.0.0#efa7baa1cd2b5f1d6ec01da68d8e0c22fadcf260"
+dependencies = [
+ "parity-scale-codec",
+ "parking_lot 0.11.1",
+ "sp-core 3.0.0 (git+https://github.com/boolnetwork/substrate.git?branch=bool-network-v3.0.0)",
+ "sp-std 3.0.0 (git+https://github.com/boolnetwork/substrate.git?branch=bool-network-v3.0.0)",
+ "thiserror",
 ]
 
 [[package]]
@@ -6715,9 +7847,33 @@ source = "git+https://github.com/paritytech/substrate.git?branch=frontier#8b3e5b
 dependencies = [
  "parity-scale-codec",
  "parking_lot 0.11.1",
- "sp-core",
- "sp-std",
+ "sp-core 3.0.0 (git+https://github.com/paritytech/substrate.git?branch=frontier)",
+ "sp-std 3.0.0 (git+https://github.com/paritytech/substrate.git?branch=frontier)",
  "thiserror",
+]
+
+[[package]]
+name = "sp-io"
+version = "3.0.0"
+source = "git+https://github.com/boolnetwork/substrate.git?branch=bool-network-v3.0.0#efa7baa1cd2b5f1d6ec01da68d8e0c22fadcf260"
+dependencies = [
+ "futures 0.3.12",
+ "hash-db",
+ "libsecp256k1",
+ "log",
+ "parity-scale-codec",
+ "parking_lot 0.11.1",
+ "sp-core 3.0.0 (git+https://github.com/boolnetwork/substrate.git?branch=bool-network-v3.0.0)",
+ "sp-externalities 0.9.0 (git+https://github.com/boolnetwork/substrate.git?branch=bool-network-v3.0.0)",
+ "sp-keystore 0.9.0 (git+https://github.com/boolnetwork/substrate.git?branch=bool-network-v3.0.0)",
+ "sp-runtime-interface 3.0.0 (git+https://github.com/boolnetwork/substrate.git?branch=bool-network-v3.0.0)",
+ "sp-state-machine 0.9.0 (git+https://github.com/boolnetwork/substrate.git?branch=bool-network-v3.0.0)",
+ "sp-std 3.0.0 (git+https://github.com/boolnetwork/substrate.git?branch=bool-network-v3.0.0)",
+ "sp-tracing 3.0.0 (git+https://github.com/boolnetwork/substrate.git?branch=bool-network-v3.0.0)",
+ "sp-trie 3.0.0 (git+https://github.com/boolnetwork/substrate.git?branch=bool-network-v3.0.0)",
+ "sp-wasm-interface 3.0.0 (git+https://github.com/boolnetwork/substrate.git?branch=bool-network-v3.0.0)",
+ "tracing",
+ "tracing-core",
 ]
 
 [[package]]
@@ -6731,15 +7887,15 @@ dependencies = [
  "log",
  "parity-scale-codec",
  "parking_lot 0.11.1",
- "sp-core",
- "sp-externalities",
- "sp-keystore",
- "sp-runtime-interface",
- "sp-state-machine",
- "sp-std",
- "sp-tracing",
- "sp-trie",
- "sp-wasm-interface",
+ "sp-core 3.0.0 (git+https://github.com/paritytech/substrate.git?branch=frontier)",
+ "sp-externalities 0.9.0 (git+https://github.com/paritytech/substrate.git?branch=frontier)",
+ "sp-keystore 0.9.0 (git+https://github.com/paritytech/substrate.git?branch=frontier)",
+ "sp-runtime-interface 3.0.0 (git+https://github.com/paritytech/substrate.git?branch=frontier)",
+ "sp-state-machine 0.9.0 (git+https://github.com/paritytech/substrate.git?branch=frontier)",
+ "sp-std 3.0.0 (git+https://github.com/paritytech/substrate.git?branch=frontier)",
+ "sp-tracing 3.0.0 (git+https://github.com/paritytech/substrate.git?branch=frontier)",
+ "sp-trie 3.0.0 (git+https://github.com/paritytech/substrate.git?branch=frontier)",
+ "sp-wasm-interface 3.0.0 (git+https://github.com/paritytech/substrate.git?branch=frontier)",
  "tracing",
  "tracing-core",
 ]
@@ -6750,9 +7906,26 @@ version = "3.0.0"
 source = "git+https://github.com/paritytech/substrate.git?branch=frontier#8b3e5bc7cd056112d390920fca5a554b2d0b0475"
 dependencies = [
  "lazy_static",
- "sp-core",
- "sp-runtime",
+ "sp-core 3.0.0 (git+https://github.com/paritytech/substrate.git?branch=frontier)",
+ "sp-runtime 3.0.0 (git+https://github.com/paritytech/substrate.git?branch=frontier)",
  "strum",
+]
+
+[[package]]
+name = "sp-keystore"
+version = "0.9.0"
+source = "git+https://github.com/boolnetwork/substrate.git?branch=bool-network-v3.0.0#efa7baa1cd2b5f1d6ec01da68d8e0c22fadcf260"
+dependencies = [
+ "async-trait",
+ "derive_more",
+ "futures 0.3.12",
+ "merlin",
+ "parity-scale-codec",
+ "parking_lot 0.11.1",
+ "schnorrkel",
+ "serde",
+ "sp-core 3.0.0 (git+https://github.com/boolnetwork/substrate.git?branch=bool-network-v3.0.0)",
+ "sp-externalities 0.9.0 (git+https://github.com/boolnetwork/substrate.git?branch=bool-network-v3.0.0)",
 ]
 
 [[package]]
@@ -6768,8 +7941,18 @@ dependencies = [
  "parking_lot 0.11.1",
  "schnorrkel",
  "serde",
- "sp-core",
- "sp-externalities",
+ "sp-core 3.0.0 (git+https://github.com/paritytech/substrate.git?branch=frontier)",
+ "sp-externalities 0.9.0 (git+https://github.com/paritytech/substrate.git?branch=frontier)",
+]
+
+[[package]]
+name = "sp-offchain"
+version = "3.0.0"
+source = "git+https://github.com/boolnetwork/substrate.git?branch=bool-network-v3.0.0#efa7baa1cd2b5f1d6ec01da68d8e0c22fadcf260"
+dependencies = [
+ "sp-api 3.0.0 (git+https://github.com/boolnetwork/substrate.git?branch=bool-network-v3.0.0)",
+ "sp-core 3.0.0 (git+https://github.com/boolnetwork/substrate.git?branch=bool-network-v3.0.0)",
+ "sp-runtime 3.0.0 (git+https://github.com/boolnetwork/substrate.git?branch=bool-network-v3.0.0)",
 ]
 
 [[package]]
@@ -6777,9 +7960,17 @@ name = "sp-offchain"
 version = "3.0.0"
 source = "git+https://github.com/paritytech/substrate.git?branch=frontier#8b3e5bc7cd056112d390920fca5a554b2d0b0475"
 dependencies = [
- "sp-api",
- "sp-core",
- "sp-runtime",
+ "sp-api 3.0.0 (git+https://github.com/paritytech/substrate.git?branch=frontier)",
+ "sp-core 3.0.0 (git+https://github.com/paritytech/substrate.git?branch=frontier)",
+ "sp-runtime 3.0.0 (git+https://github.com/paritytech/substrate.git?branch=frontier)",
+]
+
+[[package]]
+name = "sp-panic-handler"
+version = "3.0.0"
+source = "git+https://github.com/boolnetwork/substrate.git?branch=bool-network-v3.0.0#efa7baa1cd2b5f1d6ec01da68d8e0c22fadcf260"
+dependencies = [
+ "backtrace",
 ]
 
 [[package]]
@@ -6793,10 +7984,40 @@ dependencies = [
 [[package]]
 name = "sp-rpc"
 version = "3.0.0"
+source = "git+https://github.com/boolnetwork/substrate.git?branch=bool-network-v3.0.0#efa7baa1cd2b5f1d6ec01da68d8e0c22fadcf260"
+dependencies = [
+ "serde",
+ "sp-core 3.0.0 (git+https://github.com/boolnetwork/substrate.git?branch=bool-network-v3.0.0)",
+]
+
+[[package]]
+name = "sp-rpc"
+version = "3.0.0"
 source = "git+https://github.com/paritytech/substrate.git?branch=frontier#8b3e5bc7cd056112d390920fca5a554b2d0b0475"
 dependencies = [
  "serde",
- "sp-core",
+ "sp-core 3.0.0 (git+https://github.com/paritytech/substrate.git?branch=frontier)",
+]
+
+[[package]]
+name = "sp-runtime"
+version = "3.0.0"
+source = "git+https://github.com/boolnetwork/substrate.git?branch=bool-network-v3.0.0#efa7baa1cd2b5f1d6ec01da68d8e0c22fadcf260"
+dependencies = [
+ "either",
+ "hash256-std-hasher",
+ "impl-trait-for-tuples 0.2.1",
+ "log",
+ "parity-scale-codec",
+ "parity-util-mem",
+ "paste 1.0.4",
+ "rand 0.7.3",
+ "serde",
+ "sp-application-crypto 3.0.0 (git+https://github.com/boolnetwork/substrate.git?branch=bool-network-v3.0.0)",
+ "sp-arithmetic 3.0.0 (git+https://github.com/boolnetwork/substrate.git?branch=bool-network-v3.0.0)",
+ "sp-core 3.0.0 (git+https://github.com/boolnetwork/substrate.git?branch=bool-network-v3.0.0)",
+ "sp-io 3.0.0 (git+https://github.com/boolnetwork/substrate.git?branch=bool-network-v3.0.0)",
+ "sp-std 3.0.0 (git+https://github.com/boolnetwork/substrate.git?branch=bool-network-v3.0.0)",
 ]
 
 [[package]]
@@ -6813,11 +8034,28 @@ dependencies = [
  "paste 1.0.4",
  "rand 0.7.3",
  "serde",
- "sp-application-crypto",
- "sp-arithmetic",
- "sp-core",
- "sp-io",
- "sp-std",
+ "sp-application-crypto 3.0.0 (git+https://github.com/paritytech/substrate.git?branch=frontier)",
+ "sp-arithmetic 3.0.0 (git+https://github.com/paritytech/substrate.git?branch=frontier)",
+ "sp-core 3.0.0 (git+https://github.com/paritytech/substrate.git?branch=frontier)",
+ "sp-io 3.0.0 (git+https://github.com/paritytech/substrate.git?branch=frontier)",
+ "sp-std 3.0.0 (git+https://github.com/paritytech/substrate.git?branch=frontier)",
+]
+
+[[package]]
+name = "sp-runtime-interface"
+version = "3.0.0"
+source = "git+https://github.com/boolnetwork/substrate.git?branch=bool-network-v3.0.0#efa7baa1cd2b5f1d6ec01da68d8e0c22fadcf260"
+dependencies = [
+ "impl-trait-for-tuples 0.2.1",
+ "parity-scale-codec",
+ "primitive-types",
+ "sp-externalities 0.9.0 (git+https://github.com/boolnetwork/substrate.git?branch=bool-network-v3.0.0)",
+ "sp-runtime-interface-proc-macro 3.0.0 (git+https://github.com/boolnetwork/substrate.git?branch=bool-network-v3.0.0)",
+ "sp-std 3.0.0 (git+https://github.com/boolnetwork/substrate.git?branch=bool-network-v3.0.0)",
+ "sp-storage 3.0.0 (git+https://github.com/boolnetwork/substrate.git?branch=bool-network-v3.0.0)",
+ "sp-tracing 3.0.0 (git+https://github.com/boolnetwork/substrate.git?branch=bool-network-v3.0.0)",
+ "sp-wasm-interface 3.0.0 (git+https://github.com/boolnetwork/substrate.git?branch=bool-network-v3.0.0)",
+ "static_assertions",
 ]
 
 [[package]]
@@ -6828,13 +8066,25 @@ dependencies = [
  "impl-trait-for-tuples 0.2.1",
  "parity-scale-codec",
  "primitive-types",
- "sp-externalities",
- "sp-runtime-interface-proc-macro",
- "sp-std",
- "sp-storage",
- "sp-tracing",
- "sp-wasm-interface",
+ "sp-externalities 0.9.0 (git+https://github.com/paritytech/substrate.git?branch=frontier)",
+ "sp-runtime-interface-proc-macro 3.0.0 (git+https://github.com/paritytech/substrate.git?branch=frontier)",
+ "sp-std 3.0.0 (git+https://github.com/paritytech/substrate.git?branch=frontier)",
+ "sp-storage 3.0.0 (git+https://github.com/paritytech/substrate.git?branch=frontier)",
+ "sp-tracing 3.0.0 (git+https://github.com/paritytech/substrate.git?branch=frontier)",
+ "sp-wasm-interface 3.0.0 (git+https://github.com/paritytech/substrate.git?branch=frontier)",
  "static_assertions",
+]
+
+[[package]]
+name = "sp-runtime-interface-proc-macro"
+version = "3.0.0"
+source = "git+https://github.com/boolnetwork/substrate.git?branch=bool-network-v3.0.0#efa7baa1cd2b5f1d6ec01da68d8e0c22fadcf260"
+dependencies = [
+ "Inflector",
+ "proc-macro-crate 0.1.5",
+ "proc-macro2",
+ "quote",
+ "syn",
 ]
 
 [[package]]
@@ -6852,6 +8102,15 @@ dependencies = [
 [[package]]
 name = "sp-serializer"
 version = "3.0.0"
+source = "git+https://github.com/boolnetwork/substrate.git?branch=bool-network-v3.0.0#efa7baa1cd2b5f1d6ec01da68d8e0c22fadcf260"
+dependencies = [
+ "serde",
+ "serde_json",
+]
+
+[[package]]
+name = "sp-serializer"
+version = "3.0.0"
 source = "git+https://github.com/paritytech/substrate.git?branch=frontier#8b3e5bc7cd056112d390920fca5a554b2d0b0475"
 dependencies = [
  "serde",
@@ -6861,14 +8120,37 @@ dependencies = [
 [[package]]
 name = "sp-session"
 version = "3.0.0"
+source = "git+https://github.com/boolnetwork/substrate.git?branch=bool-network-v3.0.0#efa7baa1cd2b5f1d6ec01da68d8e0c22fadcf260"
+dependencies = [
+ "parity-scale-codec",
+ "sp-api 3.0.0 (git+https://github.com/boolnetwork/substrate.git?branch=bool-network-v3.0.0)",
+ "sp-core 3.0.0 (git+https://github.com/boolnetwork/substrate.git?branch=bool-network-v3.0.0)",
+ "sp-runtime 3.0.0 (git+https://github.com/boolnetwork/substrate.git?branch=bool-network-v3.0.0)",
+ "sp-staking 3.0.0 (git+https://github.com/boolnetwork/substrate.git?branch=bool-network-v3.0.0)",
+ "sp-std 3.0.0 (git+https://github.com/boolnetwork/substrate.git?branch=bool-network-v3.0.0)",
+]
+
+[[package]]
+name = "sp-session"
+version = "3.0.0"
 source = "git+https://github.com/paritytech/substrate.git?branch=frontier#8b3e5bc7cd056112d390920fca5a554b2d0b0475"
 dependencies = [
  "parity-scale-codec",
- "sp-api",
- "sp-core",
- "sp-runtime",
- "sp-staking",
- "sp-std",
+ "sp-api 3.0.0 (git+https://github.com/paritytech/substrate.git?branch=frontier)",
+ "sp-core 3.0.0 (git+https://github.com/paritytech/substrate.git?branch=frontier)",
+ "sp-runtime 3.0.0 (git+https://github.com/paritytech/substrate.git?branch=frontier)",
+ "sp-staking 3.0.0 (git+https://github.com/paritytech/substrate.git?branch=frontier)",
+ "sp-std 3.0.0 (git+https://github.com/paritytech/substrate.git?branch=frontier)",
+]
+
+[[package]]
+name = "sp-staking"
+version = "3.0.0"
+source = "git+https://github.com/boolnetwork/substrate.git?branch=bool-network-v3.0.0#efa7baa1cd2b5f1d6ec01da68d8e0c22fadcf260"
+dependencies = [
+ "parity-scale-codec",
+ "sp-runtime 3.0.0 (git+https://github.com/boolnetwork/substrate.git?branch=bool-network-v3.0.0)",
+ "sp-std 3.0.0 (git+https://github.com/boolnetwork/substrate.git?branch=bool-network-v3.0.0)",
 ]
 
 [[package]]
@@ -6877,8 +8159,30 @@ version = "3.0.0"
 source = "git+https://github.com/paritytech/substrate.git?branch=frontier#8b3e5bc7cd056112d390920fca5a554b2d0b0475"
 dependencies = [
  "parity-scale-codec",
- "sp-runtime",
- "sp-std",
+ "sp-runtime 3.0.0 (git+https://github.com/paritytech/substrate.git?branch=frontier)",
+ "sp-std 3.0.0 (git+https://github.com/paritytech/substrate.git?branch=frontier)",
+]
+
+[[package]]
+name = "sp-state-machine"
+version = "0.9.0"
+source = "git+https://github.com/boolnetwork/substrate.git?branch=bool-network-v3.0.0#efa7baa1cd2b5f1d6ec01da68d8e0c22fadcf260"
+dependencies = [
+ "hash-db",
+ "log",
+ "num-traits",
+ "parity-scale-codec",
+ "parking_lot 0.11.1",
+ "rand 0.7.3",
+ "smallvec 1.6.1",
+ "sp-core 3.0.0 (git+https://github.com/boolnetwork/substrate.git?branch=bool-network-v3.0.0)",
+ "sp-externalities 0.9.0 (git+https://github.com/boolnetwork/substrate.git?branch=bool-network-v3.0.0)",
+ "sp-panic-handler 3.0.0 (git+https://github.com/boolnetwork/substrate.git?branch=bool-network-v3.0.0)",
+ "sp-std 3.0.0 (git+https://github.com/boolnetwork/substrate.git?branch=bool-network-v3.0.0)",
+ "sp-trie 3.0.0 (git+https://github.com/boolnetwork/substrate.git?branch=bool-network-v3.0.0)",
+ "thiserror",
+ "trie-db",
+ "trie-root",
 ]
 
 [[package]]
@@ -6893,11 +8197,11 @@ dependencies = [
  "parking_lot 0.11.1",
  "rand 0.7.3",
  "smallvec 1.6.1",
- "sp-core",
- "sp-externalities",
- "sp-panic-handler",
- "sp-std",
- "sp-trie",
+ "sp-core 3.0.0 (git+https://github.com/paritytech/substrate.git?branch=frontier)",
+ "sp-externalities 0.9.0 (git+https://github.com/paritytech/substrate.git?branch=frontier)",
+ "sp-panic-handler 3.0.0 (git+https://github.com/paritytech/substrate.git?branch=frontier)",
+ "sp-std 3.0.0 (git+https://github.com/paritytech/substrate.git?branch=frontier)",
+ "sp-trie 3.0.0 (git+https://github.com/paritytech/substrate.git?branch=frontier)",
  "thiserror",
  "trie-db",
  "trie-root",
@@ -6906,7 +8210,25 @@ dependencies = [
 [[package]]
 name = "sp-std"
 version = "3.0.0"
+source = "git+https://github.com/boolnetwork/substrate.git?branch=bool-network-v3.0.0#efa7baa1cd2b5f1d6ec01da68d8e0c22fadcf260"
+
+[[package]]
+name = "sp-std"
+version = "3.0.0"
 source = "git+https://github.com/paritytech/substrate.git?branch=frontier#8b3e5bc7cd056112d390920fca5a554b2d0b0475"
+
+[[package]]
+name = "sp-storage"
+version = "3.0.0"
+source = "git+https://github.com/boolnetwork/substrate.git?branch=bool-network-v3.0.0#efa7baa1cd2b5f1d6ec01da68d8e0c22fadcf260"
+dependencies = [
+ "impl-serde",
+ "parity-scale-codec",
+ "ref-cast",
+ "serde",
+ "sp-debug-derive 3.0.0 (git+https://github.com/boolnetwork/substrate.git?branch=bool-network-v3.0.0)",
+ "sp-std 3.0.0 (git+https://github.com/boolnetwork/substrate.git?branch=bool-network-v3.0.0)",
+]
 
 [[package]]
 name = "sp-storage"
@@ -6917,8 +8239,21 @@ dependencies = [
  "parity-scale-codec",
  "ref-cast",
  "serde",
- "sp-debug-derive",
- "sp-std",
+ "sp-debug-derive 3.0.0 (git+https://github.com/paritytech/substrate.git?branch=frontier)",
+ "sp-std 3.0.0 (git+https://github.com/paritytech/substrate.git?branch=frontier)",
+]
+
+[[package]]
+name = "sp-tasks"
+version = "3.0.0"
+source = "git+https://github.com/boolnetwork/substrate.git?branch=bool-network-v3.0.0#efa7baa1cd2b5f1d6ec01da68d8e0c22fadcf260"
+dependencies = [
+ "log",
+ "sp-core 3.0.0 (git+https://github.com/boolnetwork/substrate.git?branch=bool-network-v3.0.0)",
+ "sp-externalities 0.9.0 (git+https://github.com/boolnetwork/substrate.git?branch=bool-network-v3.0.0)",
+ "sp-io 3.0.0 (git+https://github.com/boolnetwork/substrate.git?branch=bool-network-v3.0.0)",
+ "sp-runtime-interface 3.0.0 (git+https://github.com/boolnetwork/substrate.git?branch=bool-network-v3.0.0)",
+ "sp-std 3.0.0 (git+https://github.com/boolnetwork/substrate.git?branch=bool-network-v3.0.0)",
 ]
 
 [[package]]
@@ -6927,11 +8262,25 @@ version = "3.0.0"
 source = "git+https://github.com/paritytech/substrate.git?branch=frontier#8b3e5bc7cd056112d390920fca5a554b2d0b0475"
 dependencies = [
  "log",
- "sp-core",
- "sp-externalities",
- "sp-io",
- "sp-runtime-interface",
- "sp-std",
+ "sp-core 3.0.0 (git+https://github.com/paritytech/substrate.git?branch=frontier)",
+ "sp-externalities 0.9.0 (git+https://github.com/paritytech/substrate.git?branch=frontier)",
+ "sp-io 3.0.0 (git+https://github.com/paritytech/substrate.git?branch=frontier)",
+ "sp-runtime-interface 3.0.0 (git+https://github.com/paritytech/substrate.git?branch=frontier)",
+ "sp-std 3.0.0 (git+https://github.com/paritytech/substrate.git?branch=frontier)",
+]
+
+[[package]]
+name = "sp-timestamp"
+version = "3.0.0"
+source = "git+https://github.com/boolnetwork/substrate.git?branch=bool-network-v3.0.0#efa7baa1cd2b5f1d6ec01da68d8e0c22fadcf260"
+dependencies = [
+ "impl-trait-for-tuples 0.2.1",
+ "parity-scale-codec",
+ "sp-api 3.0.0 (git+https://github.com/boolnetwork/substrate.git?branch=bool-network-v3.0.0)",
+ "sp-inherents 3.0.0 (git+https://github.com/boolnetwork/substrate.git?branch=bool-network-v3.0.0)",
+ "sp-runtime 3.0.0 (git+https://github.com/boolnetwork/substrate.git?branch=bool-network-v3.0.0)",
+ "sp-std 3.0.0 (git+https://github.com/boolnetwork/substrate.git?branch=bool-network-v3.0.0)",
+ "wasm-timer",
 ]
 
 [[package]]
@@ -6941,11 +8290,24 @@ source = "git+https://github.com/paritytech/substrate.git?branch=frontier#8b3e5b
 dependencies = [
  "impl-trait-for-tuples 0.2.1",
  "parity-scale-codec",
- "sp-api",
- "sp-inherents",
- "sp-runtime",
- "sp-std",
+ "sp-api 3.0.0 (git+https://github.com/paritytech/substrate.git?branch=frontier)",
+ "sp-inherents 3.0.0 (git+https://github.com/paritytech/substrate.git?branch=frontier)",
+ "sp-runtime 3.0.0 (git+https://github.com/paritytech/substrate.git?branch=frontier)",
+ "sp-std 3.0.0 (git+https://github.com/paritytech/substrate.git?branch=frontier)",
  "wasm-timer",
+]
+
+[[package]]
+name = "sp-tracing"
+version = "3.0.0"
+source = "git+https://github.com/boolnetwork/substrate.git?branch=bool-network-v3.0.0#efa7baa1cd2b5f1d6ec01da68d8e0c22fadcf260"
+dependencies = [
+ "log",
+ "parity-scale-codec",
+ "sp-std 3.0.0 (git+https://github.com/boolnetwork/substrate.git?branch=bool-network-v3.0.0)",
+ "tracing",
+ "tracing-core",
+ "tracing-subscriber",
 ]
 
 [[package]]
@@ -6955,10 +8317,26 @@ source = "git+https://github.com/paritytech/substrate.git?branch=frontier#8b3e5b
 dependencies = [
  "log",
  "parity-scale-codec",
- "sp-std",
+ "sp-std 3.0.0 (git+https://github.com/paritytech/substrate.git?branch=frontier)",
  "tracing",
  "tracing-core",
  "tracing-subscriber",
+]
+
+[[package]]
+name = "sp-transaction-pool"
+version = "3.0.0"
+source = "git+https://github.com/boolnetwork/substrate.git?branch=bool-network-v3.0.0#efa7baa1cd2b5f1d6ec01da68d8e0c22fadcf260"
+dependencies = [
+ "derive_more",
+ "futures 0.3.12",
+ "log",
+ "parity-scale-codec",
+ "serde",
+ "sp-api 3.0.0 (git+https://github.com/boolnetwork/substrate.git?branch=bool-network-v3.0.0)",
+ "sp-blockchain 3.0.0 (git+https://github.com/boolnetwork/substrate.git?branch=bool-network-v3.0.0)",
+ "sp-runtime 3.0.0 (git+https://github.com/boolnetwork/substrate.git?branch=bool-network-v3.0.0)",
+ "thiserror",
 ]
 
 [[package]]
@@ -6971,10 +8349,24 @@ dependencies = [
  "log",
  "parity-scale-codec",
  "serde",
- "sp-api",
- "sp-blockchain",
- "sp-runtime",
+ "sp-api 3.0.0 (git+https://github.com/paritytech/substrate.git?branch=frontier)",
+ "sp-blockchain 3.0.0 (git+https://github.com/paritytech/substrate.git?branch=frontier)",
+ "sp-runtime 3.0.0 (git+https://github.com/paritytech/substrate.git?branch=frontier)",
  "thiserror",
+]
+
+[[package]]
+name = "sp-trie"
+version = "3.0.0"
+source = "git+https://github.com/boolnetwork/substrate.git?branch=bool-network-v3.0.0#efa7baa1cd2b5f1d6ec01da68d8e0c22fadcf260"
+dependencies = [
+ "hash-db",
+ "memory-db",
+ "parity-scale-codec",
+ "sp-core 3.0.0 (git+https://github.com/boolnetwork/substrate.git?branch=bool-network-v3.0.0)",
+ "sp-std 3.0.0 (git+https://github.com/boolnetwork/substrate.git?branch=bool-network-v3.0.0)",
+ "trie-db",
+ "trie-root",
 ]
 
 [[package]]
@@ -6985,10 +8377,22 @@ dependencies = [
  "hash-db",
  "memory-db",
  "parity-scale-codec",
- "sp-core",
- "sp-std",
+ "sp-core 3.0.0 (git+https://github.com/paritytech/substrate.git?branch=frontier)",
+ "sp-std 3.0.0 (git+https://github.com/paritytech/substrate.git?branch=frontier)",
  "trie-db",
  "trie-root",
+]
+
+[[package]]
+name = "sp-utils"
+version = "3.0.0"
+source = "git+https://github.com/boolnetwork/substrate.git?branch=bool-network-v3.0.0#efa7baa1cd2b5f1d6ec01da68d8e0c22fadcf260"
+dependencies = [
+ "futures 0.3.12",
+ "futures-core",
+ "futures-timer 3.0.2",
+ "lazy_static",
+ "prometheus",
 ]
 
 [[package]]
@@ -7006,13 +8410,36 @@ dependencies = [
 [[package]]
 name = "sp-version"
 version = "3.0.0"
+source = "git+https://github.com/boolnetwork/substrate.git?branch=bool-network-v3.0.0#efa7baa1cd2b5f1d6ec01da68d8e0c22fadcf260"
+dependencies = [
+ "impl-serde",
+ "parity-scale-codec",
+ "serde",
+ "sp-runtime 3.0.0 (git+https://github.com/boolnetwork/substrate.git?branch=bool-network-v3.0.0)",
+ "sp-std 3.0.0 (git+https://github.com/boolnetwork/substrate.git?branch=bool-network-v3.0.0)",
+]
+
+[[package]]
+name = "sp-version"
+version = "3.0.0"
 source = "git+https://github.com/paritytech/substrate.git?branch=frontier#8b3e5bc7cd056112d390920fca5a554b2d0b0475"
 dependencies = [
  "impl-serde",
  "parity-scale-codec",
  "serde",
- "sp-runtime",
- "sp-std",
+ "sp-runtime 3.0.0 (git+https://github.com/paritytech/substrate.git?branch=frontier)",
+ "sp-std 3.0.0 (git+https://github.com/paritytech/substrate.git?branch=frontier)",
+]
+
+[[package]]
+name = "sp-wasm-interface"
+version = "3.0.0"
+source = "git+https://github.com/boolnetwork/substrate.git?branch=bool-network-v3.0.0#efa7baa1cd2b5f1d6ec01da68d8e0c22fadcf260"
+dependencies = [
+ "impl-trait-for-tuples 0.2.1",
+ "parity-scale-codec",
+ "sp-std 3.0.0 (git+https://github.com/boolnetwork/substrate.git?branch=bool-network-v3.0.0)",
+ "wasmi",
 ]
 
 [[package]]
@@ -7022,7 +8449,7 @@ source = "git+https://github.com/paritytech/substrate.git?branch=frontier#8b3e5b
 dependencies = [
  "impl-trait-for-tuples 0.2.1",
  "parity-scale-codec",
- "sp-std",
+ "sp-std 3.0.0 (git+https://github.com/paritytech/substrate.git?branch=frontier)",
  "wasmi",
 ]
 
@@ -7169,15 +8596,29 @@ dependencies = [
  "jsonrpc-derive 15.1.0",
  "log",
  "parity-scale-codec",
- "sc-client-api",
- "sc-rpc-api",
+ "sc-client-api 3.0.0 (git+https://github.com/paritytech/substrate.git?branch=frontier)",
+ "sc-rpc-api 0.9.0 (git+https://github.com/paritytech/substrate.git?branch=frontier)",
  "serde",
- "sp-api",
- "sp-block-builder",
- "sp-blockchain",
- "sp-core",
- "sp-runtime",
- "sp-transaction-pool",
+ "sp-api 3.0.0 (git+https://github.com/paritytech/substrate.git?branch=frontier)",
+ "sp-block-builder 3.0.0 (git+https://github.com/paritytech/substrate.git?branch=frontier)",
+ "sp-blockchain 3.0.0 (git+https://github.com/paritytech/substrate.git?branch=frontier)",
+ "sp-core 3.0.0 (git+https://github.com/paritytech/substrate.git?branch=frontier)",
+ "sp-runtime 3.0.0 (git+https://github.com/paritytech/substrate.git?branch=frontier)",
+ "sp-transaction-pool 3.0.0 (git+https://github.com/paritytech/substrate.git?branch=frontier)",
+]
+
+[[package]]
+name = "substrate-prometheus-endpoint"
+version = "0.9.0"
+source = "git+https://github.com/boolnetwork/substrate.git?branch=bool-network-v3.0.0#efa7baa1cd2b5f1d6ec01da68d8e0c22fadcf260"
+dependencies = [
+ "async-std",
+ "derive_more",
+ "futures-util",
+ "hyper 0.13.9",
+ "log",
+ "prometheus",
+ "tokio 0.2.25",
 ]
 
 [[package]]
@@ -7204,22 +8645,22 @@ dependencies = [
  "hash-db",
  "hex",
  "parity-scale-codec",
- "sc-client-api",
- "sc-client-db",
- "sc-consensus",
- "sc-executor",
- "sc-light",
- "sc-offchain",
- "sc-service",
+ "sc-client-api 3.0.0 (git+https://github.com/paritytech/substrate.git?branch=frontier)",
+ "sc-client-db 0.9.0 (git+https://github.com/paritytech/substrate.git?branch=frontier)",
+ "sc-consensus 0.9.0 (git+https://github.com/paritytech/substrate.git?branch=frontier)",
+ "sc-executor 0.9.0 (git+https://github.com/paritytech/substrate.git?branch=frontier)",
+ "sc-light 3.0.0 (git+https://github.com/paritytech/substrate.git?branch=frontier)",
+ "sc-offchain 3.0.0 (git+https://github.com/paritytech/substrate.git?branch=frontier)",
+ "sc-service 0.9.0 (git+https://github.com/paritytech/substrate.git?branch=frontier)",
  "serde",
  "serde_json",
- "sp-blockchain",
- "sp-consensus",
- "sp-core",
+ "sp-blockchain 3.0.0 (git+https://github.com/paritytech/substrate.git?branch=frontier)",
+ "sp-consensus 0.9.0 (git+https://github.com/paritytech/substrate.git?branch=frontier)",
+ "sp-core 3.0.0 (git+https://github.com/paritytech/substrate.git?branch=frontier)",
  "sp-keyring",
- "sp-keystore",
- "sp-runtime",
- "sp-state-machine",
+ "sp-keystore 0.9.0 (git+https://github.com/paritytech/substrate.git?branch=frontier)",
+ "sp-runtime 3.0.0 (git+https://github.com/paritytech/substrate.git?branch=frontier)",
+ "sp-state-machine 0.9.0 (git+https://github.com/paritytech/substrate.git?branch=frontier)",
 ]
 
 [[package]]
