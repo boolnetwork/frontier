@@ -58,73 +58,73 @@ serde = { version = "1.0", features = ["derive"] }
 serde_json = "1.0"
 tokio = "1.28.1"
 # Substrate Client
-sc-basic-authorship = { git = "https://github.com/boolnetwork/substrate.git", branch = "Bool_Polkadot_v0.9.42" }
-sc-block-builder = { git = "https://github.com/boolnetwork/substrate.git", branch = "Bool_Polkadot_v0.9.42" }
-sc-chain-spec = { git = "https://github.com/boolnetwork/substrate.git", branch = "Bool_Polkadot_v0.9.42" }
-sc-cli = { git = "https://github.com/boolnetwork/substrate.git", branch = "Bool_Polkadot_v0.9.42" }
-sc-client-api = { git = "https://github.com/boolnetwork/substrate.git", branch = "Bool_Polkadot_v0.9.42" }
-sc-client-db = { git = "https://github.com/boolnetwork/substrate.git", branch = "Bool_Polkadot_v0.9.42" }
-sc-consensus = { git = "https://github.com/boolnetwork/substrate.git", branch = "Bool_Polkadot_v0.9.42" }
-sc-consensus-aura = { git = "https://github.com/boolnetwork/substrate.git", branch = "Bool_Polkadot_v0.9.42" }
-sc-consensus-grandpa = { git = "https://github.com/boolnetwork/substrate.git", branch = "Bool_Polkadot_v0.9.42" }
-sc-consensus-manual-seal = { git = "https://github.com/boolnetwork/substrate.git", branch = "Bool_Polkadot_v0.9.42" }
-sc-executor = { git = "https://github.com/boolnetwork/substrate.git", branch = "Bool_Polkadot_v0.9.42" }
-sc-keystore = { git = "https://github.com/boolnetwork/substrate.git", branch = "Bool_Polkadot_v0.9.42" }
-sc-network = { git = "https://github.com/boolnetwork/substrate.git", branch = "Bool_Polkadot_v0.9.42" }
-sc-network-common = { git = "https://github.com/boolnetwork/substrate.git", branch = "Bool_Polkadot_v0.9.42" }
-sc-network-sync = { git = "https://github.com/boolnetwork/substrate.git", branch = "Bool_Polkadot_v0.9.42" }
-sc-rpc = { git = "https://github.com/boolnetwork/substrate.git", branch = "Bool_Polkadot_v0.9.42" }
-sc-rpc-api = { git = "https://github.com/boolnetwork/substrate.git", branch = "Bool_Polkadot_v0.9.42" }
-sc-service = { git = "https://github.com/boolnetwork/substrate.git", branch = "Bool_Polkadot_v0.9.42" }
-sc-telemetry = { git = "https://github.com/boolnetwork/substrate.git", branch = "Bool_Polkadot_v0.9.42" }
-sc-transaction-pool = { git = "https://github.com/boolnetwork/substrate.git", branch = "Bool_Polkadot_v0.9.42" }
-sc-transaction-pool-api = { git = "https://github.com/boolnetwork/substrate.git", branch = "Bool_Polkadot_v0.9.42" }
-sc-utils = { git = "https://github.com/boolnetwork/substrate.git", branch = "Bool_Polkadot_v0.9.42" }
+sc-basic-authorship = { git = "https://github.com/boolnetwork/substrate.git", branch = "compatible-monitor" }
+sc-block-builder = { git = "https://github.com/boolnetwork/substrate.git", branch = "compatible-monitor" }
+sc-chain-spec = { git = "https://github.com/boolnetwork/substrate.git", branch = "compatible-monitor" }
+sc-cli = { git = "https://github.com/boolnetwork/substrate.git", branch = "compatible-monitor" }
+sc-client-api = { git = "https://github.com/boolnetwork/substrate.git", branch = "compatible-monitor" }
+sc-client-db = { git = "https://github.com/boolnetwork/substrate.git", branch = "compatible-monitor" }
+sc-consensus = { git = "https://github.com/boolnetwork/substrate.git", branch = "compatible-monitor" }
+sc-consensus-aura = { git = "https://github.com/boolnetwork/substrate.git", branch = "compatible-monitor" }
+sc-consensus-grandpa = { git = "https://github.com/boolnetwork/substrate.git", branch = "compatible-monitor" }
+sc-consensus-manual-seal = { git = "https://github.com/boolnetwork/substrate.git", branch = "compatible-monitor" }
+sc-executor = { git = "https://github.com/boolnetwork/substrate.git", branch = "compatible-monitor" }
+sc-keystore = { git = "https://github.com/boolnetwork/substrate.git", branch = "compatible-monitor" }
+sc-network = { git = "https://github.com/boolnetwork/substrate.git", branch = "compatible-monitor" }
+sc-network-common = { git = "https://github.com/boolnetwork/substrate.git", branch = "compatible-monitor" }
+sc-network-sync = { git = "https://github.com/boolnetwork/substrate.git", branch = "compatible-monitor" }
+sc-rpc = { git = "https://github.com/boolnetwork/substrate.git", branch = "compatible-monitor" }
+sc-rpc-api = { git = "https://github.com/boolnetwork/substrate.git", branch = "compatible-monitor" }
+sc-service = { git = "https://github.com/boolnetwork/substrate.git", branch = "compatible-monitor" }
+sc-telemetry = { git = "https://github.com/boolnetwork/substrate.git", branch = "compatible-monitor" }
+sc-transaction-pool = { git = "https://github.com/boolnetwork/substrate.git", branch = "compatible-monitor" }
+sc-transaction-pool-api = { git = "https://github.com/boolnetwork/substrate.git", branch = "compatible-monitor" }
+sc-utils = { git = "https://github.com/boolnetwork/substrate.git", branch = "compatible-monitor" }
 # Substrate Primitive
-sp-api = { git = "https://github.com/boolnetwork/substrate.git", branch = "Bool_Polkadot_v0.9.42", default-features = false }
-sp-block-builder = { git = "https://github.com/boolnetwork/substrate.git", branch = "Bool_Polkadot_v0.9.42", default-features = false }
-sp-blockchain = { git = "https://github.com/boolnetwork/substrate.git", branch = "Bool_Polkadot_v0.9.42" }
-sp-consensus = { git = "https://github.com/boolnetwork/substrate.git", branch = "Bool_Polkadot_v0.9.42" }
-sp-consensus-aura = { git = "https://github.com/boolnetwork/substrate.git", branch = "Bool_Polkadot_v0.9.42", default-features = false }
-sp-consensus-grandpa = { git = "https://github.com/boolnetwork/substrate.git", branch = "Bool_Polkadot_v0.9.42", default-features = false }
-sp-core = { git = "https://github.com/boolnetwork/substrate.git", branch = "Bool_Polkadot_v0.9.42", default-features = false }
-sp-database = { git = "https://github.com/boolnetwork/substrate.git", branch = "Bool_Polkadot_v0.9.42" }
-sp-inherents = { git = "https://github.com/boolnetwork/substrate.git", branch = "Bool_Polkadot_v0.9.42", default-features = false }
-sp-io = { git = "https://github.com/boolnetwork/substrate.git", branch = "Bool_Polkadot_v0.9.42", default-features = false }
-sp-keyring = { git = "https://github.com/boolnetwork/substrate.git", branch = "Bool_Polkadot_v0.9.42" }
-sp-offchain = { git = "https://github.com/boolnetwork/substrate.git", branch = "Bool_Polkadot_v0.9.42", default-features = false }
-sp-runtime = { git = "https://github.com/boolnetwork/substrate.git", branch = "Bool_Polkadot_v0.9.42", default-features = false }
-sp-session = { git = "https://github.com/boolnetwork/substrate.git", branch = "Bool_Polkadot_v0.9.42", default-features = false }
-sp-state-machine = { git = "https://github.com/boolnetwork/substrate.git", branch = "Bool_Polkadot_v0.9.42", default-features = false }
-sp-std = { git = "https://github.com/boolnetwork/substrate.git", branch = "Bool_Polkadot_v0.9.42", default-features = false }
-sp-storage = { git = "https://github.com/boolnetwork/substrate.git", branch = "Bool_Polkadot_v0.9.42", default-features = false }
-sp-timestamp = { git = "https://github.com/boolnetwork/substrate.git", branch = "Bool_Polkadot_v0.9.42", default-features = false }
-sp-transaction-pool = { git = "https://github.com/boolnetwork/substrate.git", branch = "Bool_Polkadot_v0.9.42", default-features = false }
-sp-trie = { version = "7.0.0", git = "https://github.com/boolnetwork/substrate.git", branch = "Bool_Polkadot_v0.9.42", default-features = false }
-sp-version = { version = "5.0.0", git = "https://github.com/boolnetwork/substrate.git", branch = "Bool_Polkadot_v0.9.42", default-features = false }
+sp-api = { git = "https://github.com/boolnetwork/substrate.git", branch = "compatible-monitor", default-features = false }
+sp-block-builder = { git = "https://github.com/boolnetwork/substrate.git", branch = "compatible-monitor", default-features = false }
+sp-blockchain = { git = "https://github.com/boolnetwork/substrate.git", branch = "compatible-monitor" }
+sp-consensus = { git = "https://github.com/boolnetwork/substrate.git", branch = "compatible-monitor" }
+sp-consensus-aura = { git = "https://github.com/boolnetwork/substrate.git", branch = "compatible-monitor", default-features = false }
+sp-consensus-grandpa = { git = "https://github.com/boolnetwork/substrate.git", branch = "compatible-monitor", default-features = false }
+sp-core = { git = "https://github.com/boolnetwork/substrate.git", branch = "compatible-monitor", default-features = false }
+sp-database = { git = "https://github.com/boolnetwork/substrate.git", branch = "compatible-monitor" }
+sp-inherents = { git = "https://github.com/boolnetwork/substrate.git", branch = "compatible-monitor", default-features = false }
+sp-io = { git = "https://github.com/boolnetwork/substrate.git", branch = "compatible-monitor", default-features = false }
+sp-keyring = { git = "https://github.com/boolnetwork/substrate.git", branch = "compatible-monitor" }
+sp-offchain = { git = "https://github.com/boolnetwork/substrate.git", branch = "compatible-monitor", default-features = false }
+sp-runtime = { git = "https://github.com/boolnetwork/substrate.git", branch = "compatible-monitor", default-features = false }
+sp-session = { git = "https://github.com/boolnetwork/substrate.git", branch = "compatible-monitor", default-features = false }
+sp-state-machine = { git = "https://github.com/boolnetwork/substrate.git", branch = "compatible-monitor", default-features = false }
+sp-std = { git = "https://github.com/boolnetwork/substrate.git", branch = "compatible-monitor", default-features = false }
+sp-storage = { git = "https://github.com/boolnetwork/substrate.git", branch = "compatible-monitor", default-features = false }
+sp-timestamp = { git = "https://github.com/boolnetwork/substrate.git", branch = "compatible-monitor", default-features = false }
+sp-transaction-pool = { git = "https://github.com/boolnetwork/substrate.git", branch = "compatible-monitor", default-features = false }
+sp-trie = { version = "7.0.0", git = "https://github.com/boolnetwork/substrate.git", branch = "compatible-monitor", default-features = false }
+sp-version = { version = "5.0.0", git = "https://github.com/boolnetwork/substrate.git", branch = "compatible-monitor", default-features = false }
 # Substrate FRAME
-frame-benchmarking = { git = "https://github.com/boolnetwork/substrate.git", branch = "Bool_Polkadot_v0.9.42", default-features = false }
-frame-executive = { git = "https://github.com/boolnetwork/substrate.git", branch = "Bool_Polkadot_v0.9.42", default-features = false }
-frame-support = { git = "https://github.com/boolnetwork/substrate.git", branch = "Bool_Polkadot_v0.9.42", default-features = false }
-frame-system = { git = "https://github.com/boolnetwork/substrate.git", branch = "Bool_Polkadot_v0.9.42", default-features = false }
-frame-system-benchmarking = { git = "https://github.com/boolnetwork/substrate.git", branch = "Bool_Polkadot_v0.9.42", default-features = false }
-frame-system-rpc-runtime-api = { git = "https://github.com/boolnetwork/substrate.git", branch = "Bool_Polkadot_v0.9.42", default-features = false }
-pallet-aura = { git = "https://github.com/boolnetwork/substrate.git", branch = "Bool_Polkadot_v0.9.42", default-features = false }
-pallet-balances = { git = "https://github.com/boolnetwork/substrate.git", branch = "Bool_Polkadot_v0.9.42", default-features = false }
-pallet-grandpa = { git = "https://github.com/boolnetwork/substrate.git", branch = "Bool_Polkadot_v0.9.42", default-features = false }
-pallet-sudo = { git = "https://github.com/boolnetwork/substrate.git", branch = "Bool_Polkadot_v0.9.42", default-features = false }
-pallet-timestamp = { git = "https://github.com/boolnetwork/substrate.git", branch = "Bool_Polkadot_v0.9.42", default-features = false }
-pallet-transaction-payment = { git = "https://github.com/boolnetwork/substrate.git", branch = "Bool_Polkadot_v0.9.42", default-features = false }
-pallet-transaction-payment-rpc = { git = "https://github.com/boolnetwork/substrate.git", branch = "Bool_Polkadot_v0.9.42" }
-pallet-transaction-payment-rpc-runtime-api = { git = "https://github.com/boolnetwork/substrate.git", branch = "Bool_Polkadot_v0.9.42", default-features = false }
-pallet-utility = { git = "https://github.com/boolnetwork/substrate.git", branch = "Bool_Polkadot_v0.9.42", default-features = false }
+frame-benchmarking = { git = "https://github.com/boolnetwork/substrate.git", branch = "compatible-monitor", default-features = false }
+frame-executive = { git = "https://github.com/boolnetwork/substrate.git", branch = "compatible-monitor", default-features = false }
+frame-support = { git = "https://github.com/boolnetwork/substrate.git", branch = "compatible-monitor", default-features = false }
+frame-system = { git = "https://github.com/boolnetwork/substrate.git", branch = "compatible-monitor", default-features = false }
+frame-system-benchmarking = { git = "https://github.com/boolnetwork/substrate.git", branch = "compatible-monitor", default-features = false }
+frame-system-rpc-runtime-api = { git = "https://github.com/boolnetwork/substrate.git", branch = "compatible-monitor", default-features = false }
+pallet-aura = { git = "https://github.com/boolnetwork/substrate.git", branch = "compatible-monitor", default-features = false }
+pallet-balances = { git = "https://github.com/boolnetwork/substrate.git", branch = "compatible-monitor", default-features = false }
+pallet-grandpa = { git = "https://github.com/boolnetwork/substrate.git", branch = "compatible-monitor", default-features = false }
+pallet-sudo = { git = "https://github.com/boolnetwork/substrate.git", branch = "compatible-monitor", default-features = false }
+pallet-timestamp = { git = "https://github.com/boolnetwork/substrate.git", branch = "compatible-monitor", default-features = false }
+pallet-transaction-payment = { git = "https://github.com/boolnetwork/substrate.git", branch = "compatible-monitor", default-features = false }
+pallet-transaction-payment-rpc = { git = "https://github.com/boolnetwork/substrate.git", branch = "compatible-monitor" }
+pallet-transaction-payment-rpc-runtime-api = { git = "https://github.com/boolnetwork/substrate.git", branch = "compatible-monitor", default-features = false }
+pallet-utility = { git = "https://github.com/boolnetwork/substrate.git", branch = "compatible-monitor", default-features = false }
 # Substrate Utility
-frame-benchmarking-cli = { git = "https://github.com/boolnetwork/substrate.git", branch = "Bool_Polkadot_v0.9.42" }
-prometheus-endpoint = { package = "substrate-prometheus-endpoint", git = "https://github.com/boolnetwork/substrate.git", branch = "Bool_Polkadot_v0.9.42" }
-substrate-build-script-utils = { git = "https://github.com/boolnetwork/substrate.git", branch = "Bool_Polkadot_v0.9.42" }
-substrate-frame-rpc-system = { git = "https://github.com/boolnetwork/substrate.git", branch = "Bool_Polkadot_v0.9.42" }
-substrate-test-runtime-client = { git = "https://github.com/boolnetwork/substrate.git", branch = "Bool_Polkadot_v0.9.42" }
-substrate-wasm-builder = { git = "https://github.com/boolnetwork/substrate.git", branch = "Bool_Polkadot_v0.9.42" }
+frame-benchmarking-cli = { git = "https://github.com/boolnetwork/substrate.git", branch = "compatible-monitor" }
+prometheus-endpoint = { package = "substrate-prometheus-endpoint", git = "https://github.com/boolnetwork/substrate.git", branch = "compatible-monitor" }
+substrate-build-script-utils = { git = "https://github.com/boolnetwork/substrate.git", branch = "compatible-monitor" }
+substrate-frame-rpc-system = { git = "https://github.com/boolnetwork/substrate.git", branch = "compatible-monitor" }
+substrate-test-runtime-client = { git = "https://github.com/boolnetwork/substrate.git", branch = "compatible-monitor" }
+substrate-wasm-builder = { git = "https://github.com/boolnetwork/substrate.git", branch = "compatible-monitor" }
 # Frontier Client
 fc-cli = { version = "1.0.0-dev", path = "client/cli" }
 fc-consensus = { version = "2.0.0-dev", path = "client/consensus" }
