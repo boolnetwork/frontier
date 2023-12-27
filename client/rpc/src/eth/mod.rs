@@ -219,26 +219,29 @@ where
 
 	async fn block_by_number(
 		&self,
-		number: BlockNumber,
+		number_or_hash: BlockNumberOrHash,
 		full: bool,
 	) -> RpcResult<Option<RichBlock>> {
-		self.block_by_number(number, full).await
+		self.block_by_number(number_or_hash, full).await
 	}
 
 	fn block_transaction_count_by_hash(&self, hash: H256) -> RpcResult<Option<U256>> {
 		self.block_transaction_count_by_hash(hash)
 	}
 
-	fn block_transaction_count_by_number(&self, number: BlockNumber) -> RpcResult<Option<U256>> {
-		self.block_transaction_count_by_number(number)
+	fn block_transaction_count_by_number(
+		&self,
+		number_or_hash: BlockNumberOrHash,
+	) -> RpcResult<Option<U256>> {
+		self.block_transaction_count_by_number(number_or_hash)
 	}
 
 	fn block_uncles_count_by_hash(&self, hash: H256) -> RpcResult<U256> {
 		self.block_uncles_count_by_hash(hash)
 	}
 
-	fn block_uncles_count_by_number(&self, number: BlockNumber) -> RpcResult<U256> {
-		self.block_uncles_count_by_number(number)
+	fn block_uncles_count_by_number(&self, number_or_hash: BlockNumberOrHash) -> RpcResult<U256> {
+		self.block_uncles_count_by_number(number_or_hash)
 	}
 
 	fn uncle_by_block_hash_and_index(
@@ -251,10 +254,10 @@ where
 
 	fn uncle_by_block_number_and_index(
 		&self,
-		number: BlockNumber,
+		number_or_hash: BlockNumberOrHash,
 		index: Index,
 	) -> RpcResult<Option<RichBlock>> {
-		self.uncle_by_block_number_and_index(number, index)
+		self.uncle_by_block_number_and_index(number_or_hash, index)
 	}
 
 	// ########################################################################
@@ -275,10 +278,10 @@ where
 
 	async fn transaction_by_block_number_and_index(
 		&self,
-		number: BlockNumber,
+		number_or_hash: BlockNumberOrHash,
 		index: Index,
 	) -> RpcResult<Option<Transaction>> {
-		self.transaction_by_block_number_and_index(number, index)
+		self.transaction_by_block_number_and_index(number_or_hash, index)
 			.await
 	}
 
@@ -290,25 +293,33 @@ where
 	// State
 	// ########################################################################
 
-	fn balance(&self, address: H160, number: Option<BlockNumber>) -> RpcResult<U256> {
-		self.balance(address, number)
+	fn balance(&self, address: H160, number_or_hash: Option<BlockNumberOrHash>) -> RpcResult<U256> {
+		self.balance(address, number_or_hash)
 	}
 
 	fn storage_at(
 		&self,
 		address: H160,
 		index: U256,
-		number: Option<BlockNumber>,
+		number_or_hash: Option<BlockNumberOrHash>,
 	) -> RpcResult<H256> {
-		self.storage_at(address, index, number)
+		self.storage_at(address, index, number_or_hash)
 	}
 
-	fn transaction_count(&self, address: H160, number: Option<BlockNumber>) -> RpcResult<U256> {
-		self.transaction_count(address, number)
+	fn transaction_count(
+		&self,
+		address: H160,
+		number_or_hash: Option<BlockNumberOrHash>,
+	) -> RpcResult<U256> {
+		self.transaction_count(address, number_or_hash)
 	}
 
-	fn code_at(&self, address: H160, number: Option<BlockNumber>) -> RpcResult<Bytes> {
-		self.code_at(address, number)
+	fn code_at(
+		&self,
+		address: H160,
+		number_or_hash: Option<BlockNumberOrHash>,
+	) -> RpcResult<Bytes> {
+		self.code_at(address, number_or_hash)
 	}
 
 	// ########################################################################
@@ -318,18 +329,18 @@ where
 	fn call(
 		&self,
 		request: CallRequest,
-		number: Option<BlockNumber>,
+		number_or_hash: Option<BlockNumberOrHash>,
 		state_overrides: Option<BTreeMap<H160, CallStateOverride>>,
 	) -> RpcResult<Bytes> {
-		self.call(request, number, state_overrides)
+		self.call(request, number_or_hash, state_overrides)
 	}
 
 	async fn estimate_gas(
 		&self,
 		request: CallRequest,
-		number: Option<BlockNumber>,
+		number_or_hash: Option<BlockNumberOrHash>,
 	) -> RpcResult<U256> {
-		self.estimate_gas(request, number).await
+		self.estimate_gas(request, number_or_hash).await
 	}
 
 	// ########################################################################
@@ -343,7 +354,7 @@ where
 	fn fee_history(
 		&self,
 		block_count: U256,
-		newest_block: BlockNumber,
+		newest_block: BlockNumberOrHash,
 		reward_percentiles: Option<Vec<f64>>,
 	) -> RpcResult<FeeHistory> {
 		self.fee_history(block_count, newest_block, reward_percentiles)

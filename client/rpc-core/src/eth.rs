@@ -70,7 +70,7 @@ pub trait EthApi {
 	#[method(name = "eth_getBlockByNumber")]
 	async fn block_by_number(
 		&self,
-		number: BlockNumber,
+		number_or_hash: BlockNumberOrHash,
 		full: bool,
 	) -> RpcResult<Option<RichBlock>>;
 
@@ -80,7 +80,10 @@ pub trait EthApi {
 
 	/// Returns the number of transactions in a block with given block number.
 	#[method(name = "eth_getBlockTransactionCountByNumber")]
-	fn block_transaction_count_by_number(&self, number: BlockNumber) -> RpcResult<Option<U256>>;
+	fn block_transaction_count_by_number(
+		&self,
+		number_or_hash: BlockNumberOrHash,
+	) -> RpcResult<Option<U256>>;
 
 	/// Returns the number of uncles in a block with given hash.
 	#[method(name = "eth_getUncleCountByBlockHash")]
@@ -88,7 +91,7 @@ pub trait EthApi {
 
 	/// Returns the number of uncles in a block with given block number.
 	#[method(name = "eth_getUncleCountByBlockNumber")]
-	fn block_uncles_count_by_number(&self, number: BlockNumber) -> RpcResult<U256>;
+	fn block_uncles_count_by_number(&self, number_or_hash: BlockNumberOrHash) -> RpcResult<U256>;
 
 	/// Returns an uncles at given block and index.
 	#[method(name = "eth_getUncleByBlockHashAndIndex")]
@@ -102,7 +105,7 @@ pub trait EthApi {
 	#[method(name = "eth_getUncleByBlockNumberAndIndex")]
 	fn uncle_by_block_number_and_index(
 		&self,
-		number: BlockNumber,
+		number_or_hash: BlockNumberOrHash,
 		index: Index,
 	) -> RpcResult<Option<RichBlock>>;
 
@@ -126,7 +129,7 @@ pub trait EthApi {
 	#[method(name = "eth_getTransactionByBlockNumberAndIndex")]
 	async fn transaction_by_block_number_and_index(
 		&self,
-		number: BlockNumber,
+		number_or_hash: BlockNumberOrHash,
 		index: Index,
 	) -> RpcResult<Option<Transaction>>;
 
@@ -140,7 +143,7 @@ pub trait EthApi {
 
 	/// Returns balance of the given account.
 	#[method(name = "eth_getBalance")]
-	fn balance(&self, address: H160, number: Option<BlockNumber>) -> RpcResult<U256>;
+	fn balance(&self, address: H160, number_or_hash: Option<BlockNumberOrHash>) -> RpcResult<U256>;
 
 	/// Returns content of the storage at given address.
 	#[method(name = "eth_getStorageAt")]
@@ -148,16 +151,21 @@ pub trait EthApi {
 		&self,
 		address: H160,
 		index: U256,
-		number: Option<BlockNumber>,
+		number_or_hash: Option<BlockNumberOrHash>,
 	) -> RpcResult<H256>;
 
 	/// Returns the number of transactions sent from given address at given time (block number).
 	#[method(name = "eth_getTransactionCount")]
-	fn transaction_count(&self, address: H160, number: Option<BlockNumber>) -> RpcResult<U256>;
+	fn transaction_count(
+		&self,
+		address: H160,
+		number_or_hash: Option<BlockNumberOrHash>,
+	) -> RpcResult<U256>;
 
 	/// Returns the code at given address at given time (block number).
 	#[method(name = "eth_getCode")]
-	fn code_at(&self, address: H160, number: Option<BlockNumber>) -> RpcResult<Bytes>;
+	fn code_at(&self, address: H160, number_or_hash: Option<BlockNumberOrHash>)
+		-> RpcResult<Bytes>;
 
 	// ########################################################################
 	// Execute
@@ -168,7 +176,7 @@ pub trait EthApi {
 	fn call(
 		&self,
 		request: CallRequest,
-		number: Option<BlockNumber>,
+		number_or_hash: Option<BlockNumberOrHash>,
 		state_overrides: Option<BTreeMap<H160, CallStateOverride>>,
 	) -> RpcResult<Bytes>;
 
@@ -177,7 +185,7 @@ pub trait EthApi {
 	async fn estimate_gas(
 		&self,
 		request: CallRequest,
-		number: Option<BlockNumber>,
+		number_or_hash: Option<BlockNumberOrHash>,
 	) -> RpcResult<U256>;
 
 	// ########################################################################
@@ -193,7 +201,7 @@ pub trait EthApi {
 	fn fee_history(
 		&self,
 		block_count: U256,
-		newest_block: BlockNumber,
+		newest_block: BlockNumberOrHash,
 		reward_percentiles: Option<Vec<f64>>,
 	) -> RpcResult<FeeHistory>;
 

@@ -95,7 +95,7 @@ where
 			locked.insert(
 				key,
 				FilterPoolItem {
-					last_poll: BlockNumber::Num(block_number),
+					last_poll: BlockNumberOrHash::Num(block_number),
 					filter_type,
 					at_block: block_number,
 				},
@@ -168,7 +168,7 @@ where
 						locked.insert(
 							key,
 							FilterPoolItem {
-								last_poll: BlockNumber::Num(next),
+								last_poll: BlockNumberOrHash::Num(next),
 								filter_type: pool_item.filter_type.clone(),
 								at_block: pool_item.at_block,
 							},
@@ -182,7 +182,7 @@ where
 						locked.insert(
 							key,
 							FilterPoolItem {
-								last_poll: BlockNumber::Num(block_number + 1),
+								last_poll: BlockNumberOrHash::Num(block_number + 1),
 								filter_type: pool_item.filter_type.clone(),
 								at_block: pool_item.at_block,
 							},

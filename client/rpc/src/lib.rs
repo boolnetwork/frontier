@@ -67,7 +67,7 @@ pub mod frontier_backend_client {
 	};
 	use sp_state_machine::OverlayedChanges;
 	// Frontier
-	use fc_rpc_core::types::BlockNumber;
+	use fc_rpc_core::types::BlockNumberOrHash;
 	use fp_storage::EthereumStorageSchema;
 
 	/// Implements a default runtime storage override.
@@ -183,26 +183,26 @@ pub mod frontier_backend_client {
 	pub fn native_block_id<B: BlockT, C>(
 		client: &C,
 		backend: &fc_db::Backend<B>,
-		number: Option<BlockNumber>,
+		number: Option<BlockNumberOrHash>,
 	) -> RpcResult<Option<BlockId<B>>>
 	where
 		B: BlockT,
 		C: HeaderBackend<B> + 'static,
 	{
-		Ok(match number.unwrap_or(BlockNumber::Latest) {
-			BlockNumber::Hash { hash, .. } => {
+		Ok(match number.unwrap_or(BlockNumberOrHash::Latest) {
+			BlockNumberOrHash::Hash { hash, .. } => {
 				if let Ok(Some(hash)) = load_hash::<B, C>(client, backend, hash) {
 					Some(BlockId::Hash(hash))
 				} else {
 					None
 				}
 			}
-			BlockNumber::Num(number) => Some(BlockId::Number(number.unique_saturated_into())),
-			BlockNumber::Latest => Some(BlockId::Hash(client.info().best_hash)),
-			BlockNumber::Earliest => Some(BlockId::Number(Zero::zero())),
-			BlockNumber::Pending => None,
-			BlockNumber::Safe => Some(BlockId::Hash(client.info().finalized_hash)),
-			BlockNumber::Finalized => Some(BlockId::Hash(client.info().finalized_hash)),
+			BlockNumberOrHash::Num(number) => Some(BlockId::Number(number.unique_saturated_into())),
+			BlockNumberOrHash::Latest => Some(BlockId::Hash(client.info().best_hash)),
+			BlockNumberOrHash::Earliest => Some(BlockId::Number(Zero::zero())),
+			BlockNumberOrHash::Pending => None,
+			BlockNumberOrHash::Safe => Some(BlockId::Hash(client.info().finalized_hash)),
+			BlockNumberOrHash::Finalized => Some(BlockId::Hash(client.info().finalized_hash)),
 		})
 	}
 

@@ -211,7 +211,7 @@ where
 
 	pub async fn transaction_by_block_number_and_index(
 		&self,
-		number: BlockNumber,
+		number: BlockNumberOrHash,
 		index: Index,
 	) -> RpcResult<Option<Transaction>> {
 		let client = Arc::clone(&self.client);
