@@ -10,7 +10,7 @@ use futures::{future, prelude::*};
 use sc_client_api::{BlockchainEvents, StateBackendFor};
 use sc_executor::NativeExecutionDispatch;
 use sc_network_sync::SyncingService;
-use sc_service::{error::Error as ServiceError, Configuration, TaskManager};
+use sc_service::{error::Error as ServiceError, Configuration, TaskManager, BasePath};
 use sp_api::ConstructRuntimeApi;
 use sp_runtime::traits::BlakeTwo256;
 // Frontier
@@ -26,7 +26,14 @@ use crate::client::{FullBackend, FullClient};
 pub type FrontierBackend = fc_db::Backend<Block>;
 
 pub fn db_config_dir(config: &Configuration) -> PathBuf {
-	config.base_path.config_dir(config.chain_spec.id())
+	let application = &config.impl_name;
+	config
+		.base_path
+		.as_ref()
+		.map(|base_path| base_path.config_dir(config.chain_spec.id()))
+		.unwrap_or_else(|| {
+			BasePath::from_project("", "", application).config_dir(config.chain_spec.id())
+		})
 }
 
 /// Avalailable frontier backend types.
@@ -45,6 +52,10 @@ pub struct EthConfiguration {
 	/// Maximum number of logs in a query.
 	#[arg(long, default_value = "10000")]
 	pub max_past_logs: u32,
+
+	/// Timeout for eth logs query RPCs in seconds. (default 10).
+	#[arg(long, default_value = "10")]
+	pub logs_request_timeout: u64,
 
 	/// Maximum fee history cache size.
 	#[arg(long, default_value = "2048")]

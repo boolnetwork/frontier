@@ -295,7 +295,6 @@ impl pallet_transaction_payment::Config for Runtime {
 impl pallet_sudo::Config for Runtime {
 	type RuntimeEvent = RuntimeEvent;
 	type RuntimeCall = RuntimeCall;
-	type WeightInfo = pallet_sudo::weights::SubstrateWeight<Self>;
 }
 
 impl pallet_evm_chain_id::Config for Runtime {}
