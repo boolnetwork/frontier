@@ -280,10 +280,13 @@ pub mod pallet {
 			}, without_base_extrinsic_weight)
 		})]
 		pub fn transact(
-			origin: OriginFor<T>,
+			_origin: OriginFor<T>,
 			transaction: Transaction,
 		) -> DispatchResultWithPostInfo {
-			let source = ensure_ethereum_transaction(origin)?;
+			// let source = ensure_ethereum_transaction(origin)?;
+			let source = Pallet::<T>::recover_signer(&transaction).ok_or(
+				"bad origin: expected to be an Ethereum transaction"
+			)?;
 			// Disable transact functionality if PreLog exist.
 			assert!(
 				fp_consensus::find_pre_log(&frame_system::Pallet::<T>::digest()).is_err(),
