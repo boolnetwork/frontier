@@ -65,7 +65,7 @@ pub struct Log {
 struct BlockMetadata {
 	pub substrate_block_hash: H256,
 	pub block_number: i32,
-	pub post_hashes: fp_consensus::Hashes,
+	pub post_hashes: Hashes,
 	pub schema: EthereumStorageSchema,
 	pub is_canon: i32,
 }
@@ -546,6 +546,7 @@ where
 			let transaction_index = transaction_index as i32;
 			log_count += receipt_logs.len();
 			for (log_index, log) in receipt_logs.iter().enumerate() {
+				#[allow(clippy::get_first)]
 				logs.push(Log {
 					address: log.address.as_bytes().to_owned(),
 					topic_1: log.topics.get(0).map(|l| l.as_bytes().to_owned()),
@@ -851,13 +852,14 @@ impl<Block: BlockT<Hash = H256>> BackendReader<Block> for Backend<Block> {
 		Ok(out)
 	}
 
+
 	async fn filter_logs(
 		&self,
 		from_block: u64,
 		to_block: u64,
 		addresses: Vec<H160>,
 		topics: Vec<Vec<Option<H256>>>,
-	) -> Result<Vec<FilteredLog<Block>>, String> {
+	) -> Result<Vec<crate::FilteredLog<Block>>, String> {
 		let mut unique_topics: [HashSet<H256>; 4] = [
 			HashSet::new(),
 			HashSet::new(),
@@ -955,6 +957,109 @@ impl<Block: BlockT<Hash = H256>> BackendReader<Block> for Backend<Block> {
 	}
 }
 
+#[async_trait::async_trait]
+impl<Block: BlockT<Hash = H256>> fc_api::LogIndexerBackend<Block> for Backend<Block> {
+	fn is_indexed(&self) -> bool {
+		true
+	}
+
+	async fn filter_logs(
+		&self,
+		from_block: u64,
+		to_block: u64,
+		addresses: Vec<H160>,
+		topics: Vec<Vec<Option<H256>>>,
+	) -> Result<Vec<fc_api::FilteredLog<Block>>, String> {
+		let mut unique_topics: [HashSet<H256>; 4] = [
+			HashSet::new(),
+			HashSet::new(),
+			HashSet::new(),
+			HashSet::new(),
+		];
+		for topic_combination in topics.into_iter() {
+			for (topic_index, topic) in topic_combination.into_iter().enumerate() {
+				if topic_index == MAX_TOPIC_COUNT as usize {
+					return Err("Invalid topic input. Maximum length is 4.".to_string());
+				}
+
+				if let Some(topic) = topic {
+					unique_topics[topic_index].insert(topic);
+				}
+			}
+		}
+
+		let log_key = format!("{from_block}-{to_block}-{addresses:?}-{unique_topics:?}");
+		let mut qb = QueryBuilder::new("");
+		let query = build_query(&mut qb, from_block, to_block, addresses, unique_topics);
+		let sql = query.sql();
+
+		let mut conn = self
+			.pool()
+			.acquire()
+			.await
+			.map_err(|err| format!("failed acquiring sqlite connection: {}", err))?;
+		let log_key2 = log_key.clone();
+		conn.lock_handle()
+			.await
+			.map_err(|err| format!("{:?}", err))?
+			.set_progress_handler(self.num_ops_timeout, move || {
+				log::debug!(target: "frontier-sql", "Sqlite progress_handler triggered for {log_key2}");
+				false
+			});
+		log::debug!(target: "frontier-sql", "Query: {sql:?} - {log_key}");
+
+		let mut out: Vec<fc_api::FilteredLog<Block>> = vec![];
+		let mut rows = query.fetch(&mut *conn);
+		let maybe_err = loop {
+			match rows.try_next().await {
+				Ok(Some(row)) => {
+					// Substrate block hash
+					let substrate_block_hash =
+						H256::from_slice(&row.try_get::<Vec<u8>, _>(0).unwrap_or_default()[..]);
+					// Ethereum block hash
+					let ethereum_block_hash =
+						H256::from_slice(&row.try_get::<Vec<u8>, _>(1).unwrap_or_default()[..]);
+					// Block number
+					let block_number = row.try_get::<i32, _>(2).unwrap_or_default() as u32;
+					// Ethereum storage schema
+					let ethereum_storage_schema: EthereumStorageSchema =
+						Decode::decode(&mut &row.try_get::<Vec<u8>, _>(3).unwrap_or_default()[..])
+							.map_err(|_| {
+								"Cannot decode EthereumStorageSchema for block".to_string()
+							})?;
+					// Transaction index
+					let transaction_index = row.try_get::<i32, _>(4).unwrap_or_default() as u32;
+					// Log index
+					let log_index = row.try_get::<i32, _>(5).unwrap_or_default() as u32;
+					out.push(fc_api::FilteredLog {
+						substrate_block_hash,
+						ethereum_block_hash,
+						block_number,
+						ethereum_storage_schema,
+						transaction_index,
+						log_index,
+					});
+				}
+				Ok(None) => break None, // no more rows
+				Err(err) => break Some(err),
+			};
+		};
+		drop(rows);
+		conn.lock_handle()
+			.await
+			.map_err(|err| format!("{:?}", err))?
+			.remove_progress_handler();
+
+		if let Some(err) = maybe_err {
+			log::error!(target: "frontier-sql", "Failed to query sql db: {err:?} - {log_key}");
+			return Err("Failed to query sql db with statement".to_string());
+		}
+
+		log::info!(target: "frontier-sql", "FILTER remove handler - {log_key}");
+		Ok(out)
+	}
+}
+
 /// Build a SQL query to retrieve a list of logs given certain constraints.
 fn build_query<'a>(
 	qb: &'a mut QueryBuilder<Sqlite>,
@@ -1046,6 +1151,7 @@ mod test {
 		DefaultTestClientBuilderExt, TestClientBuilder, TestClientBuilderExt,
 	};
 	// Frontier
+	use fc_api::Backend as BackendT;
 	use fc_storage::{OverrideHandle, SchemaV3Override, StorageOverride};
 	use fp_storage::{EthereumStorageSchema, PALLET_ETHEREUM_SCHEMA};
 
@@ -1073,7 +1179,7 @@ mod test {
 
 	#[allow(unused)]
 	struct TestData {
-		backend: super::Backend<OpaqueBlock>,
+		backend: Backend<OpaqueBlock>,
 		alice: H160,
 		bob: H160,
 		topics_a: H256,
@@ -1135,8 +1241,8 @@ mod test {
 		});
 
 		// Indexer backend
-		let indexer_backend = super::Backend::new(
-			super::BackendConfig::Sqlite(super::SqliteBackendConfig {
+		let indexer_backend = Backend::new(
+			BackendConfig::Sqlite(SqliteBackendConfig {
 				path: Path::new("sqlite:///")
 					.join(tmp.path())
 					.join("test.db3")
@@ -1383,10 +1489,11 @@ mod test {
 	}
 
 	async fn run_test_case(
-		backend: super::Backend<OpaqueBlock>,
+		backend: Backend<OpaqueBlock>,
 		test_case: &TestFilter,
 	) -> Result<Vec<FilteredLog<OpaqueBlock>>, String> {
 		backend
+			.log_indexer()
 			.filter_logs(
 				test_case.from_block,
 				test_case.to_block,
@@ -1840,8 +1947,7 @@ ORDER BY b.block_number ASC, l.transaction_index ASC, l.log_index ASC
 LIMIT 10001";
 
 		let mut qb = QueryBuilder::new("");
-		let actual_query_sql =
-			super::build_query(&mut qb, from_block, to_block, addresses, topics).sql();
+		let actual_query_sql = build_query(&mut qb, from_block, to_block, addresses, topics).sql();
 		assert_eq!(expected_query_sql, actual_query_sql);
 	}
 }

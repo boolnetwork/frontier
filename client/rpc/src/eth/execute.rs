@@ -25,12 +25,16 @@ use scale_codec::{Decode, Encode};
 // Substrate
 use sc_client_api::backend::{Backend, StorageProvider};
 use sc_transaction_pool::ChainApi;
-use sp_api::{ApiExt, CallApiAt, CallApiAtParams, ProvideRuntimeApi, StorageTransactionCache};
+use sp_api::{ApiExt, CallApiAt, CallApiAtParams, CallContext, ProvideRuntimeApi};
 use sp_block_builder::BlockBuilder as BlockBuilderApi;
 use sp_blockchain::HeaderBackend;
-use sp_core::ExecutionContext;
+use sp_externalities::Extensions;
+use sp_inherents::CreateInherentDataProviders;
 use sp_io::hashing::{blake2_128, twox_128};
-use sp_runtime::{traits::Block as BlockT, DispatchError, SaturatedConversion};
+use sp_runtime::{
+	traits::{Block as BlockT, HashingFor},
+	DispatchError, SaturatedConversion,
+};
 use sp_state_machine::OverlayedChanges;
 // Frontier
 use fc_rpc_core::types::*;
@@ -39,7 +43,7 @@ use fp_rpc::{EthereumRuntimeRPCApi, RuntimeStorageOverride};
 use fp_storage::{EVM_ACCOUNT_CODES, PALLET_EVM};
 
 use crate::{
-	eth::{pending_runtime_api, Eth, EthConfig},
+	eth::{Eth, EthConfig},
 	frontier_backend_client, internal_err,
 };
 
@@ -50,7 +54,7 @@ pub const JSON_RPC_ERROR_DEFAULT: i32 = -32000;
 /// Can be used to estimate gas of some contracts using a different function
 /// in the case the normal gas estimation doesn't work.
 ///
-/// Exemple: a precompile that tries to do a subcall but succeeds regardless of the
+/// Example: a precompile that tries to do a subcall but succeeds regardless of the
 /// success of the subcall. The gas estimation will thus optimize the gas limit down
 /// to the minimum, while we want to estimate a gas limit that will allow the subcall to
 /// have enough gas to succeed.
@@ -64,19 +68,21 @@ impl EstimateGasAdapter for () {
 	}
 }
 
-impl<B, C, P, CT, BE, A: ChainApi, EC: EthConfig<B, C>> Eth<B, C, P, CT, BE, A, EC>
+impl<B, C, P, CT, BE, A, CIDP, EC> Eth<B, C, P, CT, BE, A, CIDP, EC>
 where
 	B: BlockT,
 	C: CallApiAt<B> + ProvideRuntimeApi<B>,
 	C::Api: BlockBuilderApi<B> + EthereumRuntimeRPCApi<B>,
 	C: HeaderBackend<B> + StorageProvider<B, BE> + 'static,
 	BE: Backend<B> + 'static,
-	A: ChainApi<Block = B> + 'static,
+	A: ChainApi<Block = B>,
+	CIDP: CreateInherentDataProviders<B, ()> + Send + 'static,
+	EC: EthConfig<B, C>,
 {
 	pub async fn call(
 		&self,
 		request: CallRequest,
-		number: Option<BlockNumber>,
+		number_or_hash: Option<BlockNumberOrHash>,
 		state_overrides: Option<BTreeMap<H160, CallStateOverride>>,
 	) -> RpcResult<Bytes> {
 		let CallRequest {
@@ -105,7 +111,7 @@ where
 		let (substrate_hash, api) = match frontier_backend_client::native_block_id::<B, C>(
 			self.client.as_ref(),
 			self.backend.as_ref(),
-			number,
+			number_or_hash,
 		)
 		.await?
 		{
@@ -118,8 +124,9 @@ where
 			}
 			None => {
 				// Not mapped in the db, assume pending.
-				let hash = self.client.info().best_hash;
-				let api = pending_runtime_api(self.client.as_ref(), self.graph.as_ref())?;
+				let (hash, api) = self.pending_runtime_api().await.map_err(|err| {
+					internal_err(format!("Create pending runtime api error: {err}"))
+				})?;
 				(hash, api)
 			}
 		};
@@ -134,12 +141,12 @@ where
 
 		let block = if api_version > 1 {
 			api.current_block(substrate_hash)
-				.map_err(|err| internal_err(format!("runtime error: {:?}", err)))?
+				.map_err(|err| internal_err(format!("runtime error: {err}")))?
 		} else {
 			#[allow(deprecated)]
 			let legacy_block = api
 				.current_block_before_version_2(substrate_hash)
-				.map_err(|err| internal_err(format!("runtime error: {:?}", err)))?;
+				.map_err(|err| internal_err(format!("runtime error: {err}")))?;
 			legacy_block.map(|block| block.into())
 		};
 
@@ -185,8 +192,8 @@ where
 						nonce,
 						false,
 					)
-					.map_err(|err| internal_err(format!("runtime error: {:?}", err)))?
-					.map_err(|err| internal_err(format!("execution fatal: {:?}", err)))?;
+					.map_err(|err| internal_err(format!("runtime error: {err}")))?
+					.map_err(|err| internal_err(format!("execution fatal: {err:?}")))?;
 
 					error_on_execution_failure(&info.exit_reason, &info.value)?;
 					Ok(Bytes(info.value))
@@ -205,8 +212,8 @@ where
 						nonce,
 						false,
 					)
-					.map_err(|err| internal_err(format!("runtime error: {:?}", err)))?
-					.map_err(|err| internal_err(format!("execution fatal: {:?}", err)))?;
+					.map_err(|err| internal_err(format!("runtime error: {err}")))?
+					.map_err(|err| internal_err(format!("execution fatal: {err:?}")))?;
 
 					error_on_execution_failure(&info.exit_reason, &info.value)?;
 					Ok(Bytes(info.value))
@@ -235,16 +242,14 @@ where
 						api_version,
 						state_overrides,
 					)?;
-					let storage_transaction_cache =
-						RefCell::<StorageTransactionCache<B, C::StateBackend>>::default();
 					let params = CallApiAtParams {
 						at: substrate_hash,
 						function: "EthereumRuntimeRPCApi_call",
 						arguments: encoded_params,
 						overlayed_changes: &RefCell::new(overlayed_changes),
-						storage_transaction_cache: &storage_transaction_cache,
-						context: ExecutionContext::OffchainCall(None),
+						call_context: CallContext::Offchain,
 						recorder: &None,
+						extensions: &RefCell::new(Extensions::new()),
 					};
 
 					let value = if api_version == 4 {
@@ -260,8 +265,8 @@ where
 									},
 								)
 							})
-							.map_err(|err| internal_err(format!("runtime error: {:?}", err)))?
-							.map_err(|err| internal_err(format!("execution fatal: {:?}", err)))?;
+							.map_err(|err| internal_err(format!("runtime error: {err}")))?
+							.map_err(|err| internal_err(format!("execution fatal: {err:?}")))?;
 
 						error_on_execution_failure(&info.exit_reason, &info.value)?;
 						info.value
@@ -278,8 +283,8 @@ where
 									},
 								)
 							})
-							.map_err(|err| internal_err(format!("runtime error: {:?}", err)))?
-							.map_err(|err| internal_err(format!("execution fatal: {:?}", err)))?;
+							.map_err(|err| internal_err(format!("runtime error: {err}")))?
+							.map_err(|err| internal_err(format!("execution fatal: {err:?}")))?;
 
 						error_on_execution_failure(&info.exit_reason, &info.value)?;
 						info.value
@@ -306,14 +311,14 @@ where
 						nonce,
 						false,
 					)
-					.map_err(|err| internal_err(format!("runtime error: {:?}", err)))?
-					.map_err(|err| internal_err(format!("execution fatal: {:?}", err)))?;
+					.map_err(|err| internal_err(format!("runtime error: {err}")))?
+					.map_err(|err| internal_err(format!("execution fatal: {err:?}")))?;
 
 					error_on_execution_failure(&info.exit_reason, &[])?;
 
 					let code = api
 						.account_code_at(substrate_hash, info.value)
-						.map_err(|err| internal_err(format!("runtime error: {:?}", err)))?;
+						.map_err(|err| internal_err(format!("runtime error: {err}")))?;
 					Ok(Bytes(code))
 				} else if api_version >= 2 && api_version < 4 {
 					// Post-london
@@ -329,14 +334,14 @@ where
 						nonce,
 						false,
 					)
-					.map_err(|err| internal_err(format!("runtime error: {:?}", err)))?
-					.map_err(|err| internal_err(format!("execution fatal: {:?}", err)))?;
+					.map_err(|err| internal_err(format!("runtime error: {err}")))?
+					.map_err(|err| internal_err(format!("execution fatal: {err:?}")))?;
 
 					error_on_execution_failure(&info.exit_reason, &[])?;
 
 					let code = api
 						.account_code_at(substrate_hash, info.value)
-						.map_err(|err| internal_err(format!("runtime error: {:?}", err)))?;
+						.map_err(|err| internal_err(format!("runtime error: {err}")))?;
 					Ok(Bytes(code))
 				} else if api_version == 4 {
 					// Post-london + access list support
@@ -359,14 +364,14 @@ where
 								.collect(),
 						),
 					)
-					.map_err(|err| internal_err(format!("runtime error: {:?}", err)))?
-					.map_err(|err| internal_err(format!("execution fatal: {:?}", err)))?;
+					.map_err(|err| internal_err(format!("runtime error: {err}")))?
+					.map_err(|err| internal_err(format!("execution fatal: {err:?}")))?;
 
 					error_on_execution_failure(&info.exit_reason, &[])?;
 
 					let code = api
 						.account_code_at(substrate_hash, info.value)
-						.map_err(|err| internal_err(format!("runtime error: {:?}", err)))?;
+						.map_err(|err| internal_err(format!("runtime error: {err}")))?;
 					Ok(Bytes(code))
 				} else if api_version == 5 {
 					// Post-london + access list support
@@ -389,14 +394,14 @@ where
 									.collect(),
 							),
 						)
-						.map_err(|err| internal_err(format!("runtime error: {:?}", err)))?
-						.map_err(|err| internal_err(format!("execution fatal: {:?}", err)))?;
+						.map_err(|err| internal_err(format!("runtime error: {err}")))?
+						.map_err(|err| internal_err(format!("execution fatal: {err:?}")))?;
 
 					error_on_execution_failure(&info.exit_reason, &[])?;
 
 					let code = api
 						.account_code_at(substrate_hash, info.value)
-						.map_err(|err| internal_err(format!("runtime error: {:?}", err)))?;
+						.map_err(|err| internal_err(format!("runtime error: {err}")))?;
 					Ok(Bytes(code))
 				} else {
 					Err(internal_err("failed to retrieve Runtime Api version"))
@@ -408,7 +413,7 @@ where
 	pub async fn estimate_gas(
 		&self,
 		request: CallRequest,
-		number: Option<BlockNumber>,
+		number_or_hash: Option<BlockNumberOrHash>,
 	) -> RpcResult<U256> {
 		let client = Arc::clone(&self.client);
 		let block_data_cache = Arc::clone(&self.block_data_cache);
@@ -420,7 +425,7 @@ where
 		let (substrate_hash, api) = match frontier_backend_client::native_block_id::<B, C>(
 			self.client.as_ref(),
 			self.backend.as_ref(),
-			number,
+			number_or_hash,
 		)
 		.await?
 		{
@@ -432,8 +437,9 @@ where
 			}
 			None => {
 				// Not mapped in the db, assume pending.
-				let hash = client.info().best_hash;
-				let api = pending_runtime_api(client.as_ref(), self.graph.as_ref())?;
+				let (hash, api) = self.pending_runtime_api().await.map_err(|err| {
+					internal_err(format!("Create pending runtime api error: {err}"))
+				})?;
 				(hash, api)
 			}
 		};
@@ -450,25 +456,12 @@ where
 			if let Some(to) = request.to {
 				let to_code = api
 					.account_code_at(substrate_hash, to)
-					.map_err(|err| internal_err(format!("runtime error: {:?}", err)))?;
+					.map_err(|err| internal_err(format!("runtime error: {err}")))?;
 				if to_code.is_empty() {
 					return Ok(MIN_GAS_PER_TX);
 				}
 			}
 		}
-
-		let (gas_price, max_fee_per_gas, max_priority_fee_per_gas) = {
-			let details = fee_details(
-				request.gas_price,
-				request.max_fee_per_gas,
-				request.max_priority_fee_per_gas,
-			)?;
-			(
-				details.gas_price,
-				details.max_fee_per_gas,
-				details.max_priority_fee_per_gas,
-			)
-		};
 
 		let block_gas_limit = {
 			let schema = fc_storage::onchain_storage_schema(client.as_ref(), substrate_hash);
@@ -500,13 +493,26 @@ where
 			},
 		};
 
+		let (gas_price, max_fee_per_gas, max_priority_fee_per_gas, fee_cap) = {
+			let details = fee_details(
+				request.gas_price,
+				request.max_fee_per_gas,
+				request.max_priority_fee_per_gas,
+			)?;
+			(
+				details.gas_price,
+				details.max_fee_per_gas,
+				details.max_priority_fee_per_gas,
+				details.fee_cap,
+			)
+		};
+
 		// Recap the highest gas allowance with account's balance.
 		if let Some(from) = request.from {
-			let gas_price = gas_price.unwrap_or_default();
-			if gas_price > U256::zero() {
+			if fee_cap > U256::zero() {
 				let balance = api
 					.account_basic(substrate_hash, from)
-					.map_err(|err| internal_err(format!("runtime error: {:?}", err)))?
+					.map_err(|err| internal_err(format!("runtime error: {err}")))?
 					.balance;
 				let mut available = balance;
 				if let Some(value) = request.value {
@@ -515,14 +521,14 @@ where
 					}
 					available -= value;
 				}
-				let allowance = available / gas_price;
+				let allowance = available / fee_cap;
 				if highest > allowance {
 					log::warn!(
 							"Gas estimation capped by limited funds original {} balance {} sent {} feecap {} fundable {}",
 							highest,
 							balance,
 							request.value.unwrap_or_default(),
-							gas_price,
+							fee_cap,
 							allowance
 						);
 					highest = allowance;
@@ -583,8 +589,8 @@ where
 								nonce,
 								estimate_mode,
 							)
-							.map_err(|err| internal_err(format!("runtime error: {:?}", err)))?
-							.map_err(|err| internal_err(format!("execution fatal: {:?}", err)))?;
+							.map_err(|err| internal_err(format!("runtime error: {err}")))?
+							.map_err(|err| internal_err(format!("execution fatal: {err:?}")))?;
 
 							(info.exit_reason, info.value, info.used_gas)
 						} else if api_version < 4 {
@@ -602,8 +608,8 @@ where
 								nonce,
 								estimate_mode,
 							)
-							.map_err(|err| internal_err(format!("runtime error: {:?}", err)))?
-							.map_err(|err| internal_err(format!("execution fatal: {:?}", err)))?;
+							.map_err(|err| internal_err(format!("runtime error: {err}")))?
+							.map_err(|err| internal_err(format!("execution fatal: {err:?}")))?;
 
 							(info.exit_reason, info.value, info.used_gas)
 						} else if api_version == 4 {
@@ -628,8 +634,8 @@ where
 										.collect(),
 								),
 							)
-							.map_err(|err| internal_err(format!("runtime error: {:?}", err)))?
-							.map_err(|err| internal_err(format!("execution fatal: {:?}", err)))?;
+							.map_err(|err| internal_err(format!("runtime error: {err}")))?
+							.map_err(|err| internal_err(format!("execution fatal: {err:?}")))?;
 
 							(info.exit_reason, info.value, info.used_gas)
 						} else {
@@ -653,8 +659,8 @@ where
 										.collect(),
 								),
 							)
-							.map_err(|err| internal_err(format!("runtime error: {:?}", err)))?
-							.map_err(|err| internal_err(format!("execution fatal: {:?}", err)))?;
+							.map_err(|err| internal_err(format!("runtime error: {err}")))?
+							.map_err(|err| internal_err(format!("execution fatal: {err:?}")))?;
 
 							(info.exit_reason, info.value, info.used_gas.effective)
 						}
@@ -673,8 +679,8 @@ where
 								nonce,
 								estimate_mode,
 							)
-							.map_err(|err| internal_err(format!("runtime error: {:?}", err)))?
-							.map_err(|err| internal_err(format!("execution fatal: {:?}", err)))?;
+							.map_err(|err| internal_err(format!("runtime error: {err}")))?
+							.map_err(|err| internal_err(format!("execution fatal: {err:?}")))?;
 
 							(info.exit_reason, Vec::new(), info.used_gas)
 						} else if api_version < 4 {
@@ -691,8 +697,8 @@ where
 								nonce,
 								estimate_mode,
 							)
-							.map_err(|err| internal_err(format!("runtime error: {:?}", err)))?
-							.map_err(|err| internal_err(format!("execution fatal: {:?}", err)))?;
+							.map_err(|err| internal_err(format!("runtime error: {err}")))?
+							.map_err(|err| internal_err(format!("execution fatal: {err:?}")))?;
 
 							(info.exit_reason, Vec::new(), info.used_gas)
 						} else if api_version == 4 {
@@ -716,8 +722,8 @@ where
 										.collect(),
 								),
 							)
-							.map_err(|err| internal_err(format!("runtime error: {:?}", err)))?
-							.map_err(|err| internal_err(format!("execution fatal: {:?}", err)))?;
+							.map_err(|err| internal_err(format!("runtime error: {err}")))?
+							.map_err(|err| internal_err(format!("execution fatal: {err:?}")))?;
 
 							(info.exit_reason, Vec::new(), info.used_gas)
 						} else {
@@ -740,8 +746,8 @@ where
 										.collect(),
 								),
 							)
-							.map_err(|err| internal_err(format!("runtime error: {:?}", err)))?
-							.map_err(|err| internal_err(format!("execution fatal: {:?}", err)))?;
+							.map_err(|err| internal_err(format!("runtime error: {err}")))?
+							.map_err(|err| internal_err(format!("execution fatal: {err:?}")))?;
 
 							(info.exit_reason, Vec::new(), info.used_gas.effective)
 						}
@@ -807,8 +813,7 @@ where
 					match exit_reason {
 						ExitReason::Succeed(_) => {
 							return Err(internal_err(format!(
-								"gas required exceeds allowance {}",
-								cap
+								"gas required exceeds allowance {cap}",
 							)))
 						}
 						// The execution has been done with block gas limit, so it is not a lack of gas from the user.
@@ -881,7 +886,7 @@ where
 		block_hash: B::Hash,
 		api_version: u32,
 		state_overrides: Option<BTreeMap<H160, CallStateOverride>>,
-	) -> RpcResult<OverlayedChanges> {
+	) -> RpcResult<OverlayedChanges<HashingFor<B>>> {
 		let mut overlayed_changes = OverlayedChanges::default();
 		if let Some(state_overrides) = state_overrides {
 			for (address, state_override) in state_overrides {
@@ -961,13 +966,13 @@ where
 pub fn error_on_execution_failure(reason: &ExitReason, data: &[u8]) -> RpcResult<()> {
 	match reason {
 		ExitReason::Succeed(_) => Ok(()),
-		ExitReason::Error(e) => {
-			if *e == ExitError::OutOfGas {
+		ExitReason::Error(err) => {
+			if *err == ExitError::OutOfGas {
 				// `ServerError(0)` will be useful in estimate gas
 				return Err(internal_err("out of gas"));
 			}
 			Err(crate::internal_err_with_data(
-				format!("evm error: {:?}", e),
+				format!("evm error: {err:?}"),
 				&[],
 			))
 		}
@@ -986,14 +991,14 @@ pub fn error_on_execution_failure(reason: &ExitReason, data: &[u8]) -> RpcResult
 				if data.len() >= message_end {
 					let body: &[u8] = &data[MESSAGE_START..message_end];
 					if let Ok(reason) = std::str::from_utf8(body) {
-						message = format!("{} {}", message, reason);
+						message = format!("{message} {reason}");
 					}
 				}
 			}
 			Err(crate::internal_err_with_data(message, data))
 		}
-		ExitReason::Fatal(e) => Err(crate::internal_err_with_data(
-			format!("evm fatal: {:?}", e),
+		ExitReason::Fatal(err) => Err(crate::internal_err_with_data(
+			format!("evm fatal: {err:?}"),
 			&[],
 		)),
 	}
@@ -1003,50 +1008,49 @@ struct FeeDetails {
 	gas_price: Option<U256>,
 	max_fee_per_gas: Option<U256>,
 	max_priority_fee_per_gas: Option<U256>,
+	fee_cap: U256,
 }
 
 fn fee_details(
 	request_gas_price: Option<U256>,
-	request_max_fee: Option<U256>,
-	request_priority: Option<U256>,
+	request_max_fee_per_gas: Option<U256>,
+	request_priority_fee_per_gas: Option<U256>,
 ) -> RpcResult<FeeDetails> {
-	match (request_gas_price, request_max_fee, request_priority) {
-		(gas_price, None, None) => {
-			// Legacy request, all default to gas price.
-			// A zero-set gas price is None.
-			let gas_price = if gas_price.unwrap_or_default().is_zero() {
-				None
-			} else {
-				gas_price
-			};
-			Ok(FeeDetails {
-				gas_price,
-				max_fee_per_gas: gas_price,
-				max_priority_fee_per_gas: gas_price,
-			})
-		}
-		(_, max_fee, max_priority) => {
-			// eip-1559
-			// A zero-set max fee is None.
-			let max_fee = if max_fee.unwrap_or_default().is_zero() {
-				None
-			} else {
-				max_fee
-			};
-			// Ensure `max_priority_fee_per_gas` is less or equal to `max_fee_per_gas`.
-			if let Some(max_priority) = max_priority {
-				let max_fee = max_fee.unwrap_or_default();
-				if max_priority > max_fee {
-					return Err(internal_err(
-						"Invalid input: `max_priority_fee_per_gas` greater than `max_fee_per_gas`",
-					));
-				}
+	match (
+		request_gas_price,
+		request_max_fee_per_gas,
+		request_priority_fee_per_gas,
+	) {
+		(Some(_), Some(_), Some(_)) => Err(internal_err(
+			"both gasPrice and (maxFeePerGas or maxPriorityFeePerGas) specified",
+		)),
+		// Legacy or EIP-2930 transaction.
+		(gas_price, None, None) if gas_price.is_some() => Ok(FeeDetails {
+			gas_price,
+			max_fee_per_gas: None,
+			max_priority_fee_per_gas: None,
+			fee_cap: gas_price.unwrap_or_default(),
+		}),
+		// EIP-1559 transaction
+		(None, Some(max_fee), Some(max_priority)) => {
+			if max_priority > max_fee {
+				return Err(internal_err(
+					"Invalid input: `max_priority_fee_per_gas` greater than `max_fee_per_gas`",
+				));
 			}
 			Ok(FeeDetails {
-				gas_price: max_fee,
-				max_fee_per_gas: max_fee,
-				max_priority_fee_per_gas: max_priority,
+				gas_price: None,
+				max_fee_per_gas: Some(max_fee),
+				max_priority_fee_per_gas: Some(max_priority),
+				fee_cap: max_fee,
 			})
 		}
+		// Default to EIP-1559 transaction
+		_ => Ok(FeeDetails {
+			gas_price: None,
+			max_fee_per_gas: Some(U256::zero()),
+			max_priority_fee_per_gas: Some(U256::zero()),
+			fee_cap: U256::zero(),
+		}),
 	}
 }

@@ -17,7 +17,7 @@
 
 use futures::TryFutureExt;
 // Substrate
-use sc_cli::{ChainSpec, RuntimeVersion, SubstrateCli};
+use sc_cli::{ChainSpec, SubstrateCli};
 use sc_service::DatabaseSource;
 // Frontier
 use fc_db::kv::frontier_database_dir;
@@ -59,7 +59,7 @@ impl SubstrateCli for Cli {
 	fn load_spec(&self, id: &str) -> Result<Box<dyn ChainSpec>, String> {
 		Ok(match id {
 			"dev" => {
-				let enable_manual_seal = self.sealing.map(|_| true);
+				let enable_manual_seal = self.sealing.map(|_| true).unwrap_or_default();
 				Box::new(chain_spec::development_config(enable_manual_seal))
 			}
 			"" | "local" => Box::new(chain_spec::local_testnet_config()),
@@ -67,10 +67,6 @@ impl SubstrateCli for Cli {
 				std::path::PathBuf::from(path),
 			)?),
 		})
-	}
-
-	fn native_runtime_version(_: &Box<dyn ChainSpec>) -> &'static RuntimeVersion {
-		&frontier_template_runtime::VERSION
 	}
 }
 
@@ -187,8 +183,7 @@ pub fn run() -> sc_cli::Result<()> {
 
 			let runner = cli.create_runner(cmd)?;
 			match cmd {
-				BenchmarkCmd::Pallet(cmd) => runner
-					.sync_run(|config| cmd.run::<Block, service::TemplateRuntimeExecutor>(config)),
+				BenchmarkCmd::Pallet(cmd) => runner.sync_run(|config| cmd.run::<Block, ()>(config)),
 				BenchmarkCmd::Block(cmd) => runner.sync_run(|mut config| {
 					let (client, _, _, _, _) = service::new_chain_ops(&mut config, &cli.eth)?;
 					cmd.run(client)

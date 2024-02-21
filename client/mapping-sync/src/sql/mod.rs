@@ -21,11 +21,11 @@ use std::{ops::DerefMut, sync::Arc, time::Duration};
 use futures::prelude::*;
 // Substrate
 use sc_client_api::backend::{Backend as BackendT, StateBackend, StorageProvider};
-use sp_api::{HeaderT, ProvideRuntimeApi};
+use sp_api::ProvideRuntimeApi;
 use sp_blockchain::{Backend, HeaderBackend};
 use sp_consensus::SyncOracle;
 use sp_core::H256;
-use sp_runtime::traits::{BlakeTwo256, Block as BlockT, UniqueSaturatedInto};
+use sp_runtime::traits::{BlakeTwo256, Block as BlockT, Header as HeaderT, UniqueSaturatedInto};
 // Frontier
 use fp_rpc::EthereumRuntimeRPCApi;
 
@@ -482,7 +482,7 @@ mod test {
 	use sqlx::Row;
 	use tempfile::tempdir;
 	// Substrate
-	use sc_block_builder::BlockBuilderProvider;
+	use sc_block_builder::BlockBuilderBuilder;
 	use sc_client_api::{BlockchainEvents, HeaderBackend};
 	use sp_consensus::BlockOrigin;
 	use sp_core::{H160, H256, U256};
@@ -593,7 +593,12 @@ mod test {
 		let mut logs: Vec<(i32, fc_db::sql::Log)> = vec![];
 		for block_number in 1..11 {
 			// New block including pallet ethereum block digest
-			let mut builder = client.new_block(Default::default()).unwrap();
+			let chain = client.chain_info();
+			let mut builder = BlockBuilderBuilder::new(&*client)
+				.on_parent_block(chain.best_hash)
+				.with_parent_block_number(chain.best_number)
+				.build()
+				.unwrap();
 			builder
 				.push_deposit_log_digest_item(ethereum_digest())
 				.expect("deposit log");
@@ -640,7 +645,7 @@ mod test {
 			let block_hash = block.header.hash();
 			executor::block_on(client.import(BlockOrigin::Own, block)).unwrap();
 			logs.push((
-				block_number as i32,
+				block_number,
 				fc_db::sql::Log {
 					address: address_1.as_bytes().to_owned(),
 					topic_1: Some(topics_1_1.as_bytes().to_owned()),
@@ -653,7 +658,7 @@ mod test {
 				},
 			));
 			logs.push((
-				block_number as i32,
+				block_number,
 				fc_db::sql::Log {
 					address: address_2.as_bytes().to_owned(),
 					topic_1: Some(topics_2_1.as_bytes().to_owned()),
@@ -829,7 +834,12 @@ mod test {
 		let mut logs: Vec<(i32, fc_db::sql::Log)> = vec![];
 		for block_number in 1..11 {
 			// New block including pallet ethereum block digest
-			let mut builder = client.new_block(Default::default()).unwrap();
+			let chain = client.chain_info();
+			let mut builder = BlockBuilderBuilder::new(&*client)
+				.on_parent_block(chain.best_hash)
+				.with_parent_block_number(chain.best_number)
+				.build()
+				.unwrap();
 			builder
 				.push_deposit_log_digest_item(ethereum_digest())
 				.expect("deposit log");
@@ -876,7 +886,7 @@ mod test {
 			let block_hash = block.header.hash();
 			executor::block_on(client.import(BlockOrigin::Own, block)).unwrap();
 			logs.push((
-				block_number as i32,
+				block_number,
 				fc_db::sql::Log {
 					address: address_1.as_bytes().to_owned(),
 					topic_1: Some(topics_1_1.as_bytes().to_owned()),
@@ -889,7 +899,7 @@ mod test {
 				},
 			));
 			logs.push((
-				block_number as i32,
+				block_number,
 				fc_db::sql::Log {
 					address: address_2.as_bytes().to_owned(),
 					topic_1: Some(topics_2_1.as_bytes().to_owned()),
@@ -1040,8 +1050,11 @@ mod test {
 		let mut hashes_to_be_orphaned: Vec<H256> = vec![];
 		for block_number in 1..11 {
 			// New block including pallet ethereum block digest
-			let mut builder = client
-				.new_block_at(parent_hash, Default::default(), false)
+			let mut builder = BlockBuilderBuilder::new(&*client)
+				.on_parent_block(parent_hash)
+				.fetch_parent_block_number(&*client)
+				.unwrap()
+				.build()
 				.unwrap();
 			builder
 				.push_deposit_log_digest_item(ethereum_digest())
@@ -1077,8 +1090,11 @@ mod test {
 		parent_hash = common_ancestor;
 		for _ in 1..11 {
 			// New block including pallet ethereum block digest
-			let mut builder = client
-				.new_block_at(parent_hash, Default::default(), false)
+			let mut builder = BlockBuilderBuilder::new(&*client)
+				.on_parent_block(parent_hash)
+				.fetch_parent_block_number(&*client)
+				.unwrap()
+				.build()
 				.unwrap();
 			builder
 				.push_deposit_log_digest_item(ethereum_digest())
@@ -1112,13 +1128,12 @@ mod test {
 		let canon = res
 			.clone()
 			.into_iter()
-			.filter_map(|it| if it.1 == 1 { Some(it) } else { None })
+			.filter(|&it| it.1 == 1)
 			.collect::<Vec<(H256, i32, i32)>>();
 		assert_eq!(canon.len(), 18);
 
 		// and 2 of which are the originally tracked as orphaned
 		let not_canon = res
-			.clone()
 			.into_iter()
 			.filter_map(|it| if it.1 == 0 { Some(it.0) } else { None })
 			.collect::<Vec<H256>>();
@@ -1179,8 +1194,11 @@ mod test {
 			.expect("genesis hash");
 		let mut best_block_hashes: Vec<H256> = vec![];
 		for _block_number in 1..=5 {
-			let mut builder = client
-				.new_block_at(parent_hash, Default::default(), false)
+			let mut builder = BlockBuilderBuilder::new(&*client)
+				.on_parent_block(parent_hash)
+				.fetch_parent_block_number(&*client)
+				.unwrap()
+				.build()
 				.unwrap();
 			builder
 				.push_deposit_log_digest_item(ethereum_digest())
@@ -1188,7 +1206,7 @@ mod test {
 			let block = builder.build().unwrap().block;
 			let block_hash = block.header.hash();
 			executor::block_on(client.import(BlockOrigin::Own, block)).unwrap();
-			best_block_hashes.insert(0, block_hash.clone());
+			best_block_hashes.insert(0, block_hash);
 			parent_hash = block_hash;
 		}
 
@@ -1356,8 +1374,11 @@ mod test {
 			.expect("genesis hash");
 		let mut best_block_hashes: Vec<H256> = vec![];
 		for _block_number in 1..=3 {
-			let mut builder = client
-				.new_block_at(parent_hash, Default::default(), false)
+			let mut builder = BlockBuilderBuilder::new(&*client)
+				.on_parent_block(parent_hash)
+				.fetch_parent_block_number(&*client)
+				.unwrap()
+				.build()
 				.unwrap();
 			builder
 				.push_deposit_log_digest_item(ethereum_digest())
@@ -1366,7 +1387,7 @@ mod test {
 			let block_hash = block.header.hash();
 
 			executor::block_on(client.import(BlockOrigin::Own, block)).unwrap();
-			best_block_hashes.push(block_hash.clone());
+			best_block_hashes.push(block_hash);
 			parent_hash = block_hash;
 		}
 
@@ -1462,8 +1483,11 @@ mod test {
 			.expect("genesis hash");
 		let mut best_block_hashes: Vec<H256> = vec![];
 		for _block_number in 1..=3 {
-			let mut builder = client
-				.new_block_at(parent_hash, Default::default(), false)
+			let mut builder = BlockBuilderBuilder::new(&*client)
+				.on_parent_block(parent_hash)
+				.fetch_parent_block_number(&*client)
+				.unwrap()
+				.build()
 				.unwrap();
 			builder
 				.push_deposit_log_digest_item(ethereum_digest())
@@ -1472,13 +1496,16 @@ mod test {
 			let block_hash = block.header.hash();
 
 			executor::block_on(client.import(BlockOrigin::Own, block)).unwrap();
-			best_block_hashes.push(block_hash.clone());
+			best_block_hashes.push(block_hash);
 			parent_hash = block_hash;
 		}
 
 		// create non-best block
-		let mut builder = client
-			.new_block_at(best_block_hashes[0], Default::default(), false)
+		let mut builder = BlockBuilderBuilder::new(&*client)
+			.on_parent_block(best_block_hashes[0])
+			.fetch_parent_block_number(&*client)
+			.unwrap()
+			.build()
 			.unwrap();
 		builder
 			.push_deposit_log_digest_item(ethereum_digest())
@@ -1579,8 +1606,11 @@ mod test {
 			.expect("genesis hash");
 		let mut best_block_hashes: Vec<H256> = vec![];
 		for _block_number in 1..=3 {
-			let mut builder = client
-				.new_block_at(parent_hash, Default::default(), false)
+			let mut builder = BlockBuilderBuilder::new(&*client)
+				.on_parent_block(parent_hash)
+				.fetch_parent_block_number(&*client)
+				.unwrap()
+				.build()
 				.unwrap();
 			builder
 				.push_deposit_log_digest_item(ethereum_digest())
@@ -1589,7 +1619,7 @@ mod test {
 			let block_hash = block.header.hash();
 
 			executor::block_on(client.import(BlockOrigin::Own, block)).unwrap();
-			best_block_hashes.push(block_hash.clone());
+			best_block_hashes.push(block_hash);
 			parent_hash = block_hash;
 		}
 
@@ -1685,8 +1715,11 @@ mod test {
 			.expect("genesis hash");
 		let mut best_block_hashes: Vec<H256> = vec![];
 		for _block_number in 1..=3 {
-			let mut builder = client
-				.new_block_at(parent_hash, Default::default(), false)
+			let mut builder = BlockBuilderBuilder::new(&*client)
+				.on_parent_block(parent_hash)
+				.fetch_parent_block_number(&*client)
+				.unwrap()
+				.build()
 				.unwrap();
 			builder
 				.push_deposit_log_digest_item(ethereum_digest())
@@ -1695,13 +1728,16 @@ mod test {
 			let block_hash = block.header.hash();
 
 			executor::block_on(client.import(BlockOrigin::Own, block)).unwrap();
-			best_block_hashes.push(block_hash.clone());
+			best_block_hashes.push(block_hash);
 			parent_hash = block_hash;
 		}
 
 		// create non-best block
-		let mut builder = client
-			.new_block_at(best_block_hashes[0], Default::default(), false)
+		let mut builder = BlockBuilderBuilder::new(&*client)
+			.on_parent_block(best_block_hashes[0])
+			.fetch_parent_block_number(&*client)
+			.unwrap()
+			.build()
 			.unwrap();
 		builder
 			.push_deposit_log_digest_item(ethereum_digest())
@@ -1802,8 +1838,11 @@ mod test {
 			.expect("genesis hash");
 		let mut best_block_hashes: Vec<H256> = vec![];
 		for _block_number in 1..=3 {
-			let mut builder = client
-				.new_block_at(parent_hash, Default::default(), false)
+			let mut builder = BlockBuilderBuilder::new(&*client)
+				.on_parent_block(parent_hash)
+				.fetch_parent_block_number(&*client)
+				.unwrap()
+				.build()
 				.unwrap();
 			builder
 				.push_deposit_log_digest_item(ethereum_digest())
@@ -1812,7 +1851,7 @@ mod test {
 			let block_hash = block.header.hash();
 
 			executor::block_on(client.import(BlockOrigin::NetworkInitialSync, block)).unwrap();
-			best_block_hashes.push(block_hash.clone());
+			best_block_hashes.push(block_hash);
 			parent_hash = block_hash;
 		}
 
@@ -1908,8 +1947,11 @@ mod test {
 			.expect("genesis hash");
 		let mut best_block_hashes: Vec<H256> = vec![];
 		for _block_number in 1..=3 {
-			let mut builder = client
-				.new_block_at(parent_hash, Default::default(), false)
+			let mut builder = BlockBuilderBuilder::new(&*client)
+				.on_parent_block(parent_hash)
+				.fetch_parent_block_number(&*client)
+				.unwrap()
+				.build()
 				.unwrap();
 			builder
 				.push_deposit_log_digest_item(ethereum_digest())
@@ -1918,7 +1960,7 @@ mod test {
 			let block_hash = block.header.hash();
 
 			executor::block_on(client.import(BlockOrigin::NetworkInitialSync, block)).unwrap();
-			best_block_hashes.push(block_hash.clone());
+			best_block_hashes.push(block_hash);
 			parent_hash = block_hash;
 		}
 
