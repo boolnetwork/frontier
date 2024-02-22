@@ -374,7 +374,7 @@ impl<T: Config> Pallet<T> {
 		}
 	}
 
-	fn recover_signer(transaction: &Transaction) -> Option<H160> {
+	pub fn recover_signer(transaction: &Transaction) -> Option<H160> {
 		let mut sig = [0u8; 65];
 		let mut msg = [0u8; 32];
 		match transaction {
