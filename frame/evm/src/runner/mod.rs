@@ -46,7 +46,7 @@ pub trait Runner<T: Config> {
 	) -> Result<(), RunnerError<Self::Error>>;
 
 	fn call(
-		source: H160,
+		source: Option<H160>,
 		target: H160,
 		input: Vec<u8>,
 		value: U256,

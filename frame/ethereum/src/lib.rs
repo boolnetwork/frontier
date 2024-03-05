@@ -40,13 +40,7 @@ use fp_evm::{
 	CallOrCreateInfo, CheckEvmTransaction, CheckEvmTransactionConfig, InvalidEvmTransactionError,
 };
 use fp_storage::{EthereumStorageSchema, PALLET_ETHEREUM_SCHEMA};
-use frame_support::{
-	codec::{Decode, Encode, MaxEncodedLen},
-	dispatch::{DispatchInfo, DispatchResultWithPostInfo, Pays, PostDispatchInfo},
-	scale_info::TypeInfo,
-	traits::{EnsureOrigin, Get, PalletInfoAccess, Time},
-	weights::Weight,
-};
+use frame_support::{codec::{Decode, Encode, MaxEncodedLen}, dispatch::{DispatchInfo, DispatchResultWithPostInfo, Pays, PostDispatchInfo}, scale_info::TypeInfo, traits::{EnsureOrigin, Get, PalletInfoAccess, Time}, weights::Weight};
 use frame_system::{pallet_prelude::OriginFor, CheckWeight, WeightInfo};
 use pallet_evm::{BlockHashMapping, FeeCalculator, GasWeightMapping, Runner};
 use sp_runtime::{
@@ -61,7 +55,7 @@ use sp_std::{marker::PhantomData, prelude::*};
 
 pub use ethereum::{
 	AccessListItem, BlockV2 as Block, LegacyTransactionMessage, Log, ReceiptV3 as Receipt,
-	TransactionAction, TransactionV2 as Transaction,
+	TransactionAction, TransactionV2 as Transaction, EIP1559TransactionMessage,
 };
 pub use fp_rpc::TransactionStatus;
 
@@ -244,7 +238,7 @@ pub mod pallet {
 					);
 
 
-					let r = Self::apply_validated_transaction(source, transaction)
+					let r = Self::apply_validated_transaction(Some(source), transaction)
 						.expect("pre-block apply transaction failed; the block cannot be built");
 
 					weight = weight.saturating_add(r.actual_weight.unwrap_or_default());
@@ -283,7 +277,7 @@ pub mod pallet {
 			}, without_base_extrinsic_weight)
 		})]
 		pub fn transact(
-			origin: OriginFor<T>,
+			_origin: OriginFor<T>,
 			transaction: Transaction,
 		) -> DispatchResultWithPostInfo {
 			// let source = ensure_ethereum_transaction(origin)?;
@@ -296,7 +290,29 @@ pub mod pallet {
 				"pre log already exists; block is invalid",
 			);
 
-			Self::apply_validated_transaction(source, transaction)
+			Self::apply_validated_transaction(Some(source), transaction)
+		}
+
+		/// Transact an Ethereum transaction.
+		#[pallet::call_index(1)]
+		#[pallet::weight({
+			let without_base_extrinsic_weight = true;
+			<T as pallet_evm::Config>::GasWeightMapping::gas_to_weight({
+			let transaction_data: TransactionData = transaction.into();
+			transaction_data.gas_limit.unique_saturated_into()
+			}, without_base_extrinsic_weight)
+		})]
+		pub fn transact_unsigned(
+			_origin: OriginFor<T>,
+			transaction: Transaction,
+		) -> DispatchResultWithPostInfo {
+			// Disable transact functionality if PreLog exist.
+			assert!(
+				fp_consensus::find_pre_log(&frame_system::Pallet::<T>::digest()).is_err(),
+				"pre log already exists; block is invalid",
+			);
+
+			Self::apply_validated_transaction(None, transaction)
 		}
 	}
 
@@ -319,6 +335,8 @@ pub mod pallet {
 		InvalidSignature,
 		/// Pre-log is present, therefore transact is not allowed.
 		PreLogExists,
+		/// Source address is invalid
+		InvalidSource,
 	}
 
 	/// Current building block's transactions and receipts.
@@ -537,7 +555,7 @@ impl<T: Config> Pallet<T> {
 	}
 
 	fn apply_validated_transaction(
-		source: H160,
+		source: Option<H160>,
 		transaction: Transaction,
 	) -> DispatchResultWithPostInfo {
 		let (to, _, info) = Self::execute(source, &transaction, None)?;
@@ -552,7 +570,7 @@ impl<T: Config> Pallet<T> {
 				TransactionStatus {
 					transaction_hash,
 					transaction_index,
-					from: source,
+					from: source.unwrap_or_default(),
 					to,
 					contract_address: None,
 					logs: info.logs.clone(),
@@ -595,7 +613,7 @@ impl<T: Config> Pallet<T> {
 				TransactionStatus {
 					transaction_hash,
 					transaction_index,
-					from: source,
+					from: source.unwrap_or_default(),
 					to,
 					contract_address: Some(info.value),
 					logs: info.logs.clone(),
@@ -652,7 +670,7 @@ impl<T: Config> Pallet<T> {
 		Pending::<T>::append((transaction, status, receipt));
 
 		Self::deposit_event(Event::Executed {
-			from: source,
+			from: source.unwrap_or_default(),
 			to: dest.unwrap_or_default(),
 			transaction_hash,
 			exit_reason: reason,
@@ -675,7 +693,7 @@ impl<T: Config> Pallet<T> {
 
 	/// Execute an Ethereum transaction.
 	pub fn execute(
-		from: H160,
+		from: Option<H160>,
 		transaction: &Transaction,
 		config: Option<evm::Config>,
 	) -> Result<
@@ -775,6 +793,9 @@ impl<T: Config> Pallet<T> {
 				Ok((Some(target), None, CallOrCreateInfo::Call(res)))
 			}
 			ethereum::TransactionAction::Create => {
+				let from = from.ok_or::<DispatchErrorWithPostInfo<PostDispatchInfo>>(
+					Error::<T>::InvalidSource.into()
+				)?;
 				let res = match T::Runner::create(
 					from,
 					input,
@@ -905,7 +926,7 @@ impl<T: Config> Pallet<T> {
 pub struct ValidatedTransaction<T>(PhantomData<T>);
 impl<T: Config> ValidatedTransactionT for ValidatedTransaction<T> {
 	fn apply(source: H160, transaction: Transaction) -> DispatchResultWithPostInfo {
-		Pallet::<T>::apply_validated_transaction(source, transaction)
+		Pallet::<T>::apply_validated_transaction(Some(source), transaction)
 	}
 }
 

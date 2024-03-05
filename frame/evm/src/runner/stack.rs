@@ -62,7 +62,7 @@ where
 	#[allow(clippy::let_and_return)]
 	/// Execute an already validated EVM operation.
 	fn execute<'config, 'precompiles, F, R>(
-		source: H160,
+		source: Option<H160>,
 		value: U256,
 		gas_limit: u64,
 		max_fee_per_gas: Option<U256>,
@@ -117,7 +117,7 @@ where
 
 	// Execute an already validated EVM operation.
 	fn execute_inner<'config, 'precompiles, F, R>(
-		source: H160,
+		source: Option<H160>,
 		value: U256,
 		mut gas_limit: u64,
 		max_fee_per_gas: Option<U256>,
@@ -140,157 +140,158 @@ where
 		) -> (ExitReason, R),
 		R: Default,
 	{
-		// The precompile check is only used for transactional invocations. However, here we always
-		// execute the check, because the check has side effects.
-		let is_precompile = match precompiles.is_precompile(source, gas_limit) {
-			IsPrecompileResult::Answer {
-				is_precompile,
-				extra_cost,
-			} => {
-				gas_limit = gas_limit.saturating_sub(extra_cost);
-				is_precompile
-			}
-			IsPrecompileResult::OutOfGas => {
-				return Ok(ExecutionInfo {
-					exit_reason: ExitError::OutOfGas.into(),
-					value: Default::default(),
-					used_gas: gas_limit.into(),
-					logs: Default::default(),
-				})
-			}
-		};
-
-		// Only check the restrictions of EIP-3607 if the source of the EVM operation is from an external transaction.
-		// If the source of this EVM operation is from an internal call, like from `eth_call` or `eth_estimateGas` RPC,
-		// we will skip the checks for the EIP-3607.
-		//
-		// EIP-3607: https://eips.ethereum.org/EIPS/eip-3607
-		// Do not allow transactions for which `tx.sender` has any code deployed.
-		//
-		// We extend the principle of this EIP to also prevent `tx.sender` to be the address
-		// of a precompile. While mainnet Ethereum currently only has stateless precompiles,
-		// projects using Frontier can have stateful precompiles that can manage funds or
-		// which calls other contracts that expects this precompile address to be trustworthy.
-		if is_transactional && (!<AccountCodes<T>>::get(source).is_empty() || is_precompile) {
-			return Err(RunnerError {
-				error: Error::<T>::TransactionMustComeFromEOA,
-				weight,
-			});
-		}
-
-		let (total_fee_per_gas, _actual_priority_fee_per_gas) =
-			match (max_fee_per_gas, max_priority_fee_per_gas, is_transactional) {
-				// Zero max_fee_per_gas for validated transactional calls exist in XCM -> EVM
-				// because fees are already withdrawn in the xcm-executor.
-				(Some(max_fee), _, true) if max_fee.is_zero() => (U256::zero(), U256::zero()),
-				// With no tip, we pay exactly the base_fee
-				(Some(_), None, _) => (base_fee, U256::zero()),
-				// With tip, we include as much of the tip on top of base_fee that we can, never
-				// exceeding max_fee_per_gas
-				(Some(max_fee_per_gas), Some(max_priority_fee_per_gas), _) => {
-					let actual_priority_fee_per_gas = max_fee_per_gas
-						.saturating_sub(base_fee)
-						.min(max_priority_fee_per_gas);
-					(
-						base_fee.saturating_add(actual_priority_fee_per_gas),
-						actual_priority_fee_per_gas,
-					)
+		if let Some(source) = source {
+			// The precompile check is only used for transactional invocations. However, here we always
+			// execute the check, because the check has side effects.
+			let is_precompile = match precompiles.is_precompile(source, gas_limit) {
+				IsPrecompileResult::Answer {
+					is_precompile,
+					extra_cost,
+				} => {
+					gas_limit = gas_limit.saturating_sub(extra_cost);
+					is_precompile
 				}
-				// Gas price check is skipped for non-transactional calls that don't
-				// define a `max_fee_per_gas` input.
-				(None, _, false) => (Default::default(), U256::zero()),
-				// Unreachable, previously validated. Handle gracefully.
-				_ => {
-					return Err(RunnerError {
-						error: Error::<T>::GasPriceTooLow,
-						weight,
+				IsPrecompileResult::OutOfGas => {
+					return Ok(ExecutionInfo {
+						exit_reason: ExitError::OutOfGas.into(),
+						value: Default::default(),
+						used_gas: gas_limit.into(),
+						logs: Default::default(),
 					})
 				}
 			};
 
-		// After eip-1559 we make sure the account can pay both the evm execution and priority fees.
-		let total_fee =
-			total_fee_per_gas
-				.checked_mul(U256::from(gas_limit))
-				.ok_or(RunnerError {
-					error: Error::<T>::FeeOverflow,
+			// Only check the restrictions of EIP-3607 if the source of the EVM operation is from an external transaction.
+			// If the source of this EVM operation is from an internal call, like from `eth_call` or `eth_estimateGas` RPC,
+			// we will skip the checks for the EIP-3607.
+			//
+			// EIP-3607: https://eips.ethereum.org/EIPS/eip-3607
+			// Do not allow transactions for which `tx.sender` has any code deployed.
+			//
+			// We extend the principle of this EIP to also prevent `tx.sender` to be the address
+			// of a precompile. While mainnet Ethereum currently only has stateless precompiles,
+			// projects using Frontier can have stateful precompiles that can manage funds or
+			// which calls other contracts that expects this precompile address to be trustworthy.
+			if is_transactional && (!<AccountCodes<T>>::get(source).is_empty() || is_precompile) {
+				return Err(RunnerError {
+					error: Error::<T>::TransactionMustComeFromEOA,
 					weight,
-				})?;
+				});
+			}
 
-		// Deduct fee from the `source` account. Returns `None` if `total_fee` is Zero.
-		let fee = T::OnChargeTransaction::withdraw_fee(&source, total_fee)
-			.map_err(|e| RunnerError { error: e, weight })?;
+			let (total_fee_per_gas, _actual_priority_fee_per_gas) =
+				match (max_fee_per_gas, max_priority_fee_per_gas, is_transactional) {
+					// Zero max_fee_per_gas for validated transactional calls exist in XCM -> EVM
+					// because fees are already withdrawn in the xcm-executor.
+					(Some(max_fee), _, true) if max_fee.is_zero() => (U256::zero(), U256::zero()),
+					// With no tip, we pay exactly the base_fee
+					(Some(_), None, _) => (base_fee, U256::zero()),
+					// With tip, we include as much of the tip on top of base_fee that we can, never
+					// exceeding max_fee_per_gas
+					(Some(max_fee_per_gas), Some(max_priority_fee_per_gas), _) => {
+						let actual_priority_fee_per_gas = max_fee_per_gas
+							.saturating_sub(base_fee)
+							.min(max_priority_fee_per_gas);
+						(
+							base_fee.saturating_add(actual_priority_fee_per_gas),
+							actual_priority_fee_per_gas,
+						)
+					}
+					// Gas price check is skipped for non-transactional calls that don't
+					// define a `max_fee_per_gas` input.
+					(None, _, false) => (Default::default(), U256::zero()),
+					// Unreachable, previously validated. Handle gracefully.
+					_ => {
+						return Err(RunnerError {
+							error: Error::<T>::GasPriceTooLow,
+							weight,
+						})
+					}
+				};
 
-		// Execute the EVM call.
-		let vicinity = Vicinity {
-			gas_price: base_fee,
-			origin: source,
-		};
+			// After eip-1559 we make sure the account can pay both the evm execution and priority fees.
+			let total_fee =
+				total_fee_per_gas
+					.checked_mul(U256::from(gas_limit))
+					.ok_or(RunnerError {
+						error: Error::<T>::FeeOverflow,
+						weight,
+					})?;
 
-		let metadata = StackSubstateMetadata::new(gas_limit, config);
-		let state = SubstrateStackState::new(&vicinity, metadata);
-		let mut executor = StackExecutor::new_with_precompiles(state, config, precompiles);
+			// Deduct fee from the `source` account. Returns `None` if `total_fee` is Zero.
+			let fee = T::OnChargeTransaction::withdraw_fee(&source, total_fee)
+				.map_err(|e| RunnerError { error: e, weight })?;
 
-		let (reason, retv) = f(&mut executor);
+			// Execute the EVM call.
+			let vicinity = Vicinity {
+				gas_price: base_fee,
+				origin: source,
+			};
 
-		// Post execution.
-		let used_gas = U256::from(executor.used_gas());
-		let actual_fee = executor.fee(total_fee_per_gas);
-		log::debug!(
-			target: "evm",
-			"Execution {:?} [source: {:?}, value: {}, gas_limit: {}, actual_fee: {}, is_transactional: {}]",
-			reason,
-			source,
-			value,
-			gas_limit,
-			actual_fee,
-			is_transactional
-		);
-		// The difference between initially withdrawn and the actual cost is refunded.
-		//
-		// Considered the following request:
-		// +-----------+---------+--------------+
-		// | Gas_limit | Max_Fee | Max_Priority |
-		// +-----------+---------+--------------+
-		// |        20 |      10 |            6 |
-		// +-----------+---------+--------------+
-		//
-		// And execution:
-		// +----------+----------+
-		// | Gas_used | Base_Fee |
-		// +----------+----------+
-		// |        5 |        2 |
-		// +----------+----------+
-		//
-		// Initially withdrawn 10 * 20 = 200.
-		// Actual cost (2 + 6) * 5 = 40.
-		// Refunded 200 - 40 = 160.
-		// Tip 5 * 6 = 30.
-		// Burned 200 - (160 + 30) = 10. Which is equivalent to gas_used * base_fee.
-		let actual_priority_fee = T::OnChargeTransaction::correct_and_deposit_fee(
-			&source,
-			// Actual fee after evm execution, including tip.
-			actual_fee,
-			// Base fee.
-			executor.fee(base_fee),
-			// Fee initially withdrawn.
-			fee,
-		);
-		T::OnChargeTransaction::pay_priority_fee(actual_priority_fee);
+			let metadata = StackSubstateMetadata::new(gas_limit, config);
+			let state = SubstrateStackState::new(&vicinity, metadata);
+			let mut executor = StackExecutor::new_with_precompiles(state, config, precompiles);
 
-		let state = executor.into_state();
+			let (reason, retv) = f(&mut executor);
 
-		for address in state.substate.deletes {
+			// Post execution.
+			let used_gas = U256::from(executor.used_gas());
+			let actual_fee = executor.fee(total_fee_per_gas);
 			log::debug!(
+				target: "evm",
+				"Execution {:?} [source: {:?}, value: {}, gas_limit: {}, actual_fee: {}, is_transactional: {}]",
+				reason,
+				source,
+				value,
+				gas_limit,
+				actual_fee,
+				is_transactional
+			);
+			// The difference between initially withdrawn and the actual cost is refunded.
+			//
+			// Considered the following request:
+			// +-----------+---------+--------------+
+			// | Gas_limit | Max_Fee | Max_Priority |
+			// +-----------+---------+--------------+
+			// |        20 |      10 |            6 |
+			// +-----------+---------+--------------+
+			//
+			// And execution:
+			// +----------+----------+
+			// | Gas_used | Base_Fee |
+			// +----------+----------+
+			// |        5 |        2 |
+			// +----------+----------+
+			//
+			// Initially withdrawn 10 * 20 = 200.
+			// Actual cost (2 + 6) * 5 = 40.
+			// Refunded 200 - 40 = 160.
+			// Tip 5 * 6 = 30.
+			// Burned 200 - (160 + 30) = 10. Which is equivalent to gas_used * base_fee.
+			let actual_priority_fee = T::OnChargeTransaction::correct_and_deposit_fee(
+				&source,
+				// Actual fee after evm execution, including tip.
+				actual_fee,
+				// Base fee.
+				executor.fee(base_fee),
+				// Fee initially withdrawn.
+				fee,
+			);
+			T::OnChargeTransaction::pay_priority_fee(actual_priority_fee);
+
+			let state = executor.into_state();
+
+			for address in state.substate.deletes {
+				log::debug!(
 				target: "evm",
 				"Deleting account at {:?}",
 				address
 			);
-			Pallet::<T>::remove_account(&address)
-		}
+				Pallet::<T>::remove_account(&address)
+			}
 
-		for log in &state.substate.logs {
-			log::trace!(
+			for log in &state.substate.logs {
+				log::trace!(
 				target: "evm",
 				"Inserting log for {:?}, topics ({}) {:?}, data ({}): {:?}]",
 				log.address,
@@ -299,21 +300,81 @@ where
 				log.data.len(),
 				log.data
 			);
-			Pallet::<T>::deposit_event(Event::<T>::Log {
-				log: Log {
-					address: log.address,
-					topics: log.topics.clone(),
-					data: log.data.clone(),
-				},
-			});
-		}
+				Pallet::<T>::deposit_event(Event::<T>::Log {
+					log: Log {
+						address: log.address,
+						topics: log.topics.clone(),
+						data: log.data.clone(),
+					},
+				});
+			}
 
-		Ok(ExecutionInfo {
-			value: retv,
-			exit_reason: reason,
-			used_gas,
-			logs: state.substate.logs,
-		})
+			Ok(ExecutionInfo {
+				value: retv,
+				exit_reason: reason,
+				used_gas,
+				logs: state.substate.logs,
+			})
+		} else {
+			// Execute the EVM call.
+			let vicinity = Vicinity {
+				gas_price: base_fee,
+				origin: source.unwrap_or_default(),
+			};
+
+			let metadata = StackSubstateMetadata::new(gas_limit, config);
+			let state = SubstrateStackState::new(&vicinity, metadata);
+			let mut executor = StackExecutor::new_with_precompiles(state, config, precompiles);
+
+			let (reason, retv) = f(&mut executor);
+			// Post execution.
+			let used_gas = U256::from(executor.used_gas());
+			log::debug!(
+				target: "evm",
+				"Execution {:?} [source: {:?}, value: {}, gas_limit: {}, is_transactional: {}]",
+				reason,
+				source,
+				value,
+				gas_limit,
+				is_transactional
+			);
+			let state = executor.into_state();
+
+			for address in state.substate.deletes {
+				log::debug!(
+				target: "evm",
+				"Deleting account at {:?}",
+				address
+			);
+				Pallet::<T>::remove_account(&address)
+			}
+
+			for log in &state.substate.logs {
+				log::trace!(
+				target: "evm",
+				"Inserting log for {:?}, topics ({}) {:?}, data ({}): {:?}]",
+				log.address,
+				log.topics.len(),
+				log.topics,
+				log.data.len(),
+				log.data
+			);
+				Pallet::<T>::deposit_event(Event::<T>::Log {
+					log: Log {
+						address: log.address,
+						topics: log.topics.clone(),
+						data: log.data.clone(),
+					},
+				});
+			}
+
+			Ok(ExecutionInfo {
+				value: retv,
+				exit_reason: reason,
+				used_gas,
+				logs: state.substate.logs,
+			})
+		}
 	}
 }
 
@@ -369,7 +430,7 @@ where
 	}
 
 	fn call(
-		source: H160,
+		source: Option<H160>,
 		target: H160,
 		input: Vec<u8>,
 		value: U256,
@@ -382,7 +443,8 @@ where
 		validate: bool,
 		config: &evm::Config,
 	) -> Result<CallInfo, RunnerError<Self::Error>> {
-		if validate {
+		if validate && source.is_some() {
+			let source = source.unwrap();
 			Self::validate(
 				source,
 				Some(target),
@@ -407,7 +469,7 @@ where
 			config,
 			&precompiles,
 			is_transactional,
-			|executor| executor.transact_call(source, target, value, input, gas_limit, access_list),
+			|executor| executor.transact_call(source.unwrap_or_default(), target, value, input, gas_limit, access_list),
 		)
 	}
 
@@ -441,7 +503,7 @@ where
 		}
 		let precompiles = T::PrecompilesValue::get();
 		Self::execute(
-			source,
+			Some(source),
 			value,
 			gas_limit,
 			max_fee_per_gas,
@@ -491,7 +553,7 @@ where
 		let precompiles = T::PrecompilesValue::get();
 		let code_hash = H256::from(sp_io::hashing::keccak_256(&init));
 		Self::execute(
-			source,
+			Some(source),
 			value,
 			gas_limit,
 			max_fee_per_gas,

@@ -679,7 +679,7 @@ impl_runtime_apis! {
 			let validate = true;
 			let evm_config = config.as_ref().unwrap_or(<Runtime as pallet_evm::Config>::config());
 			<Runtime as pallet_evm::Config>::Runner::call(
-				from,
+				Some(from),
 				to,
 				data,
 				value,
