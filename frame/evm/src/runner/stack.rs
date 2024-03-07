@@ -161,7 +161,7 @@ where
 				},
 			)?;
 
-		if source == Default::default() {
+		if source != Default::default() {
 			// The precompile check is only used for transactional invocations. However, here we always
 			// execute the check, because the check has side effects.
 			match precompiles.is_precompile(source, gas_limit) {
@@ -497,7 +497,7 @@ where
 		proof_size_base_cost: Option<u64>,
 		config: &evm::Config,
 	) -> Result<CallInfo, RunnerError<Self::Error>> {
-		if validate {
+		if validate && source != Default::default() {
 			Self::validate(
 				source,
 				Some(target),
@@ -545,7 +545,7 @@ where
 		proof_size_base_cost: Option<u64>,
 		config: &evm::Config,
 	) -> Result<CreateInfo, RunnerError<Self::Error>> {
-		if validate {
+		if validate && source != Default::default() {
 			Self::validate(
 				source,
 				None,
