@@ -51,8 +51,24 @@ pub mod pallet {
 		type DefaultBaseFeePerGas: Get<U256>;
 		type DefaultElasticity: Get<Permill>;
 	}
+	// #[pallet::genesis_config]
+	// #[derive(frame_support::DefaultNoBound)]
+	// pub struct GenesisConfig<T> {
+	// 	pub chain_id: u64,
+	// 	#[serde(skip)]
+	// 	pub _marker: PhantomData<T>,
+	// }
+	//
+	// #[pallet::genesis_build]
+	// impl<T: Config> BuildGenesisConfig for GenesisConfig<T> {
+	// 	fn build(&self) {
+	// 		ChainId::<T>::put(self.chain_id);
+	// 	}
+	// }
+
 
 	#[pallet::genesis_config]
+	#[derive(frame_support::DefaultNoBound)]
 	pub struct GenesisConfig<T: Config> {
 		pub base_fee_per_gas: U256,
 		pub elasticity: Permill,
@@ -66,17 +82,6 @@ pub mod pallet {
 			Self {
 				base_fee_per_gas,
 				elasticity,
-				_marker: PhantomData,
-			}
-		}
-	}
-
-	#[cfg(feature = "std")]
-	impl<T: Config> Default for GenesisConfig<T> {
-		fn default() -> Self {
-			Self {
-				base_fee_per_gas: T::DefaultBaseFeePerGas::get(),
-				elasticity: T::DefaultElasticity::get(),
 				_marker: PhantomData,
 			}
 		}

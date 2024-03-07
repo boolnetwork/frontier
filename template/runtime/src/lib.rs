@@ -817,7 +817,7 @@ impl_runtime_apis! {
 			let (weight_limit, proof_size_base_cost) = pallet_ethereum::Pallet::<Runtime>::transaction_weight(&transaction_data);
 
 			<Runtime as pallet_evm::Config>::Runner::call(
-				from,
+				Some(from),
 				to,
 				data,
 				value,
