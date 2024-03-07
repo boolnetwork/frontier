@@ -243,7 +243,7 @@ pub mod pallet {
 					Self::validate_transaction_in_block(source, &transaction).expect(
 						"pre-block transaction verification failed; the block cannot be built",
 					);
-					let (r, _) = Self::apply_validated_transaction(Some(source), transaction)
+					let (r, _) = Self::apply_validated_transaction(source, transaction)
 						.expect("pre-block apply transaction failed; the block cannot be built");
 
 					weight = weight.saturating_add(r.actual_weight.unwrap_or_default());
@@ -295,7 +295,7 @@ pub mod pallet {
 				"pre log already exists; block is invalid",
 			);
 
-			Self::apply_validated_transaction(Some(source), transaction).map(|(post_info, _)| post_info)
+			Self::apply_validated_transaction(source, transaction).map(|(post_info, _)| post_info)
 		}
 
 		/// Transact an Ethereum transaction.
@@ -317,7 +317,7 @@ pub mod pallet {
 				"pre log already exists; block is invalid",
 			);
 
-			Self::apply_validated_transaction(None, transaction).map(|(post_info, _)| post_info)
+			Self::apply_validated_transaction(Default::default(), transaction).map(|(post_info, _)| post_info)
 		}
 	}
 
@@ -588,7 +588,7 @@ impl<T: Config> Pallet<T> {
 	}
 
 	fn apply_validated_transaction(
-		source: Option<H160>,
+		source: H160,
 		transaction: Transaction,
 	) -> Result<(PostDispatchInfo, CallOrCreateInfo), DispatchErrorWithPostInfo> {
 		let (to, _, info) = Self::execute(source, &transaction, None)?;
@@ -603,7 +603,7 @@ impl<T: Config> Pallet<T> {
 				TransactionStatus {
 					transaction_hash,
 					transaction_index,
-					from: source.unwrap_or_default(),
+					from: source,
 					to,
 					contract_address: None,
 					logs: info.logs.clone(),
@@ -647,7 +647,7 @@ impl<T: Config> Pallet<T> {
 				TransactionStatus {
 					transaction_hash,
 					transaction_index,
-					from: source.unwrap_or_default(),
+					from: source,
 					to,
 					contract_address: Some(info.value),
 					logs: info.logs.clone(),
@@ -705,7 +705,7 @@ impl<T: Config> Pallet<T> {
 		Pending::<T>::append((transaction, status, receipt));
 
 		Self::deposit_event(Event::Executed {
-			from: source.unwrap_or_default(),
+			from: source,
 			to: dest.unwrap_or_default(),
 			transaction_hash,
 			exit_reason: reason,
@@ -742,7 +742,7 @@ impl<T: Config> Pallet<T> {
 
 	/// Execute an Ethereum transaction.
 	pub fn execute(
-		from: Option<H160>,
+		from: H160,
 		transaction: &Transaction,
 		config: Option<evm::Config>,
 	) -> Result<(Option<H160>, Option<H160>, CallOrCreateInfo), DispatchErrorWithPostInfo> {
@@ -844,9 +844,6 @@ impl<T: Config> Pallet<T> {
 				Ok((Some(target), None, CallOrCreateInfo::Call(res)))
 			}
 			ethereum::TransactionAction::Create => {
-				let from = from.ok_or::<DispatchErrorWithPostInfo>(
-					Error::<T>::InvalidSource.into()
-				)?;
 				let res = match T::Runner::create(
 					from,
 					input,
@@ -984,7 +981,7 @@ impl<T: Config> ValidatedTransactionT for ValidatedTransaction<T> {
 		source: H160,
 		transaction: Transaction,
 	) -> Result<(PostDispatchInfo, CallOrCreateInfo), DispatchErrorWithPostInfo> {
-		Pallet::<T>::apply_validated_transaction(Some(source), transaction)
+		Pallet::<T>::apply_validated_transaction(source, transaction)
 	}
 }
 

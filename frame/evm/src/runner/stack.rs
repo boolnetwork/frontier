@@ -68,7 +68,7 @@ where
 	#[allow(clippy::let_and_return)]
 	/// Execute an already validated EVM operation.
 	fn execute<'config, 'precompiles, F, R>(
-		source: Option<H160>,
+		source: H160,
 		value: U256,
 		gas_limit: u64,
 		max_fee_per_gas: Option<U256>,
@@ -127,7 +127,7 @@ where
 
 	// Execute an already validated EVM operation.
 	fn execute_inner<'config, 'precompiles, F, R>(
-		source: Option<H160>,
+		source: H160,
 		value: U256,
 		mut gas_limit: u64,
 		max_fee_per_gas: Option<U256>,
@@ -161,8 +161,8 @@ where
 				},
 			)?;
 
-		if let Some(source) = source {
-// The precompile check is only used for transactional invocations. However, here we always
+		if source == Default::default() {
+			// The precompile check is only used for transactional invocations. However, here we always
 			// execute the check, because the check has side effects.
 			match precompiles.is_precompile(source, gas_limit) {
 				IsPrecompileResult::Answer { extra_cost, .. } => {
@@ -353,7 +353,7 @@ where
 			// Execute the EVM call.
 			let vicinity = Vicinity {
 				gas_price: base_fee,
-				origin: source.unwrap_or_default(),
+				origin: source,
 			};
 
 			let metadata = StackSubstateMetadata::new(gas_limit, config);
@@ -482,7 +482,7 @@ where
 	}
 
 	fn call(
-		source: Option<H160>,
+		source: H160,
 		target: H160,
 		input: Vec<u8>,
 		value: U256,
@@ -497,8 +497,7 @@ where
 		proof_size_base_cost: Option<u64>,
 		config: &evm::Config,
 	) -> Result<CallInfo, RunnerError<Self::Error>> {
-		if validate && source.is_some() {
-			let source = source.unwrap();
+		if validate {
 			Self::validate(
 				source,
 				Some(target),
@@ -527,7 +526,7 @@ where
 			is_transactional,
 			weight_limit,
 			proof_size_base_cost,
-			|executor| executor.transact_call(source.unwrap_or_default(), target, value, input, gas_limit, access_list),
+			|executor| executor.transact_call(source, target, value, input, gas_limit, access_list),
 		)
 	}
 
@@ -565,7 +564,7 @@ where
 		}
 		let precompiles = T::PrecompilesValue::get();
 		Self::execute(
-			Some(source),
+			source,
 			value,
 			gas_limit,
 			max_fee_per_gas,
@@ -621,7 +620,7 @@ where
 		let precompiles = T::PrecompilesValue::get();
 		let code_hash = H256::from(sp_io::hashing::keccak_256(&init));
 		Self::execute(
-			Some(source),
+			source,
 			value,
 			gas_limit,
 			max_fee_per_gas,
