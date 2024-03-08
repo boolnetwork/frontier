@@ -32,7 +32,7 @@ mod tests;
 
 pub use ethereum::{
 	AccessListItem, BlockV2 as Block, LegacyTransactionMessage, Log, ReceiptV3 as Receipt,
-	TransactionAction, TransactionV2 as Transaction,
+	TransactionAction, TransactionV2 as Transaction, EIP1559TransactionMessage,
 };
 use ethereum_types::{Bloom, BloomInput, H160, H256, H64, U256};
 use evm::ExitReason;
@@ -296,6 +296,28 @@ pub mod pallet {
 			);
 
 			Self::apply_validated_transaction(source, transaction).map(|(post_info, _)| post_info)
+		}
+
+		/// Transact an Ethereum transaction.
+		#[pallet::call_index(1)]
+		#[pallet::weight({
+			let without_base_extrinsic_weight = true;
+			<T as pallet_evm::Config>::GasWeightMapping::gas_to_weight({
+			let transaction_data: TransactionData = transaction.into();
+			transaction_data.gas_limit.unique_saturated_into()
+			}, without_base_extrinsic_weight)
+		})]
+		pub fn transact_unsigned(
+			_origin: OriginFor<T>,
+			transaction: Transaction,
+		) -> DispatchResultWithPostInfo {
+			// Disable transact functionality if PreLog exist.
+			assert!(
+				fp_consensus::find_pre_log(&frame_system::Pallet::<T>::digest()).is_err(),
+				"pre log already exists; block is invalid",
+			);
+
+			Self::apply_validated_transaction(Default::default(), transaction).map(|(post_info, _)| post_info)
 		}
 	}
 
