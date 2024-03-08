@@ -340,8 +340,6 @@ pub mod pallet {
 		InvalidSignature,
 		/// Pre-log is present, therefore transact is not allowed.
 		PreLogExists,
-		/// Source address is invalid
-		InvalidSource,
 	}
 
 	/// Current building block's transactions and receipts.
