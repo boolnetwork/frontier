@@ -71,6 +71,7 @@ pub mod pallet {
 		}
 	}
 
+	#[cfg(feature = "std")]
 	impl<T: Config> Default for GenesisConfig<T> {
 		fn default() -> Self {
 			Self {
