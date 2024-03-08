@@ -497,7 +497,7 @@ where
 		proof_size_base_cost: Option<u64>,
 		config: &evm::Config,
 	) -> Result<CallInfo, RunnerError<Self::Error>> {
-		if validate && source != Default::default() {
+		if validate {
 			Self::validate(
 				source,
 				Some(target),
@@ -545,7 +545,7 @@ where
 		proof_size_base_cost: Option<u64>,
 		config: &evm::Config,
 	) -> Result<CreateInfo, RunnerError<Self::Error>> {
-		if validate && source != Default::default() {
+		if validate {
 			Self::validate(
 				source,
 				None,
