@@ -53,7 +53,6 @@ pub mod pallet {
 	}
 
 	#[pallet::genesis_config]
-	#[derive(frame_support::DefaultNoBound)]
 	pub struct GenesisConfig<T: Config> {
 		pub base_fee_per_gas: U256,
 		pub elasticity: Permill,
@@ -67,6 +66,16 @@ pub mod pallet {
 			Self {
 				base_fee_per_gas,
 				elasticity,
+				_marker: PhantomData,
+			}
+		}
+	}
+
+	impl<T: Config> Default for GenesisConfig<T> {
+		fn default() -> Self {
+			Self {
+				base_fee_per_gas: T::DefaultBaseFeePerGas::get(),
+				elasticity: T::DefaultElasticity::get(),
 				_marker: PhantomData,
 			}
 		}
