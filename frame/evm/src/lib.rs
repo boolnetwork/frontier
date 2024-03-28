@@ -76,9 +76,8 @@ use frame_support::{
 	traits::{
 		tokens::{
 			currency::Currency,
-			fungible::Inspect,
 			imbalance::{Imbalance, OnUnbalanced, SignedImbalance},
-			ExistenceRequirement, Fortitude, Preservation, WithdrawReasons,
+			ExistenceRequirement, Preservation, WithdrawReasons,
 		},
 		FindAuthor, Get, Time,
 	},
@@ -139,7 +138,7 @@ pub mod pallet {
 		/// Mapping from address to account id.
 		type AddressMapping: AddressMapping<Self::AccountId>;
 		/// Currency type for withdraw and balance storage.
-		type Currency: Currency<Self::AccountId> + Inspect<Self::AccountId>;
+		type Currency: Currency<Self::AccountId>;
 
 		/// The overarching event type.
 		type RuntimeEvent: From<Event<Self>> + IsType<<Self as frame_system::Config>::RuntimeEvent>;
@@ -851,8 +850,7 @@ impl<T: Config> Pallet<T> {
 
 		let nonce = frame_system::Pallet::<T>::account_nonce(&account_id);
 		// keepalive `true` takes into account ExistentialDeposit as part of what's considered liquid balance.
-		let balance =
-			T::Currency::reducible_balance(&account_id, Preservation::Preserve, Fortitude::Polite);
+		let balance = T::Currency::transferrable_balance(&account_id, Preservation::Preserve);
 
 		(
 			Account {
@@ -894,7 +892,7 @@ pub trait OnChargeEVMTransaction<T: Config> {
 	) -> Self::LiquidityInfo;
 
 	/// Introduced in EIP1559 to handle the priority tip.
-	fn pay_priority_fee(tip: Self::LiquidityInfo);
+	fn pay_priority_fee(to: &H160, tip: Self::LiquidityInfo);
 }
 
 /// Implements the transaction payment for a pallet implementing the `Currency`
@@ -956,7 +954,6 @@ where
 				.unwrap_or_else(|_| C::PositiveImbalance::zero());
 
 			// Make sure this works with 0 ExistentialDeposit
-			// https://github.com/paritytech/substrate/issues/10117
 			// If we tried to refund something, the account still empty and the ED is set to 0,
 			// we call `make_free_balance_be` with the refunded amount.
 			let refund_imbalance = if C::minimum_balance().is_zero()
@@ -987,10 +984,10 @@ where
 		None
 	}
 
-	fn pay_priority_fee(tip: Self::LiquidityInfo) {
-		// Default Ethereum behaviour: issue the tip to the block author.
+	fn pay_priority_fee(who: &H160, tip: Self::LiquidityInfo) {
+		let account_id = T::AddressMapping::into_account_id(*who);
 		if let Some(tip) = tip {
-			let account_id = T::AddressMapping::into_account_id(<Pallet<T>>::find_author());
+			// let account_id = T::AddressMapping::into_account_id(<Pallet<T>>::find_author());
 			let _ = C::deposit_into_existing(&account_id, tip.peek());
 		}
 	}
@@ -1026,8 +1023,8 @@ U256: UniqueSaturatedInto<BalanceOf<T>>,
 		<EVMCurrencyAdapter::<<T as Config>::Currency, ()> as OnChargeEVMTransaction<T>>::correct_and_deposit_fee(who, corrected_fee, base_fee, already_withdrawn)
 	}
 
-	fn pay_priority_fee(tip: Self::LiquidityInfo) {
-		<EVMCurrencyAdapter::<<T as Config>::Currency, ()> as OnChargeEVMTransaction<T>>::pay_priority_fee(tip);
+	fn pay_priority_fee(to: &H160, tip: Self::LiquidityInfo) {
+		<EVMCurrencyAdapter::<<T as Config>::Currency, ()> as OnChargeEVMTransaction<T>>::pay_priority_fee(to, tip);
 	}
 }
 
