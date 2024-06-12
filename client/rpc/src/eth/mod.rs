@@ -622,7 +622,7 @@ fn rich_block_build(
 				}
 			},
 			size: Some(U256::from(rlp::encode(&block).len() as u32)),
-			base_fee_per_gas: base_fee,
+			base_fee_per_gas: None,
 		},
 		extra_info: BTreeMap::new(),
 	}
