@@ -587,7 +587,7 @@ fn rich_block_build(
 				gas_limit: block.header.gas_limit,
 				extra_data: Bytes(block.header.extra_data.clone()),
 				logs_bloom: block.header.logs_bloom,
-				timestamp: U256::from(block.header.timestamp / 1000),
+				timestamp: U256::from(block.header.timestamp),
 				difficulty: block.header.difficulty,
 				nonce,
 				size: Some(U256::from(rlp::encode(&block.header).len() as u32)),

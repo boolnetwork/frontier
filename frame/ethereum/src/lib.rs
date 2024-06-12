@@ -452,7 +452,7 @@ impl<T: Config> Pallet<T> {
 		let receipts_root = ethereum::util::ordered_trie_root(
 			receipts.iter().map(ethereum::EnvelopedEncodable::encode),
 		);
-		let partial_header = ethereum::PartialHeader {
+		let mut partial_header = ethereum::PartialHeader {
 			parent_hash: if block_number > U256::zero() {
 				BlockHash::<T>::get(block_number - 1)
 			} else {
@@ -471,6 +471,7 @@ impl<T: Config> Pallet<T> {
 			mix_hash: H256::default(),
 			nonce: H64::default(),
 		};
+		partial_header.timestamp /= 1000;
 		let block = ethereum::Block::new(partial_header, transactions.clone(), ommers);
 
 		CurrentBlock::<T>::put(block.clone());
