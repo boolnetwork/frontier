@@ -58,7 +58,7 @@ use sp_runtime::{
 use sp_std::{marker::PhantomData, prelude::*};
 // Frontier
 use fp_consensus::{PostLog, PreLog, FRONTIER_ENGINE_ID};
-pub use fp_ethereum::TransactionData;
+pub use fp_ethereum::{Header1559, TransactionData};
 use fp_ethereum::ValidatedTransaction as ValidatedTransactionT;
 use fp_evm::{
 	CallOrCreateInfo, CheckEvmTransaction, CheckEvmTransactionConfig, TransactionValidationError,
@@ -477,20 +477,24 @@ impl<T: Config> Pallet<T> {
 		CurrentBlock::<T>::put(block.clone());
 		CurrentReceipts::<T>::put(receipts.clone());
 		CurrentTransactionStatuses::<T>::put(statuses.clone());
-		BlockHash::<T>::insert(block_number, block.header.hash());
+		let (base_fee, _) = T::FeeCalculator::min_gas_price();
+		let eth_block_hash = Header1559::new_from_header(block.header.clone(), base_fee).hash();
+		BlockHash::<T>::insert(block_number, eth_block_hash);
 
 		match post_log {
 			Some(PostLogContent::BlockAndTxnHashes) => {
 				let digest = DigestItem::Consensus(
 					FRONTIER_ENGINE_ID,
-					PostLog::Hashes(fp_consensus::Hashes::from_block(block)).encode(),
+					PostLog::Hashes(fp_consensus::Hashes::from_block(block, Some(base_fee))).encode(),
 				);
 				frame_system::Pallet::<T>::deposit_log(digest);
 			}
 			Some(PostLogContent::OnlyBlockHash) => {
+				let (base_fee, _) = T::FeeCalculator::min_gas_price();
+				let eth_block_hash = Header1559::new_from_header(block.header.clone(), base_fee).hash();
 				let digest = DigestItem::Consensus(
 					FRONTIER_ENGINE_ID,
-					PostLog::BlockHash(block.header.hash()).encode(),
+					PostLog::BlockHash(eth_block_hash).encode(),
 				);
 				frame_system::Pallet::<T>::deposit_log(digest);
 			}
@@ -736,7 +740,10 @@ impl<T: Config> Pallet<T> {
 
 	/// Get current block hash
 	pub fn current_block_hash() -> Option<H256> {
-		<CurrentBlock<T>>::get().map(|block| block.header.hash())
+		<CurrentBlock<T>>::get().map(|block| {
+			let (base_fee, _) = T::FeeCalculator::min_gas_price();
+			Header1559::new_from_header(block.header.clone(), base_fee).hash()
+		})
 	}
 
 	/// Execute an Ethereum transaction.

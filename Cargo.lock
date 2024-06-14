@@ -2448,6 +2448,7 @@ dependencies = [
  "fc-api",
  "fc-storage",
  "fp-consensus",
+ "fp-ethereum",
  "fp-rpc",
  "fp-storage",
  "futures 0.3.30",
@@ -2497,6 +2498,7 @@ dependencies = [
  "fc-db",
  "fc-storage",
  "fp-consensus",
+ "fp-ethereum",
  "fp-rpc",
  "fp-storage",
  "frontier-template-runtime",
@@ -2532,6 +2534,7 @@ dependencies = [
  "fc-mapping-sync",
  "fc-rpc-core",
  "fc-storage",
+ "fp-ethereum",
  "fp-evm",
  "fp-rpc",
  "fp-storage",
@@ -2681,6 +2684,7 @@ dependencies = [
  "fc-rpc-core-trace",
  "fc-rpc-core-types",
  "fc-storage",
+ "fp-ethereum",
  "fp-rpc",
  "fp-rpc-debug",
  "futures 0.3.30",
@@ -2929,6 +2933,7 @@ name = "fp-consensus"
 version = "2.0.0-dev"
 dependencies = [
  "ethereum",
+ "fp-ethereum",
  "parity-scale-codec",
  "sp-core",
  "sp-runtime",
@@ -2953,6 +2958,8 @@ dependencies = [
  "fp-evm",
  "frame-support",
  "parity-scale-codec",
+ "rlp",
+ "sha3",
  "sp-std 8.0.0",
 ]
 
@@ -4823,7 +4830,7 @@ dependencies = [
  "rw-stream-sink",
  "soketto",
  "url",
- "webpki-roots",
+ "webpki-roots 0.22.6",
 ]
 
 [[package]]
@@ -9883,6 +9890,8 @@ dependencies = [
  "once_cell",
  "paste",
  "percent-encoding",
+ "rustls 0.21.10",
+ "rustls-pemfile",
  "serde",
  "sha2 0.10.8",
  "smallvec",
@@ -9892,6 +9901,7 @@ dependencies = [
  "tokio-stream",
  "tracing",
  "url",
+ "webpki-roots 0.25.4",
 ]
 
 [[package]]
@@ -11417,6 +11427,12 @@ checksum = "b6c71e40d7d2c34a5106301fb632274ca37242cd0c9d3e64dbece371a40a2d87"
 dependencies = [
  "webpki",
 ]
+
+[[package]]
+name = "webpki-roots"
+version = "0.25.4"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "5f20c57d8d7db6d3b86154206ae5d8fba62dd39573114de97c2cb0578251f8e1"
 
 [[package]]
 name = "which"

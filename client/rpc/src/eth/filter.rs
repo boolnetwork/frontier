@@ -40,6 +40,7 @@ use sp_runtime::{
 // Frontier
 use fc_rpc_core::{types::*, EthFilterApiServer};
 use fp_rpc::{EthereumRuntimeRPCApi, TransactionStatus};
+use fp_ethereum::Header1559;
 
 use crate::{cache::EthBlockDataCacheTask, frontier_backend_client, internal_err};
 
@@ -330,7 +331,14 @@ where
 
 					let block = block_data_cache.current_block(schema, substrate_hash).await;
 					if let Some(block) = block {
-						ethereum_hashes.push(block.header.hash())
+						let base_fee = client
+							.runtime_api()
+							.gas_price(client.info().best_hash).ok();
+						let block_hash = match base_fee {
+							Some(base_fee) => Header1559::new_from_header(block.header.clone(), base_fee).hash(),
+							None => block.header.hash(),
+						};
+						ethereum_hashes.push(block_hash)
 					}
 				}
 				Ok(FilterChanges::Hashes(ethereum_hashes))

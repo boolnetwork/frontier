@@ -19,6 +19,7 @@ fc-evm-tracing = { workspace = true }
 fc-rpc-core-trace = { workspace = true }
 fc-rpc-core-types = { workspace = true }
 fp-rpc-debug = { workspace = true }
+fp-ethereum = { workspace = true }
 
 # Substrate
 sc-client-api = { workspace = true }

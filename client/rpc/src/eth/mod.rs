@@ -51,6 +51,7 @@ use fp_rpc::{
 	ConvertTransaction, ConvertTransactionRuntimeApi, EthereumRuntimeRPCApi,
 	RuntimeStorageOverride, TransactionStatus,
 };
+use fp_ethereum::Header1559;
 
 use crate::{
 	cache::EthBlockDataCacheTask, frontier_backend_client, internal_err, public_key,
@@ -622,7 +623,7 @@ fn rich_block_build(
 				}
 			},
 			size: Some(U256::from(rlp::encode(&block).len() as u32)),
-			base_fee_per_gas: None,
+			base_fee_per_gas: base_fee,
 		},
 		extra_info: BTreeMap::new(),
 	}
@@ -668,7 +669,11 @@ fn transaction_build(
 	}
 
 	// Block hash.
-	transaction.block_hash = block.map(|block| block.header.hash());
+	transaction.block_hash = match base_fee {
+		Some(base_fee) => block.map(|block| Header1559::new_from_header(block.header.clone(), base_fee).hash()),
+		None => block.map(|block| block.header.hash()),
+	};
+
 	// Block number.
 	transaction.block_number = block.map(|block| block.header.number);
 	// Transaction index.

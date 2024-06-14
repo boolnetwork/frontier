@@ -37,6 +37,7 @@ fc-storage = { workspace = true, optional = true }
 fp-consensus = { workspace = true, features = ["default"], optional = true }
 fp-rpc = { workspace = true, features = ["default"], optional = true }
 fp-storage = { workspace = true, features = ["default"] }
+fp-ethereum = { workspace = true, features = ["default"] }
 
 [dev-dependencies]
 futures = { workspace = true }

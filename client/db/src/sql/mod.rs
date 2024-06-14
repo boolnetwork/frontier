@@ -41,6 +41,7 @@ use fc_storage::OverrideHandle;
 use fp_consensus::{FindLogError, Hashes, Log as ConsensusLog, PostLog, PreLog};
 use fp_rpc::EthereumRuntimeRPCApi;
 use fp_storage::{EthereumStorageSchema, PALLET_ETHEREUM_SCHEMA};
+use fp_ethereum::Header1559;
 
 use crate::{BackendReader, FilteredLog};
 
@@ -201,7 +202,7 @@ where
 		client: Arc<Client>,
 	) -> Result<Option<H256>, Error>
 	where
-		Client: StorageProvider<Block, BE> + HeaderBackend<Block> + Send + Sync + 'static,
+		Client: StorageProvider<Block, BE> + HeaderBackend<Block> + ProvideRuntimeApi<Block> + Send + Sync + 'static,
 		Client: ProvideRuntimeApi<Block>,
 		Client::Api: EthereumRuntimeRPCApi<Block>,
 		BE: BackendT<Block> + 'static,
@@ -235,7 +236,13 @@ where
 
 				let schema =
 					Self::onchain_storage_schema(client.as_ref(), substrate_genesis_hash).encode();
-				let ethereum_block_hash = ethereum_block.header.hash().as_bytes().to_owned();
+				let base_fee = client
+					.runtime_api()
+					.gas_price(client.info().best_hash).ok();
+				let eth_block_hash = match base_fee {
+					Some(base_fee) => Header1559::new_from_header(ethereum_block.header.clone(), base_fee).hash(),
+					None => ethereum_block.header.hash(),
+				};
 				let substrate_block_hash = substrate_genesis_hash.as_bytes();
 				let block_number = 0i32;
 				let is_canon = 1i32;
@@ -249,7 +256,7 @@ where
 						is_canon)
 					VALUES (?, ?, ?, ?, ?)",
 				)
-				.bind(ethereum_block_hash)
+				.bind(eth_block_hash.as_bytes().to_owned())
 				.bind(substrate_block_hash)
 				.bind(block_number)
 				.bind(schema)
@@ -270,7 +277,8 @@ where
 		overrides: Arc<OverrideHandle<Block>>,
 	) -> Result<BlockMetadata, Error>
 	where
-		Client: StorageProvider<Block, BE> + HeaderBackend<Block> + Send + Sync + 'static,
+		Client: StorageProvider<Block, BE> + HeaderBackend<Block> + ProvideRuntimeApi<Block> + Send + Sync + 'static,
+		Client::Api: EthereumRuntimeRPCApi<Block>,
 		BE: BackendT<Block> + 'static,
 		BE::State: StateBackend<BlakeTwo256>,
 	{
@@ -281,7 +289,10 @@ where
 					let schema = Self::onchain_storage_schema(client.as_ref(), hash);
 					let log_hashes = match log {
 						ConsensusLog::Post(PostLog::Hashes(post_hashes)) => post_hashes,
-						ConsensusLog::Post(PostLog::Block(block)) => Hashes::from_block(block),
+						ConsensusLog::Post(PostLog::Block(block)) => {
+							let base_fee = client.runtime_api().gas_price(client.info().best_hash).ok();
+							Hashes::from_block(block, base_fee)
+						},
 						ConsensusLog::Post(PostLog::BlockHash(expect_eth_block_hash)) => {
 							let ethereum_block = overrides
 								.schemas
@@ -290,7 +301,13 @@ where
 								.current_block(hash);
 							match ethereum_block {
 								Some(block) => {
-									let got_eth_block_hash = block.header.hash();
+									let base_fee = client
+										.runtime_api()
+										.gas_price(client.info().best_hash).ok();
+									let got_eth_block_hash = match base_fee {
+										Some(base_fee) => Header1559::new_from_header(block.header.clone(), base_fee).hash(),
+										None => block.header.hash(),
+									};
 									if got_eth_block_hash != expect_eth_block_hash {
 										return Err(Error::Protocol(format!(
 											"Ethereum block hash mismatch: \
@@ -298,7 +315,7 @@ where
 											db state ({got_eth_block_hash:?})"
 										)));
 									} else {
-										Hashes::from_block(block)
+										Hashes::from_block(block, base_fee)
 									}
 								}
 								None => {
@@ -308,7 +325,10 @@ where
 								}
 							}
 						}
-						ConsensusLog::Pre(PreLog::Block(block)) => Hashes::from_block(block),
+						ConsensusLog::Pre(PreLog::Block(block)) => {
+							let base_fee = client.runtime_api().gas_price(client.info().best_hash).ok();
+							Hashes::from_block(block, base_fee)
+						},
 					};
 
 					let header_number = *header.number();
@@ -362,7 +382,8 @@ where
 		hash: H256,
 	) -> Result<(), Error>
 	where
-		Client: StorageProvider<Block, BE> + HeaderBackend<Block> + Send + Sync + 'static,
+		Client: StorageProvider<Block, BE> + HeaderBackend<Block> + ProvideRuntimeApi<Block> + Send + Sync + 'static,
+		Client::Api: EthereumRuntimeRPCApi<Block>,
 		BE: BackendT<Block> + 'static,
 		BE::State: StateBackend<BlakeTwo256>,
 	{
@@ -438,7 +459,7 @@ where
 	/// Index the logs for the newly indexed blocks upto a `max_pending_blocks` value.
 	pub async fn index_block_logs<Client, BE>(&self, client: Arc<Client>, block_hash: Block::Hash)
 	where
-		Client: StorageProvider<Block, BE> + HeaderBackend<Block> + Send + Sync + 'static,
+		Client: StorageProvider<Block, BE> + HeaderBackend<Block> + ProvideRuntimeApi<Block> + Send + Sync + 'static,
 		BE: BackendT<Block> + 'static,
 		BE::State: StateBackend<BlakeTwo256>,
 	{

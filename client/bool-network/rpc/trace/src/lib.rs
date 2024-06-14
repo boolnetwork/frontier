@@ -31,6 +31,7 @@ use substrate_prometheus_endpoint::{
 use ethereum_types::H256;
 use fc_rpc::OverrideHandle;
 use fp_rpc::EthereumRuntimeRPCApi;
+use fp_ethereum::Header1559;
 
 use fc_evm_tracing::{
 	formatters::ResponseFormatter,
@@ -812,7 +813,11 @@ where
 			_ => return Err(format!("No storage override at {:?}", substrate_hash)),
 		};
 
-		let eth_block_hash = eth_block.header.hash();
+		let base_fee = api.gas_price(client.info().best_hash).ok();
+		let eth_block_hash = match base_fee {
+			Some(base_fee) => Header1559::new_from_header(eth_block.header.clone(), base_fee).hash(),
+			None => eth_block.header.hash(),
+		};
 		let eth_tx_hashes = eth_transactions
 			.iter()
 			.map(|t| t.transaction_hash)
