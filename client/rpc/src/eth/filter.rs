@@ -497,8 +497,9 @@ where
 			let statuses = block_data_cache
 				.current_transaction_statuses(schema, substrate_hash)
 				.await;
+			let base_fee = client.runtime_api().gas_price(substrate_hash).ok();
 			if let (Some(block), Some(statuses)) = (block, statuses) {
-				filter_block_logs(&mut ret, &filter, block, statuses);
+				filter_block_logs(&mut ret, &filter, block, statuses, base_fee);
 			}
 		} else {
 			let best_number = client.info().best_number;
@@ -740,8 +741,9 @@ where
 				let statuses = block_data_cache
 					.current_transaction_statuses(schema, substrate_hash)
 					.await;
+				let base_fee = client.runtime_api().gas_price(substrate_hash).ok();
 				if let Some(statuses) = statuses {
-					filter_block_logs(ret, filter, block, statuses);
+					filter_block_logs(ret, filter, block, statuses, base_fee);
 				}
 			}
 		}
@@ -772,10 +774,14 @@ fn filter_block_logs<'a>(
 	filter: &'a Filter,
 	block: EthereumBlock,
 	transaction_statuses: Vec<TransactionStatus>,
+	base_fee: Option<U256>,
 ) -> &'a Vec<Log> {
 	let params = FilteredParams::new(Some(filter.clone()));
 	let mut block_log_index: u32 = 0;
-	let block_hash = H256::from(keccak_256(&rlp::encode(&block.header)));
+	let block_hash = match base_fee {
+		Some(base_fee) => H256::from(Header1559::new_from_header(block.header.clone(), base_fee).hash().0),
+		None => H256::from(keccak_256(&rlp::encode(&block.header))),
+	};
 	for status in transaction_statuses.iter() {
 		let mut transaction_log_index: u32 = 0;
 		let transaction_hash = status.transaction_hash;

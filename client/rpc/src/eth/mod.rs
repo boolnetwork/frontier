@@ -564,7 +564,12 @@ fn rich_block_build(
 ) -> RichBlock {
 	let (hash, miner, nonce, total_difficulty) = if !is_pending {
 		(
-			Some(hash.unwrap_or_else(|| H256::from(keccak_256(&rlp::encode(&block.header))))),
+			Some(hash.unwrap_or_else(|| {
+				match base_fee {
+					Some(base_fee) => H256::from(Header1559::new_from_header(block.header.clone(), base_fee).hash().0),
+					None => H256::from(keccak_256(&rlp::encode(&block.header))),
+				}
+			})),
 			Some(block.header.beneficiary),
 			Some(block.header.nonce),
 			Some(U256::zero()),

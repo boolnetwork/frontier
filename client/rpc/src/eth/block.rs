@@ -30,6 +30,7 @@ use sp_core::hashing::keccak_256;
 use sp_runtime::traits::Block as BlockT;
 // Frontier
 use fc_rpc_core::types::*;
+use fp_ethereum::Header1559;
 use fp_rpc::EthereumRuntimeRPCApi;
 
 use crate::{
@@ -114,7 +115,10 @@ where
 
 				match (block, statuses) {
 					(Some(block), Some(statuses)) => {
-						let hash = H256::from(keccak_256(&rlp::encode(&block.header)));
+						let hash = match base_fee {
+							Some(base_fee) => H256::from(Header1559::new_from_header(block.header.clone(), base_fee).hash().0),
+							None => H256::from(keccak_256(&rlp::encode(&block.header))),
+						};
 						let mut rich_block = rich_block_build(
 							block,
 							statuses.into_iter().map(Option::Some).collect(),
