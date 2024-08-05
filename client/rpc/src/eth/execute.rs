@@ -87,7 +87,7 @@ where
 			max_priority_fee_per_gas,
 			gas,
 			value,
-			data,
+			input,
 			nonce,
 			access_list,
 			..
@@ -168,7 +168,7 @@ where
 			},
 		};
 
-		let data = data.map(|d| d.0).unwrap_or_default();
+		let data = input.try_into_unique_input()?.map(|data| data.0).unwrap_or_default();
 		match to {
 			Some(to) => {
 				if api_version == 1 {
@@ -442,9 +442,9 @@ where
 		let request = EC::EstimateGasAdapter::adapt_request(request);
 
 		// For simple transfer to simple account, return MIN_GAS_PER_TX directly
-		let is_simple_transfer = match &request.data {
+		let is_simple_transfer = match &request.input.unique_input()? {
 			None => true,
-			Some(vec) => vec.0.is_empty(),
+			Some(vec) => vec.0.is_empty()
 		};
 		if is_simple_transfer {
 			if let Some(to) = request.to {
@@ -556,7 +556,7 @@ where
 					to,
 					gas,
 					value,
-					data,
+					input,
 					nonce,
 					access_list,
 					..
@@ -565,7 +565,7 @@ where
 				// Use request gas limit only if it less than gas_limit parameter
 				let gas_limit = core::cmp::min(gas.unwrap_or(gas_limit), gas_limit);
 
-				let data = data.map(|d| d.0).unwrap_or_default();
+				let data = input.try_into_unique_input()?.map(|data| data.0).unwrap_or_default();
 
 				let (exit_reason, data, used_gas) = match to {
 					Some(to) => {

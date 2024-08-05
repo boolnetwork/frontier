@@ -21,6 +21,7 @@ use std::collections::BTreeMap;
 use ethereum::AccessListItem;
 use ethereum_types::{H160, H256, U256};
 use serde::Deserialize;
+use jsonrpsee::types::error::CallError;
 
 use crate::types::Bytes;
 
@@ -44,8 +45,8 @@ pub struct CallRequest {
 	/// Value
 	pub value: Option<U256>,
 	/// Data
-	#[serde(alias = "input")]
-	pub data: Option<Bytes>,
+	#[serde(default, flatten)]
+    pub input: CallInput,
 	/// Nonce
 	pub nonce: Option<U256>,
 	/// AccessList
@@ -73,3 +74,62 @@ pub struct CallStateOverride {
 	/// executing the call.
 	pub state_diff: Option<BTreeMap<H256, H256>>,
 }
+
+
+#[derive(Debug, Clone, Default, Eq, PartialEq, Deserialize)]
+pub struct CallInput {
+    /// Transaction data
+    pub input: Option<Bytes>,
+    /// Transaction data
+    ///
+    /// This is the same as `input` but is used for backwards compatibility: <https://github.com/ethereum/go-ethereum/issues/15628>
+    pub data: Option<Bytes>,
+}
+
+impl CallInput {
+    /// Consumes the type and returns the optional input data.
+    ///
+    /// Returns an error if both `data` and `input` fields are set and not equal.
+    pub fn try_into_unique_input(self) -> Result<Option<Bytes>, CallError> {
+        let Self { input, data } = self;
+        match (input, data) {
+            (Some(input), Some(data)) if input == data => Ok(Some(input)),
+            (Some(_), Some(_)) => Err(CallError::InvalidParams(CallInputError::default().into())),
+            (Some(input), None) => Ok(Some(input)),
+            (None, Some(data)) => Ok(Some(data)),
+            (None, None) => Ok(None),
+        }
+    }
+
+    /// Consumes the type and returns the optional input data.
+    ///
+    /// Returns an error if both `data` and `input` fields are set and not equal.
+    pub fn unique_input(&self) -> Result<Option<&Bytes>, CallError> {
+        let Self { input, data } = self;
+        match (input, data) {
+            (Some(input), Some(data)) if input == data => Ok(Some(input)),
+            (Some(_), Some(_)) => Err(CallError::InvalidParams(CallInputError::default().into())),
+            (Some(input), None) => Ok(Some(input)),
+            (None, Some(data)) => Ok(Some(data)),
+            (None, None) => Ok(None),
+        }
+    }
+}
+
+impl From<Bytes> for CallInput {
+    fn from(input: Bytes) -> Self {
+        Self { input: Some(input), data: None }
+    }
+}
+
+impl From<Option<Bytes>> for CallInput {
+    fn from(input: Option<Bytes>) -> Self {
+        Self { input, data: None }
+    }
+}
+
+#[derive(Debug, Default, thiserror::Error)]
+#[error("both \"data\" and \"input\" are set and not equal. Please use \"input\" to pass transaction call data")]
+#[non_exhaustive]
+pub struct CallInputError;
+

@@ -2448,6 +2448,7 @@ dependencies = [
  "rustc-hex",
  "serde",
  "serde_json",
+ "thiserror",
 ]
 
 [[package]]
