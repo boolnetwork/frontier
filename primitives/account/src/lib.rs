@@ -207,6 +207,12 @@ impl From<MultiSignature> for EthereumSignature {
 	}
 }
 
+impl From<ecdsa::Signature> for EthereumSignature {
+	fn from(sig: ecdsa::Signature) -> Self {
+		EthereumSignature(sig)
+	}
+}
+
 impl EthereumSignature {
 	pub fn new(s: ecdsa::Signature) -> Self {
 		Self(s)
