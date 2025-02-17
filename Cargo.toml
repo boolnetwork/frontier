@@ -172,7 +172,7 @@ substrate-wasm-builder = { git = "https://github.com/boolnetwork/polkadot-sdk", 
 substrate-prometheus-endpoint = { git = "https://github.com/boolnetwork/substrate", branch = "Bool_Polkadot_v0.9.42" }
 
 # XCM
-xcm = { package = "staging-xcm", git = "https://github.com/boolnetwork/polkadot-sdk", branch = "application", default-features = false }
+xcm = { package = "staging-xcm", git = "https://github.com/boolnetwork/polkadot-sdk", branch = "Bool_Polkadot", default-features = false }
 
 # Arkworks
 ark-bls12-377 = { version = "0.4.0", default-features = false, features = ["curve"] }
