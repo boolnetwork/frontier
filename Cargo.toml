@@ -43,6 +43,7 @@ members = [
     "runtime/evm-tracer",
     "template/node",
     "template/runtime",
+    "precompiles",
 ]
 resolver = "2"
 
@@ -83,6 +84,11 @@ sqlx = { version = "0.7.0-alpha.3", default-features = false, features = ["macro
 thiserror = "1.0"
 tokio = "1.13"
 tracing = "0.1.34"
+derive_more = "0.99"
+impl-trait-for-tuples = "0.2.1"
+num_enum = { version = "0.7.0", default-features = false }
+similar-asserts = "1.5.0"
+
 # Substrate Client
 sc-basic-authorship = { version = "0.10.0-dev", git = "https://github.com/boolnetwork/polkadot-sdk", branch = "application" }
 sc-block-builder = { version = "0.10.0-dev", git = "https://github.com/boolnetwork/polkadot-sdk", branch = "application" }
@@ -132,6 +138,8 @@ sp-timestamp = { version = "4.0.0-dev", git = "https://github.com/boolnetwork/po
 sp-transaction-pool = { version = "4.0.0-dev", git = "https://github.com/boolnetwork/polkadot-sdk", branch = "application", default-features = false }
 sp-trie = { version = "7.0.0", git = "https://github.com/boolnetwork/polkadot-sdk", branch = "application", default-features = false }
 sp-version = { version = "5.0.0", git = "https://github.com/boolnetwork/polkadot-sdk", branch = "application", default-features = false }
+sp-weights = { git = "https://github.com/boolnetwork/polkadot-sdk", branch = "application", default-features = false }
+sp-core-hashing = { git = "https://github.com/boolnetwork/polkadot-sdk", branch = "application", default-features = false }
 # Substrate FRAME
 frame-benchmarking = { version = "4.0.0-dev", git = "https://github.com/boolnetwork/polkadot-sdk", branch = "application", default-features = false }
 frame-executive = { version = "4.0.0-dev", git = "https://github.com/boolnetwork/polkadot-sdk", branch = "application", default-features = false }
@@ -207,6 +215,8 @@ pallet-hotfix-sufficients = { version = "1.0.0", path = "frame/hotfix-sufficient
 frontier-template-runtime = { path = "template/runtime", default-features = false }
 # Frontier Utility
 precompile-utils = { path = "precompiles", default-features = false }
+# XCM
+xcm = { package = "staging-xcm", git = "https://github.com/boolnetwork/polkadot-sdk", branch = "Bool_Polkadot", default-features = false }
 # Arkworks
 ark-bls12-377 = { version = "0.4.0", default-features = false, features = ["curve"] }
 ark-bw6-761 = { version = "0.4.0", default-features = false }
