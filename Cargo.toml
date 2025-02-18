@@ -114,48 +114,48 @@ sc-transaction-pool = { version = "4.0.0-dev", git = "https://github.com/boolnet
 sc-transaction-pool-api = { version = "4.0.0-dev", git = "https://github.com/boolnetwork/polkadot-sdk", branch = "application-wasm" }
 sc-utils = { version = "4.0.0-dev", git = "https://github.com/boolnetwork/polkadot-sdk", branch = "application-wasm" }
 # Substrate Primitive
-sp-api = { version = "4.0.0-dev", git = "https://github.com/boolnetwork/polkadot-sdk", branch = "application", default-features = false }
-sp-block-builder = { version = "4.0.0-dev", git = "https://github.com/boolnetwork/polkadot-sdk", branch = "application", default-features = false }
+sp-api = { version = "4.0.0-dev", git = "https://github.com/boolnetwork/polkadot-sdk", branch = "application-wasm", default-features = false }
+sp-block-builder = { version = "4.0.0-dev", git = "https://github.com/boolnetwork/polkadot-sdk", branch = "application-wasm", default-features = false }
 sp-blockchain = { version = "4.0.0-dev", git = "https://github.com/boolnetwork/polkadot-sdk", branch = "application-wasm" }
 sp-consensus = { version = "0.10.0-dev", git = "https://github.com/boolnetwork/polkadot-sdk", branch = "application-wasm" }
-sp-consensus-aura = { version = "0.10.0-dev", git = "https://github.com/boolnetwork/polkadot-sdk", branch = "application", default-features = false }
-sp-consensus-grandpa = { version = "4.0.0-dev", git = "https://github.com/boolnetwork/polkadot-sdk", branch = "application", default-features = false }
-sp-core = { version = "7.0.0", git = "https://github.com/boolnetwork/polkadot-sdk", branch = "application", default-features = false }
+sp-consensus-aura = { version = "0.10.0-dev", git = "https://github.com/boolnetwork/polkadot-sdk", branch = "application-wasm", default-features = false }
+sp-consensus-grandpa = { version = "4.0.0-dev", git = "https://github.com/boolnetwork/polkadot-sdk", branch = "application-wasm", default-features = false }
+sp-core = { version = "7.0.0", git = "https://github.com/boolnetwork/polkadot-sdk", branch = "application-wasm", default-features = false }
 sp-database = { version = "4.0.0-dev", git = "https://github.com/boolnetwork/polkadot-sdk", branch = "application-wasm" }
-sp-externalities = { version = "0.13.0", git = "https://github.com/boolnetwork/polkadot-sdk", branch = "application", default-features = false }
-sp-finality-grandpa = { version = "4.0.0-dev", git = "https://github.com/boolnetwork/polkadot-sdk", branch = "application", default-features = false }
-sp-inherents = { version = "4.0.0-dev", git = "https://github.com/boolnetwork/polkadot-sdk", branch = "application", default-features = false }
-sp-io = { version = "7.0.0", git = "https://github.com/boolnetwork/polkadot-sdk", branch = "application", default-features = false }
+sp-externalities = { version = "0.13.0", git = "https://github.com/boolnetwork/polkadot-sdk", branch = "application-wasm", default-features = false }
+sp-finality-grandpa = { version = "4.0.0-dev", git = "https://github.com/boolnetwork/polkadot-sdk", branch = "application-wasm", default-features = false }
+sp-inherents = { version = "4.0.0-dev", git = "https://github.com/boolnetwork/polkadot-sdk", branch = "application-wasm", default-features = false }
+sp-io = { version = "7.0.0", git = "https://github.com/boolnetwork/polkadot-sdk", branch = "application-wasm", default-features = false }
 sp-keyring = { version = "7.0.0", git = "https://github.com/boolnetwork/polkadot-sdk", branch = "application-wasm" }
-sp-offchain = { version = "4.0.0-dev", git = "https://github.com/boolnetwork/polkadot-sdk", branch = "application", default-features = false }
-sp-runtime = { version = "7.0.0", git = "https://github.com/boolnetwork/polkadot-sdk", branch = "application", default-features = false }
-sp-runtime-interface = { version = "7.0.0", git = "https://github.com/boolnetwork/polkadot-sdk", branch = "application", default-features = false }
-sp-session = { version = "4.0.0-dev", git = "https://github.com/boolnetwork/polkadot-sdk", branch = "application", default-features = false }
-sp-state-machine = { version = "0.13.0", git = "https://github.com/boolnetwork/polkadot-sdk", branch = "application", default-features = false }
-sp-std = { version = "5.0.0", git = "https://github.com/boolnetwork/polkadot-sdk", branch = "application", default-features = false }
-sp-storage = { version = "7.0.0", git = "https://github.com/boolnetwork/polkadot-sdk", branch = "application", default-features = false }
-sp-timestamp = { version = "4.0.0-dev", git = "https://github.com/boolnetwork/polkadot-sdk", branch = "application", default-features = false }
-sp-transaction-pool = { version = "4.0.0-dev", git = "https://github.com/boolnetwork/polkadot-sdk", branch = "application", default-features = false }
-sp-trie = { version = "7.0.0", git = "https://github.com/boolnetwork/polkadot-sdk", branch = "application", default-features = false }
-sp-version = { version = "5.0.0", git = "https://github.com/boolnetwork/polkadot-sdk", branch = "application", default-features = false }
-sp-weights = { git = "https://github.com/boolnetwork/polkadot-sdk", branch = "application", default-features = false }
-sp-core-hashing = { git = "https://github.com/boolnetwork/polkadot-sdk", branch = "application", default-features = false }
+sp-offchain = { version = "4.0.0-dev", git = "https://github.com/boolnetwork/polkadot-sdk", branch = "application-wasm", default-features = false }
+sp-runtime = { version = "7.0.0", git = "https://github.com/boolnetwork/polkadot-sdk", branch = "application-wasm", default-features = false }
+sp-runtime-interface = { version = "7.0.0", git = "https://github.com/boolnetwork/polkadot-sdk", branch = "application-wasm", default-features = false }
+sp-session = { version = "4.0.0-dev", git = "https://github.com/boolnetwork/polkadot-sdk", branch = "application-wasm", default-features = false }
+sp-state-machine = { version = "0.13.0", git = "https://github.com/boolnetwork/polkadot-sdk", branch = "application-wasm", default-features = false }
+sp-std = { version = "5.0.0", git = "https://github.com/boolnetwork/polkadot-sdk", branch = "application-wasm", default-features = false }
+sp-storage = { version = "7.0.0", git = "https://github.com/boolnetwork/polkadot-sdk", branch = "application-wasm", default-features = false }
+sp-timestamp = { version = "4.0.0-dev", git = "https://github.com/boolnetwork/polkadot-sdk", branch = "application-wasm", default-features = false }
+sp-transaction-pool = { version = "4.0.0-dev", git = "https://github.com/boolnetwork/polkadot-sdk", branch = "application-wasm", default-features = false }
+sp-trie = { version = "7.0.0", git = "https://github.com/boolnetwork/polkadot-sdk", branch = "application-wasm", default-features = false }
+sp-version = { version = "5.0.0", git = "https://github.com/boolnetwork/polkadot-sdk", branch = "application-wasm", default-features = false }
+sp-weights = { git = "https://github.com/boolnetwork/polkadot-sdk", branch = "application-wasm", default-features = false }
+sp-core-hashing = { git = "https://github.com/boolnetwork/polkadot-sdk", branch = "application-wasm", default-features = false }
 # Substrate FRAME
-frame-benchmarking = { version = "4.0.0-dev", git = "https://github.com/boolnetwork/polkadot-sdk", branch = "application", default-features = false }
-frame-executive = { version = "4.0.0-dev", git = "https://github.com/boolnetwork/polkadot-sdk", branch = "application", default-features = false }
-frame-support = { version = "4.0.0-dev", git = "https://github.com/boolnetwork/polkadot-sdk", branch = "application", default-features = false }
-frame-system = { version = "4.0.0-dev", git = "https://github.com/boolnetwork/polkadot-sdk", branch = "application", default-features = false }
-frame-system-benchmarking = { version = "4.0.0-dev", git = "https://github.com/boolnetwork/polkadot-sdk", branch = "application", default-features = false }
-frame-system-rpc-runtime-api = { version = "4.0.0-dev", git = "https://github.com/boolnetwork/polkadot-sdk", branch = "application", default-features = false }
-pallet-aura = { version = "4.0.0-dev", git = "https://github.com/boolnetwork/polkadot-sdk", branch = "application", default-features = false }
-pallet-balances = { version = "4.0.0-dev", git = "https://github.com/boolnetwork/polkadot-sdk", branch = "application", default-features = false }
-pallet-grandpa = { version = "4.0.0-dev", git = "https://github.com/boolnetwork/polkadot-sdk", branch = "application", default-features = false }
-pallet-sudo = { version = "4.0.0-dev", git = "https://github.com/boolnetwork/polkadot-sdk", branch = "application", default-features = false }
-pallet-timestamp = { version = "4.0.0-dev", git = "https://github.com/boolnetwork/polkadot-sdk", branch = "application", default-features = false }
-pallet-transaction-payment = { version = "4.0.0-dev", git = "https://github.com/boolnetwork/polkadot-sdk", branch = "application", default-features = false }
+frame-benchmarking = { version = "4.0.0-dev", git = "https://github.com/boolnetwork/polkadot-sdk", branch = "application-wasm", default-features = false }
+frame-executive = { version = "4.0.0-dev", git = "https://github.com/boolnetwork/polkadot-sdk", branch = "application-wasm", default-features = false }
+frame-support = { version = "4.0.0-dev", git = "https://github.com/boolnetwork/polkadot-sdk", branch = "application-wasm", default-features = false }
+frame-system = { version = "4.0.0-dev", git = "https://github.com/boolnetwork/polkadot-sdk", branch = "application-wasm", default-features = false }
+frame-system-benchmarking = { version = "4.0.0-dev", git = "https://github.com/boolnetwork/polkadot-sdk", branch = "application-wasm", default-features = false }
+frame-system-rpc-runtime-api = { version = "4.0.0-dev", git = "https://github.com/boolnetwork/polkadot-sdk", branch = "application-wasm", default-features = false }
+pallet-aura = { version = "4.0.0-dev", git = "https://github.com/boolnetwork/polkadot-sdk", branch = "application-wasm", default-features = false }
+pallet-balances = { version = "4.0.0-dev", git = "https://github.com/boolnetwork/polkadot-sdk", branch = "application-wasm", default-features = false }
+pallet-grandpa = { version = "4.0.0-dev", git = "https://github.com/boolnetwork/polkadot-sdk", branch = "application-wasm", default-features = false }
+pallet-sudo = { version = "4.0.0-dev", git = "https://github.com/boolnetwork/polkadot-sdk", branch = "application-wasm", default-features = false }
+pallet-timestamp = { version = "4.0.0-dev", git = "https://github.com/boolnetwork/polkadot-sdk", branch = "application-wasm", default-features = false }
+pallet-transaction-payment = { version = "4.0.0-dev", git = "https://github.com/boolnetwork/polkadot-sdk", branch = "application-wasm", default-features = false }
 pallet-transaction-payment-rpc = { version = "4.0.0-dev", git = "https://github.com/boolnetwork/polkadot-sdk", branch = "application-wasm" }
-pallet-transaction-payment-rpc-runtime-api = { version = "4.0.0-dev", git = "https://github.com/boolnetwork/polkadot-sdk", branch = "application", default-features = false }
-pallet-utility = { version = "4.0.0-dev", git = "https://github.com/boolnetwork/polkadot-sdk", branch = "application", default-features = false }
+pallet-transaction-payment-rpc-runtime-api = { version = "4.0.0-dev", git = "https://github.com/boolnetwork/polkadot-sdk", branch = "application-wasm", default-features = false }
+pallet-utility = { version = "4.0.0-dev", git = "https://github.com/boolnetwork/polkadot-sdk", branch = "application-wasm", default-features = false }
 parity-scale-codec = { version = "3.2.2", default-features = false, features = [
     "derive",
 ] }
