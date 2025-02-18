@@ -241,7 +241,7 @@ pub mod pallet {
 					Self::validate_transaction_in_block(source, &transaction).expect(
 						"pre-block transaction verification failed; the block cannot be built",
 					);
-					let r = Self::apply_validated_transaction(source, transaction)
+					let r = Self::apply_validated_transaction(source, transaction, false)
 						.expect("pre-block apply transaction failed; the block cannot be built");
 
 					weight = weight.saturating_add(r.actual_weight.unwrap_or_default());
@@ -290,7 +290,7 @@ pub mod pallet {
 				"pre log already exists; block is invalid",
 			);
 
-			Self::apply_validated_transaction(source, transaction)
+			Self::apply_validated_transaction(source, transaction, false)
 		}
 	}
 
@@ -555,9 +555,10 @@ impl<T: Config> Pallet<T> {
 		builder.build()
 	}
 
-	fn apply_validated_transaction(
+	pub fn apply_validated_transaction(
 		source: H160,
 		transaction: Transaction,
+		return_err: bool,
 	) -> DispatchResultWithPostInfo {
 		let (to, _, info) = Self::execute(source, &transaction, None)?;
 
@@ -676,11 +677,10 @@ impl<T: Config> Pallet<T> {
 			from: source,
 			to: dest.unwrap_or_default(),
 			transaction_hash,
-			exit_reason: reason,
+			exit_reason: reason.clone(),
 			extra_data,
 		});
-
-		Ok(PostDispatchInfo {
+		let dispatch_info = PostDispatchInfo {
 			actual_weight: {
 				let mut gas_to_weight = T::GasWeightMapping::gas_to_weight(
 					sp_std::cmp::max(
@@ -697,7 +697,19 @@ impl<T: Config> Pallet<T> {
 				Some(gas_to_weight)
 			},
 			pays_fee: Pays::No,
-		})
+		};
+		if return_err {
+			if let ExitReason::Succeed(_) = reason {
+				Ok(dispatch_info)
+			} else {
+				Err(DispatchErrorWithPostInfo {
+					post_info: dispatch_info,
+					error: sp_runtime::DispatchError::Corruption,
+				})
+			}
+		} else {
+			Ok(dispatch_info)
+		}
 	}
 
 	/// Get current block hash
@@ -967,7 +979,7 @@ impl<T: Config> Pallet<T> {
 pub struct ValidatedTransaction<T>(PhantomData<T>);
 impl<T: Config> ValidatedTransactionT for ValidatedTransaction<T> {
 	fn apply(source: H160, transaction: Transaction) -> DispatchResultWithPostInfo {
-		Pallet::<T>::apply_validated_transaction(source, transaction)
+		Pallet::<T>::apply_validated_transaction(source, transaction, false)
 	}
 }
 
