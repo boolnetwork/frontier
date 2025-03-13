@@ -308,9 +308,10 @@ pub mod pallet {
 			}, without_base_extrinsic_weight)
 		})]
 		pub fn transact_unsigned(
-			_origin: OriginFor<T>,
+			origin: OriginFor<T>,
 			transaction: Transaction,
 		) -> DispatchResultWithPostInfo {
+			ensure_none(origin)?;
 			// Disable transact functionality if PreLog exist.
 			assert!(
 				fp_consensus::find_pre_log(&frame_system::Pallet::<T>::digest()).is_err(),
