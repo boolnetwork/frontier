@@ -183,7 +183,7 @@ impl super::ResponseFormatter for Formatter {
 							.position(|current| match (last.clone(), current) {
 								(
 									Call::CallTracer(CallTracerCall {
-										trace_address: Some(a),
+										trace_address: Some(mut a),
 										..
 									}),
 									Call::CallTracer(CallTracerCall {
@@ -191,10 +191,12 @@ impl super::ResponseFormatter for Formatter {
 										..
 									}),
 								) => {
-									&b[..]
-										== a.get(0..a.len() - 1).expect(
+									if !a.is_empty() {
+										a = a.get(0..a.len() - 1).expect(
 											"non-root element while traversing trace result",
-										)
+										).to_vec();
+									}
+									&b[..] == a
 								}
 								_ => unreachable!(),
 							}) {
