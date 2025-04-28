@@ -1215,18 +1215,6 @@ impl fmt::LowerHex for I256 {
     }
 }
 
-impl fmt::UpperHex for I256 {
-    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        let (sign, abs) = self.into_sign_and_abs();
-        fmt::Display::fmt(&sign, f)?;
-
-        // NOTE: Work around `U256: !UpperHex`.
-        let mut buffer = format!("{abs:x}");
-        buffer.make_ascii_uppercase();
-        f.write_str(&buffer)
-    }
-}
-
 // cmp
 impl cmp::PartialOrd for I256 {
     #[inline(always)]
