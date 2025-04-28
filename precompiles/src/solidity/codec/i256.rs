@@ -5,12 +5,10 @@
 #![warn(clippy::missing_const_for_fn)]
 
 use sp_core::U256;
-use serde::{Deserialize, Serialize};
 use std::{
     cmp,
     fmt::{self, Write},
     iter, ops,
-    str::FromStr,
 };
 use thiserror::Error;
 
@@ -78,8 +76,7 @@ impl Sign {
 /// (e.g. `i8`, `i16` etc). On standard types if the number is negative right shift will perform
 /// an arithmetic shift, whereas on I256 this will perform a bit-wise shift.
 /// Arithmetic shift on I256 is done via the [asr](I256::asr) and [asl](I256::asl) functions.
-#[derive(Clone, Copy, Default, PartialEq, Eq, Hash, Serialize, Deserialize)]
-#[serde(transparent)]
+#[derive(Clone, Copy, Default, PartialEq, Eq, Hash)]
 pub struct I256(U256);
 
 impl I256 {
