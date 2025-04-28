@@ -5,16 +5,14 @@
 #![warn(clippy::missing_const_for_fn)]
 
 use sp_core::U256;
-use std::{
+use sp_std::{
     cmp,
     fmt::{self, Write},
     iter, ops,
 };
-use thiserror::Error;
 
 /// The error type that is returned when conversion to or from a 256-bit integer fails.
-#[derive(Clone, Copy, Debug, Error)]
-#[error("output of range integer conversion attempted")]
+#[derive(Clone, Copy, Debug)]
 pub struct TryFromBigIntError;
 
 /// Enum to represent the sign of a 256-bit signed integer.

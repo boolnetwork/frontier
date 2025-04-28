@@ -16,7 +16,6 @@ num_enum = { workspace = true }
 scale-info = { workspace = true, optional = true, features = ["derive"] }
 serde = { workspace = true, optional = true }
 similar-asserts = { workspace = true, optional = true }
-thiserror = "1.0"
 
 # Moonbeam
 precompile-utils-macro = { path = "macro" }
