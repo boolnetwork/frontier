@@ -21,6 +21,7 @@ use super::*;
 use crate::solidity::revert::InjectBacktrace;
 use impl_trait_for_tuples::impl_for_tuples;
 use sp_core::{ConstU32, Get, H160};
+use crate::solidity::codec::i256::I256;
 
 impl Codec for () {
 	fn read(_reader: &mut Reader) -> MayRevert<Self> {
@@ -38,7 +39,7 @@ impl Codec for () {
 	}
 }
 
-#[impl_for_tuples(1, 18)]
+#[impl_for_tuples(1, 30)]
 impl Codec for Tuple {
 	fn has_static_size() -> bool {
 		for_tuples!(#( Tuple::has_static_size() )&*)
@@ -224,6 +225,45 @@ macro_rules! impl_evmdata_for_uints {
 }
 
 impl_evmdata_for_uints!(u8, u16, u32, u64, u128,);
+
+macro_rules! impl_evmdata_for_ints {
+	($($int:ty, )*) => {
+		$(
+			impl Codec for $int {
+				fn read(reader: &mut Reader) -> MayRevert<Self> {
+					let value256: U256 = reader.read()
+					.map_err(|_| RevertReason::read_out_of_bounds(
+						Self::signature()
+					))?;
+					let mut bytes = Vec::new();
+					value256.to_little_endian(&mut bytes);
+					let eth_u256 = U256::from_little_endian(&bytes);
+					let signed_value256: I256 = I256::from_raw(eth_u256);
+					signed_value256
+						.try_into()
+						.map_err(|_| RevertReason::value_is_too_large(
+							Self::signature()
+						).into())
+				}
+
+				fn write(writer: &mut Writer, value: Self) {
+					let value = I256::from(value).into_raw();
+					U256::write(writer, value);
+				}
+
+				fn has_static_size() -> bool {
+					true
+				}
+
+				fn signature() -> String {
+					alloc::format!("int{}", core::mem::size_of::<Self>() * 8)
+				}
+			}
+		)*
+	};
+}
+
+impl_evmdata_for_ints!(i8, i16, i32, i64, i128,);
 
 impl Codec for bool {
 	fn read(reader: &mut Reader) -> MayRevert<Self> {

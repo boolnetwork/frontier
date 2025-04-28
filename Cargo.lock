@@ -6589,6 +6589,7 @@ dependencies = [
  "sp-std 5.0.0",
  "sp-weights 4.0.0",
  "staging-xcm",
+ "thiserror",
 ]
 
 [[package]]

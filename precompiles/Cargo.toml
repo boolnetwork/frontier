@@ -16,6 +16,7 @@ num_enum = { workspace = true }
 scale-info = { workspace = true, optional = true, features = ["derive"] }
 serde = { workspace = true, optional = true }
 similar-asserts = { workspace = true, optional = true }
+thiserror = "1.0"
 
 # Moonbeam
 precompile-utils-macro = { path = "macro" }
@@ -55,6 +56,7 @@ std = [
 	"sp-io/std",
 	"sp-std/std",
 	"xcm?/std",
+	"serde",
 ]
 codec-xcm = ["xcm"]
 testing = ["derive_more", "hex-literal", "scale-info", "serde", "similar-asserts", "std"]

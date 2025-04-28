@@ -25,6 +25,7 @@ pub mod native;
 
 #[cfg(any(feature = "codec-xcm", test))]
 pub mod xcm;
+pub mod i256;
 
 use crate::solidity::revert::{MayRevert, RevertReason};
 use core::{marker::PhantomData, ops::Range};
