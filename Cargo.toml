@@ -38,6 +38,16 @@ members = [
 	"precompiles",
 	"precompiles/macro",
 	"precompiles/tests-external",
+	"client/advance/evm-tracing",
+    "client/advance/rpc-core/types",
+    "client/advance/rpc-core/trace",
+    "client/advance/rpc-core/debug",
+    "client/advance/rpc/debug",
+    "client/advance/rpc/trace",
+	"primitives/advance/ext",
+    "primitives/advance/rpc/evm-tracing-events",
+    "primitives/advance/rpc/debug",
+    "primitives/advance/rpc/txpool",
 ]
 resolver = "2"
 
@@ -53,10 +63,12 @@ clap = { version = "4.5", features = ["derive", "deprecated"] }
 const-hex = { version = "1.14", default-features = false, features = ["alloc"] }
 derive_more = "1.0"
 environmental = { version = "1.1.4", default-features = false }
-ethereum = { version = "0.15.0", default-features = false }
+ethereum = { version = "0.15.0", default-features = false, features = ["with-codec"]}
 ethereum-types = { version = "0.14.1", default-features = false }
-evm = { version = "0.42.0", default-features = false }
-futures = "0.3.31"
+evm = { version = "0.42", default-features = false }
+evm-gasometer = { version = "0.42", default-features = false }
+evm-runtime = { version = "0.42", default-features = false }
+futures = "0.3.30"
 hash-db = { version = "0.16.0", default-features = false }
 hex = { version = "0.4.3", default-features = false, features = ["alloc"] }
 hex-literal = "0.4.1"
@@ -79,7 +91,9 @@ serde_json = "1.0"
 similar-asserts = "1.6.0"
 sqlx = { version = "0.7.4", default-features = false, features = ["macros"] }
 thiserror = "1.0"
-tokio = "1.43.0"
+tokio = "1.40.0"
+sha3 = "0.10"
+tracing = "0.1.34"
 
 # Substrate Client
 sc-basic-authorship = { git = "https://github.com/paritytech/polkadot-sdk", branch = "stable2409" }
@@ -178,6 +192,15 @@ fc-rpc-v2 = { path = "client/rpc-v2" }
 fc-rpc-v2-api = { path = "client/rpc-v2/api" }
 fc-rpc-v2-types = { path = "client/rpc-v2/types" }
 fc-storage = { path = "client/storage" }
+# Frontier Advance Client
+fc-evm-tracing = { version = "0.1.0", path = "client/advance/evm-tracing" }
+fc-rpc-core-debug = { version = "0.1.0", path = "client/advance/rpc-core/debug" }
+fc-rpc-core-trace = { version = "0.6.0", path = "client/advance/rpc-core/trace" }
+fc-rpc-core-txpool = { version = "0.6.0", path = "client/advance/rpc-core/txpool" }
+fc-rpc-core-types = { version = "0.1.0", path = "client/advance/rpc-core/types" }
+fc-rpc-debug = { version = "0.1.0", path = "client/advance/rpc/debug" }
+fc-rpc-trace = { version = "0.1.0", path = "client/advance/rpc/trace" }
+fc-rpc-txpool = { version = "0.1.0", path = "client/advance/rpc/txpool" }
 # Frontier Primitive
 fp-account = { path = "primitives/account", default-features = false }
 fp-consensus = { path = "primitives/consensus", default-features = false }
@@ -187,6 +210,11 @@ fp-evm = { path = "primitives/evm", default-features = false }
 fp-rpc = { path = "primitives/rpc", default-features = false }
 fp-self-contained = { path = "primitives/self-contained", default-features = false }
 fp-storage = { path = "primitives/storage", default-features = false }
+# Frontier Advance Primitive
+fp-ext = { version = "0.1.0", path = "primitives/advance/ext", default-features = false }
+fp-rpc-debug = { version = "0.1.0", path = "primitives/advance/rpc/debug", default-features = false }
+fp-rpc-evm-tracing-events = { version = "0.1.0", path = "primitives/advance/rpc/evm-tracing-events", default-features = false }
+fp-rpc-txpool = { version = "0.6.0", path = "primitives/advance/rpc/txpool", default-features = false }
 # Frontier FRAME
 pallet-base-fee = { path = "frame/base-fee", default-features = false }
 pallet-dynamic-fee = { path = "frame/dynamic-fee", default-features = false }
