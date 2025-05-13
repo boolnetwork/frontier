@@ -241,7 +241,7 @@ pub mod pallet {
 					Self::validate_transaction_in_block(source, &transaction).expect(
 						"pre-block transaction verification failed; the block cannot be built",
 					);
-					let r = Self::apply_validated_transaction(source, transaction, false)
+					let r = Self::apply_validated_transaction(source.clone(), source, transaction, false)
 						.expect("pre-block apply transaction failed; the block cannot be built");
 
 					weight = weight.saturating_add(r.actual_weight.unwrap_or_default());
@@ -290,7 +290,7 @@ pub mod pallet {
 				"pre log already exists; block is invalid",
 			);
 
-			Self::apply_validated_transaction(source, transaction, false)
+			Self::apply_validated_transaction(source.clone(), source, transaction, false)
 		}
 	}
 
@@ -557,10 +557,11 @@ impl<T: Config> Pallet<T> {
 
 	pub fn apply_validated_transaction(
 		source: H160,
+		fee_source: H160,
 		transaction: Transaction,
 		return_err: bool,
 	) -> DispatchResultWithPostInfo {
-		let (to, _, info) = Self::execute(source, &transaction, None)?;
+		let (to, _, info) = Self::execute(source, fee_source, &transaction, None)?;
 
 		let pending = Pending::<T>::get();
 		let transaction_hash = transaction.hash();
@@ -720,6 +721,7 @@ impl<T: Config> Pallet<T> {
 	/// Execute an Ethereum transaction.
 	pub fn execute(
 		from: H160,
+		fee_source: H160,
 		transaction: &Transaction,
 		config: Option<evm::Config>,
 	) -> Result<
@@ -804,6 +806,7 @@ impl<T: Config> Pallet<T> {
 			ethereum::TransactionAction::Call(target) => {
 				let res = match T::Runner::call(
 					from,
+					fee_source,
 					target,
 					input,
 					value,
@@ -979,7 +982,7 @@ impl<T: Config> Pallet<T> {
 pub struct ValidatedTransaction<T>(PhantomData<T>);
 impl<T: Config> ValidatedTransactionT for ValidatedTransaction<T> {
 	fn apply(source: H160, transaction: Transaction) -> DispatchResultWithPostInfo {
-		Pallet::<T>::apply_validated_transaction(source, transaction, false)
+		Pallet::<T>::apply_validated_transaction(source.clone(), source, transaction, false)
 	}
 }
 

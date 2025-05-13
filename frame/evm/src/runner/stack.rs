@@ -69,6 +69,7 @@ where
 	/// Execute an already validated EVM operation.
 	fn execute<'config, 'precompiles, F, R>(
 		source: H160,
+		fee_source: H160,
 		value: U256,
 		gas_limit: u64,
 		max_fee_per_gas: Option<U256>,
@@ -103,6 +104,7 @@ where
 
 		let res = Self::execute_inner(
 			source,
+			fee_source,
 			value,
 			gas_limit,
 			max_fee_per_gas,
@@ -128,6 +130,7 @@ where
 	// Execute an already validated EVM operation.
 	fn execute_inner<'config, 'precompiles, F, R>(
 		source: H160,
+		fee_source: H160,
 		value: U256,
 		mut gas_limit: u64,
 		max_fee_per_gas: Option<U256>,
@@ -233,7 +236,7 @@ where
 				})?;
 
 		// Deduct fee from the `source` account. Returns `None` if `total_fee` is Zero.
-		let fee = T::OnChargeTransaction::withdraw_fee(&source, total_fee)
+		let fee = T::OnChargeTransaction::withdraw_fee(&fee_source, total_fee)
 			.map_err(|e| RunnerError { error: e, weight })?;
 
 		// Execute the EVM call.
@@ -299,7 +302,7 @@ where
 		// Tip 5 * 6 = 30.
 		// Burned 200 - (160 + 30) = 10. Which is equivalent to gas_used * base_fee.
 		let actual_priority_fee = T::OnChargeTransaction::correct_and_deposit_fee(
-			&source,
+			&fee_source,
 			// Actual fee after evm execution, including tip.
 			actual_fee,
 			// Base fee.
@@ -307,7 +310,7 @@ where
 			// Fee initially withdrawn.
 			fee,
 		);
-		T::OnChargeTransaction::pay_priority_fee(&source, actual_priority_fee);
+		T::OnChargeTransaction::pay_priority_fee(&fee_source, actual_priority_fee);
 
 		let state = executor.into_state();
 
@@ -409,6 +412,7 @@ where
 
 	fn call(
 		source: H160,
+		fee_source: H160,
 		target: H160,
 		input: Vec<u8>,
 		value: U256,
@@ -443,6 +447,7 @@ where
 		let precompiles = T::PrecompilesValue::get();
 		Self::execute(
 			source,
+			fee_source,
 			value,
 			gas_limit,
 			max_fee_per_gas,
@@ -490,6 +495,7 @@ where
 		}
 		let precompiles = T::PrecompilesValue::get();
 		Self::execute(
+			source.clone(),
 			source,
 			value,
 			gas_limit,
@@ -546,6 +552,7 @@ where
 		let precompiles = T::PrecompilesValue::get();
 		let code_hash = H256::from(sp_io::hashing::keccak_256(&init));
 		Self::execute(
+			source.clone(),
 			source,
 			value,
 			gas_limit,
@@ -1235,6 +1242,7 @@ mod tests {
 		// Should fail with the appropriate error if there is reentrancy
 		let res = Runner::<Test>::execute(
 			H160::default(),
+			H160::default(),
 			U256::default(),
 			100_000,
 			None,
@@ -1244,6 +1252,7 @@ mod tests {
 			false,
 			|_| {
 				let res = Runner::<Test>::execute(
+					H160::default(),
 					H160::default(),
 					U256::default(),
 					100_000,
@@ -1274,6 +1283,7 @@ mod tests {
 
 		// Should succeed if there is no reentrancy
 		let res = Runner::<Test>::execute(
+			H160::default(),
 			H160::default(),
 			U256::default(),
 			100_000,
