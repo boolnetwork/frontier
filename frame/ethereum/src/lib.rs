@@ -633,6 +633,7 @@ impl<T: Config> Pallet<T> {
 				Vec::new(),
 			),
 		};
+		log::error!("executed reasom: {reason:?}");
 
 		let receipt = {
 			let status_code: u8 = match reason {
@@ -699,6 +700,7 @@ impl<T: Config> Pallet<T> {
 			},
 			pays_fee: Pays::No,
 		};
+
 		if return_err {
 			if let ExitReason::Succeed(_) = reason {
 				Ok(dispatch_info)

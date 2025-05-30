@@ -29,6 +29,7 @@ fp-evm = { workspace = true }
 fp-rpc = { workspace = true }
 fp-storage = { workspace = true }
 pallet-evm = { workspace = true }
+log = { version = "0.4", default-features = false }
 
 [dev-dependencies]
 hex = { workspace = true }
