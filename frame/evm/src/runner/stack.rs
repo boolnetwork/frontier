@@ -94,13 +94,13 @@ where
 	{
 		let (base_fee, weight) = T::FeeCalculator::min_gas_price();
 
-		#[cfg(feature = "forbid-evm-reentrancy")]
-		if IN_EVM.with(|in_evm| in_evm.replace(true)) {
-			return Err(RunnerError {
-				error: Error::<T>::Reentrancy,
-				weight,
-			});
-		}
+		// #[cfg(feature = "forbid-evm-reentrancy")]
+		// if IN_EVM.with(|in_evm| in_evm.replace(true)) {
+		// 	return Err(RunnerError {
+		// 		error: Error::<T>::Reentrancy,
+		// 		weight,
+		// 	});
+		// }
 
 		let res = Self::execute_inner(
 			source,
