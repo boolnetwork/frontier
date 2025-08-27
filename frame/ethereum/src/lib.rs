@@ -233,6 +233,8 @@ pub mod pallet {
 			if let Ok(log) = fp_consensus::find_pre_log(&frame_system::Pallet::<T>::digest()) {
 				let PreLog::Block(block) = log;
 
+				log::info!("*******block transactions length: {:?}", block.transactions.len());
+
 				for transaction in block.transactions {
 					let source = Self::recover_signer(&transaction).expect(
 						"pre-block transaction signature invalid; the block cannot be built",
@@ -248,10 +250,11 @@ pub mod pallet {
 				}
 			}
 			// Account for `on_finalize` weight:
-			//	- read: frame_system::Pallet::<T>::digest()
-			//	- read: frame_system::Pallet::<T>::block_number()
+			// 			//	- read: frame_system::Pallet::<T>::digest()
+			// 			//	- read: frame_system::Pallet::<T>::block_number()
 			//	- write: <Pallet<T>>::store_block()
 			//	- write: <BlockHash<T>>::remove()
+
 			weight.saturating_add(T::DbWeight::get().reads_writes(2, 2))
 		}
 
@@ -398,6 +401,9 @@ impl<T: Config> Pallet<T> {
 	}
 
 	fn store_block(post_log: Option<PostLogContent>, block_number: U256) {
+		#[cfg(feature = "std")]
+		let timer = std::time::Instant::now();
+
 		let mut transactions = Vec::new();
 		let mut statuses = Vec::new();
 		let mut receipts = Vec::new();
@@ -440,7 +446,7 @@ impl<T: Config> Pallet<T> {
 			nonce: H64::default(),
 		};
 		let block = ethereum::Block::new(partial_header, transactions.clone(), ommers);
-
+		log::warn!("*******store block for height: {:?}, block: {:?}", block_number, block);
 		CurrentBlock::<T>::put(block.clone());
 		CurrentReceipts::<T>::put(receipts.clone());
 		CurrentTransactionStatuses::<T>::put(statuses.clone());
@@ -463,6 +469,9 @@ impl<T: Config> Pallet<T> {
 			}
 			None => { /* do nothing*/ }
 		}
+
+		#[cfg(feature = "std")]
+		log::info!("time to store evm block: {:?}", timer.elapsed().as_micros());
 	}
 
 	fn logs_bloom(logs: Vec<Log>, bloom: &mut Bloom) {
@@ -633,7 +642,7 @@ impl<T: Config> Pallet<T> {
 				Vec::new(),
 			),
 		};
-		log::error!("executed reason: {reason:?}, extra_data: {extra_data:?}");
+		log::info!("executed reason: {reason:?}, extra_data: {extra_data:?}");
 
 		let receipt = {
 			let status_code: u8 = match reason {
@@ -998,6 +1007,10 @@ pub struct IntermediateStateRoot<T>(PhantomData<T>);
 impl<T: Config> Get<H256> for IntermediateStateRoot<T> {
 	fn get() -> H256 {
 		let version = T::Version::get().state_version();
+		log::info!("******IntermediateStateRoot version: {:?}", version);
+		let root = sp_io::storage::root(version).to_vec();
+		log::info!("******root: {:?}", root);
+
 		H256::decode(&mut &sp_io::storage::root(version)[..])
 			.expect("Node is configured to use the same hash; qed")
 	}
