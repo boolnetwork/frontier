@@ -402,14 +402,17 @@ impl<T: Config> Pallet<T> {
 
 	fn store_block(post_log: Option<PostLogContent>, block_number: U256) {
 		#[cfg(feature = "std")]
-		let timer = std::time::Instant::now();
-
-		let mut transactions = Vec::new();
-		let mut statuses = Vec::new();
-		let mut receipts = Vec::new();
+		let total_timer = std::time::Instant::now();
+		#[cfg(feature = "std")]
+		let tx_timer = std::time::Instant::now();
+		let pending_transactions = Pending::<T>::take();
+		let mut transactions = Vec::with_capacity(pending_transactions.len());
+		let mut statuses = Vec::with_capacity(pending_transactions.len());
+		let mut receipts = Vec::with_capacity(pending_transactions.len());
 		let mut logs_bloom = Bloom::default();
 		let mut cumulative_gas_used = U256::zero();
-		for (transaction, status, receipt) in Pending::<T>::get() {
+		for transaction in pending_transactions {
+			let (transaction, status, receipt) = transaction;
 			transactions.push(transaction);
 			statuses.push(status);
 			receipts.push(receipt.clone());
@@ -422,10 +425,23 @@ impl<T: Config> Pallet<T> {
 			Self::logs_bloom(logs, &mut logs_bloom);
 		}
 
+		#[cfg(feature = "std")]
+		let tx_time = tx_timer.elapsed().as_micros();
+
 		let ommers = Vec::<ethereum::Header>::new();
+		#[cfg(feature = "std")]
+		let receipts_root_timer = std::time::Instant::now();
+
 		let receipts_root = ethereum::util::ordered_trie_root(
 			receipts.iter().map(ethereum::EnvelopedEncodable::encode),
 		);
+
+		#[cfg(feature = "std")]
+		let receipts_root_time = receipts_root_timer.elapsed().as_micros();
+
+		#[cfg(feature = "std")]
+		let partial_header_timer = std::time::Instant::now();
+
 		let partial_header = ethereum::PartialHeader {
 			parent_hash: if block_number > U256::zero() {
 				BlockHash::<T>::get(block_number - 1)
@@ -445,8 +461,15 @@ impl<T: Config> Pallet<T> {
 			mix_hash: H256::default(),
 			nonce: H64::default(),
 		};
+
+		#[cfg(feature = "std")]
+		let partial_header_time = partial_header_timer.elapsed().as_micros();
+
+		#[cfg(feature = "std")]
+		let block_timer = std::time::Instant::now();
 		let block = ethereum::Block::new(partial_header, transactions.clone(), ommers);
-		log::warn!("*******store block for height: {:?}, block: {:?}", block_number, block);
+		#[cfg(feature = "std")]
+		let block_time = block_timer.elapsed().as_micros();
 		CurrentBlock::<T>::put(block.clone());
 		CurrentReceipts::<T>::put(receipts.clone());
 		CurrentTransactionStatuses::<T>::put(statuses.clone());
@@ -471,7 +494,7 @@ impl<T: Config> Pallet<T> {
 		}
 
 		#[cfg(feature = "std")]
-		log::info!("time to store evm block: {:?}", timer.elapsed().as_micros());
+		log::info!("time to store evm block: {:?}, tx time: {tx_time:?}, receipts_root_time: {receipts_root_time:?}, partial_header_time: {partial_header_time:?}, block_time: {block_time:?}", total_timer.elapsed().as_micros());
 	}
 
 	fn logs_bloom(logs: Vec<Log>, bloom: &mut Bloom) {
@@ -1007,10 +1030,6 @@ pub struct IntermediateStateRoot<T>(PhantomData<T>);
 impl<T: Config> Get<H256> for IntermediateStateRoot<T> {
 	fn get() -> H256 {
 		let version = T::Version::get().state_version();
-		log::info!("******IntermediateStateRoot version: {:?}", version);
-		let root = sp_io::storage::root(version).to_vec();
-		log::info!("******root: {:?}", root);
-
 		H256::decode(&mut &sp_io::storage::root(version)[..])
 			.expect("Node is configured to use the same hash; qed")
 	}
