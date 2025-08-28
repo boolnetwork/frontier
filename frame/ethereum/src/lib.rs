@@ -664,7 +664,7 @@ impl<T: Config> Pallet<T> {
 				Vec::new(),
 			),
 		};
-		log::info!("executed reason: {reason:?}, extra_data: {extra_data:?}");
+		log::debug!("executed reason: {reason:?}, extra_data: {extra_data:?}");
 
 		let receipt = {
 			let status_code: u8 = match reason {
