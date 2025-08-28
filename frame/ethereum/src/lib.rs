@@ -58,7 +58,6 @@ use sp_runtime::{
 	DispatchErrorWithPostInfo, RuntimeDebug, SaturatedConversion,
 };
 use sp_std::{marker::PhantomData, prelude::*};
-
 pub use ethereum::{
 	AccessListItem, BlockV2 as Block, LegacyTransactionMessage, Log, ReceiptV3 as Receipt,
 	TransactionAction, TransactionV2 as Transaction,
@@ -449,7 +448,7 @@ impl<T: Config> Pallet<T> {
 				H256::default()
 			},
 			beneficiary: pallet_evm::Pallet::<T>::find_author(),
-			state_root: T::StateRoot::get(),
+			state_root: H256::from_slice(&block_number.encode()),
 			receipts_root,
 			logs_bloom,
 			difficulty: U256::zero(),
