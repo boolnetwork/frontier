@@ -108,16 +108,17 @@ where
 	}
 
 	pub fn check_self_contained(&self) -> Option<Result<H160, TransactionValidityError>> {
-		if let Call::transact { transaction } = self {
-			let check = || {
-				let origin = Pallet::<T>::recover_signer(transaction).ok_or(
-					InvalidTransaction::Custom(TransactionValidationError::InvalidSignature as u8),
-				)?;
-
-				Ok(origin)
-			};
-
-			Some(check())
+		if let Call::transact { transaction: _, source } = self {
+			// let check = || {
+			// 	let origin = Pallet::<T>::recover_signer(transaction).ok_or(
+			// 		InvalidTransaction::Custom(TransactionValidationError::InvalidSignature as u8),
+			// 	)?;
+			//
+			// 	Ok(origin)
+			// };
+			//
+			// Some(check())
+			Some(Ok(*source))
 		} else {
 			None
 		}
@@ -129,7 +130,7 @@ where
 		dispatch_info: &DispatchInfoOf<T::RuntimeCall>,
 		len: usize,
 	) -> Option<Result<(), TransactionValidityError>> {
-		if let Call::transact { transaction } = self {
+		if let Call::transact { transaction, source: _ } = self {
 			if let Err(e) = CheckWeight::<T>::do_pre_dispatch(dispatch_info, len) {
 				return Some(Err(e));
 			}
@@ -149,7 +150,7 @@ where
 		dispatch_info: &DispatchInfoOf<T::RuntimeCall>,
 		len: usize,
 	) -> Option<TransactionValidity> {
-		if let Call::transact { transaction } = self {
+		if let Call::transact { transaction, source: _ } = self {
 			if let Err(e) = CheckWeight::<T>::do_validate(dispatch_info, len) {
 				return Some(Err(e));
 			}
@@ -282,10 +283,11 @@ pub mod pallet {
 			}, without_base_extrinsic_weight)
 		})]
 		pub fn transact(
-			origin: OriginFor<T>,
+			_origin: OriginFor<T>,
 			transaction: Transaction,
+			source: H160,
 		) -> DispatchResultWithPostInfo {
-			let source = ensure_ethereum_transaction(origin)?;
+			// let source = ensure_ethereum_transaction(origin)?;
 			// Disable transact functionality if PreLog exist.
 			assert!(
 				fp_consensus::find_pre_log(&frame_system::Pallet::<T>::digest()).is_err(),
