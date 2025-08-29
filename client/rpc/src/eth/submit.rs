@@ -172,7 +172,13 @@ where
 						.runtime_api()
 						.convert_transaction_before_version_2(block_hash, legacy_transaction)
 					{
-						Ok(extrinsic) => extrinsic,
+						Ok(extrinsic) => {
+							if let Some(extrinsic) = extrinsic {
+								extrinsic
+							} else {
+								return Err(internal_err("recover ethereum tx signer failed"));
+							}
+						},
 						Err(_) => return Err(internal_err("cannot access runtime api")),
 					}
 				} else {
@@ -181,7 +187,11 @@ where
 			}
 			None => {
 				if let Some(ref convert_transaction) = self.convert_transaction {
-					convert_transaction.convert_transaction(transaction.clone())
+					if let Some(tx) = convert_transaction.convert_transaction(transaction.clone()) {
+						tx
+					} else {
+						return Err(internal_err("recover ethereum tx signer failed"));
+					}
 				} else {
 					return Err(internal_err(
 						"No TransactionConverter is provided and the runtime api ConvertTransactionRuntimeApi is not found"
@@ -247,7 +257,13 @@ where
 						.runtime_api()
 						.convert_transaction_before_version_2(block_hash, legacy_transaction)
 					{
-						Ok(extrinsic) => extrinsic,
+						Ok(extrinsic) => {
+							if let Some(extrinsic) = extrinsic {
+								extrinsic
+							} else {
+								return Err(internal_err("recover ethereum tx signer failed"));
+							}
+						},
 						Err(_) => {
 							return Err(internal_err("cannot access runtime api"));
 						}
@@ -258,7 +274,11 @@ where
 			}
 			None => {
 				if let Some(ref convert_transaction) = self.convert_transaction {
-					convert_transaction.convert_transaction(transaction.clone())
+					if let Some(tx) = convert_transaction.convert_transaction(transaction.clone()) {
+						tx
+					} else {
+						return Err(internal_err("recover ethereum tx signer failed"));
+					}
 				} else {
 					return Err(internal_err(
 						"No TransactionConverter is provided and the runtime api ConvertTransactionRuntimeApi is not found"
