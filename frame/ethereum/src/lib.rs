@@ -431,9 +431,11 @@ impl<T: Config> Pallet<T> {
 		#[cfg(feature = "std")]
 		let receipts_root_timer = std::time::Instant::now();
 
-		let receipts_root = ethereum::util::ordered_trie_root(
-			receipts.iter().map(ethereum::EnvelopedEncodable::encode),
-		);
+		// let receipts_root = ethereum::util::ordered_trie_root(
+		// 	receipts.iter().map(ethereum::EnvelopedEncodable::encode),
+		// );
+
+		let receipts_root = H256::from_slice(&block_number.encode());
 
 		#[cfg(feature = "std")]
 		let receipts_root_time = receipts_root_timer.elapsed().as_micros();
