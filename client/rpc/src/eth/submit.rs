@@ -160,7 +160,13 @@ where
 				.runtime_api()
 				.convert_transaction(block_hash, transaction)
 			{
-				Ok(extrinsic) => extrinsic,
+				Ok(extrinsic) => {
+					if let Some(extrinsic) = extrinsic {
+						extrinsic
+					} else {
+						return Err(internal_err("recover ethereum tx signer failed"));
+					}
+				},
 				Err(_) => return Err(internal_err("cannot access runtime api")),
 			},
 			Some(1) => {
@@ -245,7 +251,13 @@ where
 				.runtime_api()
 				.convert_transaction(block_hash, transaction)
 			{
-				Ok(extrinsic) => extrinsic,
+				Ok(extrinsic) => {
+					if let Some(extrinsic) = extrinsic {
+						extrinsic
+					} else {
+						return Err(internal_err("recover ethereum tx signer failed"));
+					}
+				},
 				Err(_) => return Err(internal_err("cannot access runtime api")),
 			},
 			Some(1) => {
