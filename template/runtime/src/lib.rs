@@ -423,10 +423,17 @@ construct_runtime!(
 pub struct TransactionConverter;
 
 impl fp_rpc::ConvertTransaction<UncheckedExtrinsic> for TransactionConverter {
-	fn convert_transaction(&self, transaction: pallet_ethereum::Transaction) -> UncheckedExtrinsic {
-		UncheckedExtrinsic::new_unsigned(
-			pallet_ethereum::Call::<Runtime>::transact { transaction }.into(),
-		)
+	fn convert_transaction(&self, transaction: pallet_ethereum::Transaction) -> Option<UncheckedExtrinsic> {
+		let source = pallet_ethereum::Pallet::<Runtime>::recover_signer(&transaction);
+		if let Some(source) = source {
+			Some(
+				UncheckedExtrinsic::new_unsigned(
+					pallet_ethereum::Call::<Runtime>::transact { transaction, source }.into(),
+				)
+			)
+		} else {
+			None
+		}
 	}
 }
 
@@ -434,13 +441,20 @@ impl fp_rpc::ConvertTransaction<opaque::UncheckedExtrinsic> for TransactionConve
 	fn convert_transaction(
 		&self,
 		transaction: pallet_ethereum::Transaction,
-	) -> opaque::UncheckedExtrinsic {
-		let extrinsic = UncheckedExtrinsic::new_unsigned(
-			pallet_ethereum::Call::<Runtime>::transact { transaction }.into(),
-		);
+	) -> Option<opaque::UncheckedExtrinsic> {
+		let source = pallet_ethereum::Pallet::<Runtime>::recover_signer(&transaction);
+		let extrinsic = if let Some(source) = source {
+			UncheckedExtrinsic::new_unsigned(
+				pallet_ethereum::Call::<Runtime>::transact { transaction, source }.into(),
+			)
+		} else {
+			return None;
+		};
 		let encoded = extrinsic.encode();
-		opaque::UncheckedExtrinsic::decode(&mut &encoded[..])
-			.expect("Encoded extrinsic is always valid")
+		Some(
+			opaque::UncheckedExtrinsic::decode(&mut &encoded[..])
+				.expect("Encoded extrinsic is always valid")
+		)
 	}
 }
 
@@ -877,10 +891,17 @@ impl_runtime_apis! {
 	}
 
 	impl fp_rpc::ConvertTransactionRuntimeApi<Block> for Runtime {
-		fn convert_transaction(transaction: EthereumTransaction) -> <Block as BlockT>::Extrinsic {
-			UncheckedExtrinsic::new_unsigned(
-				pallet_ethereum::Call::<Runtime>::transact { transaction }.into(),
-			)
+		fn convert_transaction(transaction: EthereumTransaction) -> Option<<Block as BlockT>::Extrinsic> {
+			let source = pallet_ethereum::Pallet::<Runtime>::recover_signer(&transaction);
+			if let Some(source) = source {
+				Some(
+					UncheckedExtrinsic::new_unsigned(
+						pallet_ethereum::Call::<Runtime>::transact { transaction, source }.into(),
+					)
+				)
+			} else {
+				None
+			}
 		}
 	}
 
