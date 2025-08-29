@@ -468,7 +468,15 @@ impl<T: Config> Pallet<T> {
 
 		#[cfg(feature = "std")]
 		let block_timer = std::time::Instant::now();
-		let block = ethereum::Block::new(partial_header, transactions.clone(), ommers);
+		// let block = ethereum::Block::new(partial_header, transactions.clone(), ommers);
+		let ommers_hash = H256::default();
+		let transactions_root = H256::from_slice(&block_number.encode());
+		let block = ethereum::Block {
+			header: ethereum::Header::new(partial_header, ommers_hash, transactions_root),
+			transactions: transactions.clone(),
+			ommers,
+		};
+
 		#[cfg(feature = "std")]
 		let block_time = block_timer.elapsed().as_micros();
 		CurrentBlock::<T>::put(block.clone());
