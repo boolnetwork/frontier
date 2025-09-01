@@ -21,7 +21,7 @@ use futures::future::TryFutureExt;
 use jsonrpsee::core::RpcResult;
 // Substrate
 use sc_client_api::backend::{Backend, StorageProvider};
-use sc_transaction_pool::ChainApi;
+use sc_transaction_pool::{ChainApi, RCGroup};
 use sc_transaction_pool_api::TransactionPool;
 use sp_api::{ApiExt, ProvideRuntimeApi};
 use sp_block_builder::BlockBuilder as BlockBuilderApi;
@@ -38,7 +38,7 @@ use crate::{
 	internal_err,
 };
 
-impl<B, C, P, CT, BE, A: ChainApi, EC: EthConfig<B, C>> Eth<B, C, P, CT, BE, A, EC>
+impl<B, C, P, CT, BE, A: ChainApi, EC: EthConfig<B, C>, RCG> Eth<B, C, P, CT, BE, A, EC, RCG>
 where
 	B: BlockT,
 	C: ProvideRuntimeApi<B>,
@@ -48,6 +48,7 @@ where
 	P: TransactionPool<Block = B> + 'static,
 	CT: ConvertTransaction<<B as BlockT>::Extrinsic> + 'static,
 	A: ChainApi<Block = B> + 'static,
+	RCG: RCGroup<<<A as ChainApi>::Block as BlockT>::Extrinsic, Error=<A as ChainApi>::Error> + 'static,
 {
 	pub async fn send_transaction(&self, request: TransactionRequest) -> RpcResult<H256> {
 		let from = match request.from {

@@ -23,7 +23,7 @@ use ethereum_types::{H160, H256, U256};
 use jsonrpsee::core::RpcResult;
 use serde::Serialize;
 // substrate
-use sc_transaction_pool::{ChainApi, Pool};
+use sc_transaction_pool::{ChainApi, Pool, RCGroup};
 use sc_transaction_pool_api::InPoolTransaction;
 use sp_api::ProvideRuntimeApi;
 use sp_blockchain::HeaderBackend;
@@ -38,13 +38,13 @@ use fp_rpc::{EthereumRuntimeRPCApi, TxPoolResponse};
 
 use crate::{internal_err, public_key};
 
-pub struct TxPool<B, C, A: ChainApi> {
+pub struct TxPool<B, C, A: ChainApi, RCG: RCGroup<<<A as ChainApi>::Block as BlockT>::Extrinsic, Error=<A as ChainApi>::Error>> {
 	client: Arc<C>,
-	graph: Arc<Pool<A>>,
+	graph: Arc<Pool<A, RCG>>,
 	_marker: PhantomData<B>,
 }
 
-impl<B, C, A: ChainApi> Clone for TxPool<B, C, A> {
+impl<B, C, A: ChainApi, RCG: RCGroup<<<A as ChainApi>::Block as BlockT>::Extrinsic, Error=<A as ChainApi>::Error>> Clone for TxPool<B, C, A, RCG> {
 	fn clone(&self) -> Self {
 		Self {
 			client: self.client.clone(),
@@ -54,13 +54,14 @@ impl<B, C, A: ChainApi> Clone for TxPool<B, C, A> {
 	}
 }
 
-impl<B, C, A> TxPool<B, C, A>
+impl<B, C, A, RCG> TxPool<B, C, A, RCG>
 where
 	B: BlockT,
 	C: ProvideRuntimeApi<B>,
 	C::Api: EthereumRuntimeRPCApi<B>,
 	C: HeaderBackend<B> + 'static,
 	A: ChainApi<Block = B> + 'static,
+	RCG: RCGroup<<<A as ChainApi>::Block as BlockT>::Extrinsic, Error=<A as ChainApi>::Error> + 'static,
 {
 	/// Use the transaction graph interface to get the extrinsics currently in the ready and future
 	/// queues.
@@ -141,8 +142,8 @@ where
 	}
 }
 
-impl<B, C, A: ChainApi> TxPool<B, C, A> {
-	pub fn new(client: Arc<C>, graph: Arc<Pool<A>>) -> Self {
+impl<B, C, A: ChainApi, RCG: RCGroup<<<A as ChainApi>::Block as BlockT>::Extrinsic, Error=<A as ChainApi>::Error>> TxPool<B, C, A, RCG> {
+	pub fn new(client: Arc<C>, graph: Arc<Pool<A, RCG>>) -> Self {
 		Self {
 			client,
 			graph,
@@ -151,13 +152,14 @@ impl<B, C, A: ChainApi> TxPool<B, C, A> {
 	}
 }
 
-impl<B, C, A> TxPoolApiServer for TxPool<B, C, A>
+impl<B, C, A, RCG> TxPoolApiServer for TxPool<B, C, A, RCG>
 where
 	B: BlockT,
 	C: ProvideRuntimeApi<B>,
 	C::Api: EthereumRuntimeRPCApi<B>,
 	C: HeaderBackend<B> + 'static,
 	A: ChainApi<Block = B> + 'static,
+	RCG: RCGroup<<<A as ChainApi>::Block as BlockT>::Extrinsic, Error=<A as ChainApi>::Error> + 'static,
 {
 	fn content(&self) -> RpcResult<TxPoolResult<TransactionMap<TxPoolTransaction>>> {
 		self.map_build::<TxPoolTransaction>()

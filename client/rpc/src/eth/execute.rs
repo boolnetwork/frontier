@@ -24,7 +24,7 @@ use jsonrpsee::core::RpcResult;
 use scale_codec::{Decode, Encode};
 // Substrate
 use sc_client_api::backend::{Backend, StorageProvider};
-use sc_transaction_pool::ChainApi;
+use sc_transaction_pool::{ChainApi, RCGroup};
 use sp_api::{ApiExt, CallApiAt, CallApiAtParams, ProvideRuntimeApi, StorageTransactionCache};
 use sp_block_builder::BlockBuilder as BlockBuilderApi;
 use sp_blockchain::HeaderBackend;
@@ -64,7 +64,7 @@ impl EstimateGasAdapter for () {
 	}
 }
 
-impl<B, C, P, CT, BE, A: ChainApi, EC: EthConfig<B, C>> Eth<B, C, P, CT, BE, A, EC>
+impl<B, C, P, CT, BE, A: ChainApi, EC: EthConfig<B, C>, RCG> Eth<B, C, P, CT, BE, A, EC, RCG>
 where
 	B: BlockT,
 	C: CallApiAt<B> + ProvideRuntimeApi<B>,
@@ -72,6 +72,7 @@ where
 	C: HeaderBackend<B> + StorageProvider<B, BE> + 'static,
 	BE: Backend<B> + 'static,
 	A: ChainApi<Block = B> + 'static,
+	RCG: RCGroup<<<A as ChainApi>::Block as BlockT>::Extrinsic, Error=<A as ChainApi>::Error> + 'static,
 {
 	pub async fn call(
 		&self,

@@ -4,7 +4,7 @@ pub use fc_rpc_core_txpool::{
 	GetT, Summary, Transaction, TransactionMap, TxPoolResult, TxPoolServer,
 };
 use jsonrpsee::core::RpcResult;
-use sc_transaction_pool::{ChainApi, Pool};
+use sc_transaction_pool::{ChainApi, Pool, RCGroup};
 use sc_transaction_pool_api::InPoolTransaction;
 use serde::Serialize;
 use sha3::{Digest, Keccak256};
@@ -15,13 +15,13 @@ use std::{collections::HashMap, marker::PhantomData, sync::Arc};
 
 use fp_rpc_txpool::{Transaction as TransactionV2, TxPoolResponse, TxPoolRuntimeApi};
 
-pub struct TxPool<B: BlockT, C, A: ChainApi> {
+pub struct TxPool<B: BlockT, C, A: ChainApi, RCG: RCGroup<<<A as ChainApi>::Block as BlockT>::Extrinsic, Error=<A as ChainApi>::Error>> {
 	client: Arc<C>,
-	graph: Arc<Pool<A>>,
+	graph: Arc<Pool<A, RCG>>,
 	_marker: PhantomData<B>,
 }
 
-impl<B, C, A> TxPool<B, C, A>
+impl<B, C, A, RCG> TxPool<B, C, A, RCG>
 where
 	C: ProvideRuntimeApi<B>,
 	C: HeaderMetadata<B, Error = BlockChainError> + HeaderBackend<B> + 'static,
@@ -29,6 +29,7 @@ where
 	B: BlockT<Hash = H256> + Send + Sync + 'static,
 	A: ChainApi<Block = B> + 'static,
 	C::Api: TxPoolRuntimeApi<B>,
+	RCG: RCGroup<<<A as ChainApi>::Block as BlockT>::Extrinsic, Error=<A as ChainApi>::Error> + 'static,
 {
 	/// Use the transaction graph interface to get the extrinsics currently in the ready and future
 	/// queues.
@@ -127,8 +128,8 @@ where
 	}
 }
 
-impl<B: BlockT, C, A: ChainApi> TxPool<B, C, A> {
-	pub fn new(client: Arc<C>, graph: Arc<Pool<A>>) -> Self {
+impl<B: BlockT, C, A: ChainApi, RCG: RCGroup<<<A as ChainApi>::Block as BlockT>::Extrinsic, Error=<A as ChainApi>::Error>> TxPool<B, C, A, RCG> {
+	pub fn new(client: Arc<C>, graph: Arc<Pool<A, RCG>>) -> Self {
 		Self {
 			client,
 			graph,
@@ -137,7 +138,7 @@ impl<B: BlockT, C, A: ChainApi> TxPool<B, C, A> {
 	}
 }
 
-impl<B, C, A> TxPoolServer for TxPool<B, C, A>
+impl<B, C, A, RCG> TxPoolServer for TxPool<B, C, A, RCG>
 where
 	C: ProvideRuntimeApi<B>,
 	C: HeaderMetadata<B, Error = BlockChainError> + HeaderBackend<B>,
@@ -145,6 +146,7 @@ where
 	B: BlockT<Hash = H256> + Send + Sync + 'static,
 	A: ChainApi<Block = B> + 'static,
 	C::Api: TxPoolRuntimeApi<B>,
+	RCG: RCGroup<<<A as ChainApi>::Block as BlockT>::Extrinsic, Error=<A as ChainApi>::Error> + 'static,
 {
 	fn content(&self) -> RpcResult<TxPoolResult<TransactionMap<Transaction>>> {
 		self.map_build::<Transaction>()
@@ -163,7 +165,7 @@ where
 	}
 }
 
-impl<B: BlockT, C, A: ChainApi> Clone for TxPool<B, C, A> {
+impl<B: BlockT, C, A: ChainApi, RCG: RCGroup<<<A as ChainApi>::Block as BlockT>::Extrinsic, Error=<A as ChainApi>::Error>> Clone for TxPool<B, C, A, RCG> {
 	fn clone(&self) -> Self {
 		Self::new(self.client.clone(), self.graph.clone())
 	}

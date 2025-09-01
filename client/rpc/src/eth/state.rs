@@ -21,7 +21,7 @@ use jsonrpsee::core::RpcResult;
 use scale_codec::Encode;
 // Substrate
 use sc_client_api::backend::{Backend, StorageProvider};
-use sc_transaction_pool::ChainApi;
+use sc_transaction_pool::{ChainApi, RCGroup};
 use sc_transaction_pool_api::{InPoolTransaction, TransactionPool};
 use sp_api::ProvideRuntimeApi;
 use sp_block_builder::BlockBuilder as BlockBuilderApi;
@@ -36,7 +36,7 @@ use crate::{
 	frontier_backend_client, internal_err,
 };
 
-impl<B, C, P, CT, BE, A: ChainApi, EC: EthConfig<B, C>> Eth<B, C, P, CT, BE, A, EC>
+impl<B, C, P, CT, BE, A: ChainApi, EC: EthConfig<B, C>, RCG> Eth<B, C, P, CT, BE, A, EC, RCG>
 where
 	B: BlockT,
 	C: ProvideRuntimeApi<B>,
@@ -45,6 +45,7 @@ where
 	BE: Backend<B> + 'static,
 	P: TransactionPool<Block = B> + 'static,
 	A: ChainApi<Block = B> + 'static,
+	RCG: RCGroup<<<A as ChainApi>::Block as BlockT>::Extrinsic, Error=<A as ChainApi>::Error> + 'static,
 {
 	pub async fn balance(&self, address: H160, number: Option<BlockNumber>) -> RpcResult<U256> {
 		let number = number.unwrap_or(BlockNumber::Latest);

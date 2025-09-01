@@ -22,7 +22,7 @@ use ethereum_types::{H256, U256};
 use jsonrpsee::core::RpcResult;
 // Substrate
 use sc_client_api::backend::{Backend, StorageProvider};
-use sc_transaction_pool::ChainApi;
+use sc_transaction_pool::{ChainApi, RCGroup};
 use sc_transaction_pool_api::InPoolTransaction;
 use sp_api::ProvideRuntimeApi;
 use sp_blockchain::HeaderBackend;
@@ -37,7 +37,7 @@ use crate::{
 	frontier_backend_client, internal_err,
 };
 
-impl<B, C, P, CT, BE, A: ChainApi, EC: EthConfig<B, C>> Eth<B, C, P, CT, BE, A, EC>
+impl<B, C, P, CT, BE, A: ChainApi, EC: EthConfig<B, C>, RCG> Eth<B, C, P, CT, BE, A, EC, RCG>
 where
 	B: BlockT,
 	C: ProvideRuntimeApi<B>,
@@ -45,6 +45,7 @@ where
 	C: HeaderBackend<B> + StorageProvider<B, BE> + 'static,
 	BE: Backend<B>,
 	A: ChainApi<Block = B> + 'static,
+	RCG: RCGroup<<<A as ChainApi>::Block as BlockT>::Extrinsic, Error=<A as ChainApi>::Error> + 'static,
 {
 	pub async fn block_by_hash(&self, hash: H256, full: bool) -> RpcResult<Option<RichBlock>> {
 		let client = Arc::clone(&self.client);

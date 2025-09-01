@@ -13,7 +13,7 @@ use sc_consensus_manual_seal::rpc::EngineCommand;
 use sc_rpc::SubscriptionTaskExecutor;
 use sc_rpc_api::DenyUnsafe;
 use sc_service::TransactionPool;
-use sc_transaction_pool::ChainApi;
+use sc_transaction_pool::{ChainApi, RCGroup};
 use sp_api::{CallApiAt, ProvideRuntimeApi};
 use sp_blockchain::{Error as BlockChainError, HeaderBackend, HeaderMetadata};
 use sp_runtime::traits::Block as BlockT;
@@ -24,7 +24,7 @@ mod eth;
 pub use self::eth::{create_eth, overrides_handle, EthDeps};
 
 /// Full client dependencies.
-pub struct FullDeps<C, P, A: ChainApi, CT> {
+pub struct FullDeps<C, P, A: ChainApi, CT, RCG: RCGroup<<<A as ChainApi>::Block as BlockT>::Extrinsic, Error=<A as ChainApi>::Error>> {
 	/// The client instance to use.
 	pub client: Arc<C>,
 	/// Transaction pool instance.
@@ -34,7 +34,7 @@ pub struct FullDeps<C, P, A: ChainApi, CT> {
 	/// Manual seal command sink
 	pub command_sink: Option<mpsc::Sender<EngineCommand<Hash>>>,
 	/// Ethereum-compatibility specific dependencies.
-	pub eth: EthDeps<C, P, A, CT, Block>,
+	pub eth: EthDeps<C, P, A, CT, Block, RCG>,
 }
 
 pub struct DefaultEthConfig<C, BE>(std::marker::PhantomData<(C, BE)>);
@@ -50,8 +50,8 @@ where
 }
 
 /// Instantiate all Full RPC extensions.
-pub fn create_full<C, P, BE, A, CT>(
-	deps: FullDeps<C, P, A, CT>,
+pub fn create_full<C, P, BE, A, CT, RCG>(
+	deps: FullDeps<C, P, A, CT, RCG>,
 	subscription_task_executor: SubscriptionTaskExecutor,
 	pubsub_notification_sinks: Arc<
 		fc_mapping_sync::EthereumBlockNotificationSinks<
@@ -74,6 +74,7 @@ where
 	P: TransactionPool<Block = Block> + 'static,
 	A: ChainApi<Block = Block> + 'static,
 	CT: fp_rpc::ConvertTransaction<<Block as BlockT>::Extrinsic> + Send + Sync + 'static,
+	RCG: RCGroup<<<A as ChainApi>::Block as BlockT>::Extrinsic, Error=<A as ChainApi>::Error> + 'static,
 {
 	use pallet_transaction_payment_rpc::{TransactionPayment, TransactionPaymentApiServer};
 	use sc_consensus_manual_seal::rpc::{ManualSeal, ManualSealApiServer};
@@ -100,7 +101,7 @@ where
 	}
 
 	// Ethereum compatibility RPCs
-	let io = create_eth::<_, _, _, _, _, _, DefaultEthConfig<C, BE>>(
+	let io = create_eth::<_, _, _, _, _, _, DefaultEthConfig<C, BE>, RCG>(
 		io,
 		eth,
 		subscription_task_executor,

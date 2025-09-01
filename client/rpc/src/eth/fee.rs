@@ -20,7 +20,7 @@ use ethereum_types::U256;
 use jsonrpsee::core::RpcResult;
 // Substrate
 use sc_client_api::backend::{Backend, StorageProvider};
-use sc_transaction_pool::ChainApi;
+use sc_transaction_pool::{ChainApi, RCGroup};
 use sp_api::ProvideRuntimeApi;
 use sp_blockchain::HeaderBackend;
 use sp_runtime::traits::{Block as BlockT, UniqueSaturatedInto};
@@ -33,13 +33,14 @@ use crate::{
 	frontier_backend_client, internal_err,
 };
 
-impl<B, C, P, CT, BE, A: ChainApi, EC: EthConfig<B, C>> Eth<B, C, P, CT, BE, A, EC>
+impl<B, C, P, CT, BE, A: ChainApi, EC: EthConfig<B, C>, RCG> Eth<B, C, P, CT, BE, A, EC, RCG>
 where
 	B: BlockT,
 	C: ProvideRuntimeApi<B>,
 	C::Api: EthereumRuntimeRPCApi<B>,
 	C: HeaderBackend<B> + StorageProvider<B, BE> + 'static,
 	BE: Backend<B> + 'static,
+	RCG: RCGroup<<<A as ChainApi>::Block as BlockT>::Extrinsic, Error=<A as ChainApi>::Error> + 'static,
 {
 	pub fn gas_price(&self) -> RpcResult<U256> {
 		let block_hash = self.client.info().best_hash;

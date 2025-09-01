@@ -36,7 +36,7 @@ use jsonrpsee::core::{async_trait, RpcResult};
 // Substrate
 use sc_client_api::backend::{Backend, StorageProvider};
 use sc_network_sync::SyncingService;
-use sc_transaction_pool::{ChainApi, Pool};
+use sc_transaction_pool::{ChainApi, Pool, RCGroup};
 use sc_transaction_pool_api::{InPoolTransaction, TransactionPool};
 use sp_api::{ApiRef, CallApiAt, Core, HeaderT, ProvideRuntimeApi};
 use sp_block_builder::BlockBuilder as BlockBuilderApi;
@@ -71,9 +71,9 @@ impl<B: BlockT, C> EthConfig<B, C> for () {
 }
 
 /// Eth API implementation.
-pub struct Eth<B: BlockT, C, P, CT, BE, A: ChainApi, EC: EthConfig<B, C>> {
+pub struct Eth<B: BlockT, C, P, CT, BE, A: ChainApi, EC: EthConfig<B, C>, RCG: RCGroup<<<A as ChainApi>::Block as BlockT>::Extrinsic, Error=<A as ChainApi>::Error>> {
 	pool: Arc<P>,
-	graph: Arc<Pool<A>>,
+	graph: Arc<Pool<A, RCG>>,
 	client: Arc<C>,
 	convert_transaction: Option<CT>,
 	sync: Arc<SyncingService<B>>,
@@ -91,11 +91,11 @@ pub struct Eth<B: BlockT, C, P, CT, BE, A: ChainApi, EC: EthConfig<B, C>> {
 	_marker: PhantomData<(B, BE, EC)>,
 }
 
-impl<B: BlockT, C, P, CT, BE, A: ChainApi> Eth<B, C, P, CT, BE, A, ()> {
+impl<B: BlockT, C, P, CT, BE, A: ChainApi, RCG: RCGroup<<<A as ChainApi>::Block as BlockT>::Extrinsic, Error=<A as ChainApi>::Error>> Eth<B, C, P, CT, BE, A, (), RCG> {
 	pub fn new(
 		client: Arc<C>,
 		pool: Arc<P>,
-		graph: Arc<Pool<A>>,
+		graph: Arc<Pool<A, RCG>>,
 		convert_transaction: Option<CT>,
 		sync: Arc<SyncingService<B>>,
 		signers: Vec<Box<dyn EthSigner>>,
@@ -128,8 +128,8 @@ impl<B: BlockT, C, P, CT, BE, A: ChainApi> Eth<B, C, P, CT, BE, A, ()> {
 	}
 }
 
-impl<B: BlockT, C, P, CT, BE, A: ChainApi, EC: EthConfig<B, C>> Eth<B, C, P, CT, BE, A, EC> {
-	pub fn replace_config<EC2: EthConfig<B, C>>(self) -> Eth<B, C, P, CT, BE, A, EC2> {
+impl<B: BlockT, C, P, CT, BE, A: ChainApi, EC: EthConfig<B, C>, RCG: RCGroup<<<A as ChainApi>::Block as BlockT>::Extrinsic, Error=<A as ChainApi>::Error>> Eth<B, C, P, CT, BE, A, EC, RCG> {
+	pub fn replace_config<EC2: EthConfig<B, C>>(self) -> Eth<B, C, P, CT, BE, A, EC2, RCG> {
 		let Self {
 			client,
 			pool,
@@ -169,7 +169,7 @@ impl<B: BlockT, C, P, CT, BE, A: ChainApi, EC: EthConfig<B, C>> Eth<B, C, P, CT,
 }
 
 #[async_trait]
-impl<B, C, P, CT, BE, A, EC> EthApiServer for Eth<B, C, P, CT, BE, A, EC>
+impl<B, C, P, CT, BE, A, EC, RCG> EthApiServer for Eth<B, C, P, CT, BE, A, EC, RCG>
 where
 	B: BlockT,
 	C: CallApiAt<B> + ProvideRuntimeApi<B>,
@@ -180,6 +180,7 @@ where
 	CT: ConvertTransaction<<B as BlockT>::Extrinsic> + Send + Sync + 'static,
 	A: ChainApi<Block = B> + 'static,
 	EC: EthConfig<B, C>,
+	RCG: RCGroup<<<A as ChainApi>::Block as BlockT>::Extrinsic, Error=<A as ChainApi>::Error> + 'static,
 {
 	// ########################################################################
 	// Client
@@ -549,9 +550,9 @@ fn transaction_build(
 	transaction
 }
 
-fn pending_runtime_api<'a, B: BlockT, C, BE, A: ChainApi>(
+fn pending_runtime_api<'a, B: BlockT, C, BE, A: ChainApi, RCG: RCGroup<<<A as ChainApi>::Block as BlockT>::Extrinsic, Error=<A as ChainApi>::Error>>(
 	client: &'a C,
-	graph: &'a Pool<A>,
+	graph: &'a Pool<A, RCG>,
 ) -> RpcResult<ApiRef<'a, C::Api>>
 where
 	B: BlockT,

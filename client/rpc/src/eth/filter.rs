@@ -23,7 +23,7 @@ use ethereum_types::{H256, U256};
 use jsonrpsee::core::{async_trait, RpcResult};
 // Substrate
 use sc_client_api::backend::{Backend, StorageProvider};
-use sc_transaction_pool::ChainApi;
+use sc_transaction_pool::{ChainApi, RCGroup};
 use sp_api::ProvideRuntimeApi;
 use sp_blockchain::HeaderBackend;
 use sp_core::hashing::keccak_256;
@@ -37,10 +37,10 @@ use fp_rpc::{EthereumRuntimeRPCApi, TransactionStatus};
 
 use crate::{eth::cache::EthBlockDataCacheTask, frontier_backend_client, internal_err, TxPool};
 
-pub struct EthFilter<B: BlockT, C, BE, A: ChainApi> {
+pub struct EthFilter<B: BlockT, C, BE, A: ChainApi, RCG: RCGroup<<<A as ChainApi>::Block as BlockT>::Extrinsic, Error=<A as ChainApi>::Error>> {
 	client: Arc<C>,
 	backend: Arc<dyn fc_db::BackendReader<B> + Send + Sync>,
-	tx_pool: TxPool<B, C, A>,
+	tx_pool: TxPool<B, C, A, RCG>,
 	filter_pool: FilterPool,
 	max_stored_filters: usize,
 	max_past_logs: u32,
@@ -49,11 +49,11 @@ pub struct EthFilter<B: BlockT, C, BE, A: ChainApi> {
 	_marker: PhantomData<BE>,
 }
 
-impl<B: BlockT, C, BE, A: ChainApi> EthFilter<B, C, BE, A> {
+impl<B: BlockT, C, BE, A: ChainApi, RCG: RCGroup<<<A as ChainApi>::Block as BlockT>::Extrinsic, Error=<A as ChainApi>::Error>> EthFilter<B, C, BE, A, RCG> {
 	pub fn new(
 		client: Arc<C>,
 		backend: Arc<dyn fc_db::BackendReader<B> + Send + Sync>,
-		tx_pool: TxPool<B, C, A>,
+		tx_pool: TxPool<B, C, A, RCG>,
 		filter_pool: FilterPool,
 		max_stored_filters: usize,
 		max_past_logs: u32,
@@ -74,13 +74,14 @@ impl<B: BlockT, C, BE, A: ChainApi> EthFilter<B, C, BE, A> {
 	}
 }
 
-impl<B, C, BE, A> EthFilter<B, C, BE, A>
+impl<B, C, BE, A, RCG> EthFilter<B, C, BE, A, RCG>
 where
 	B: BlockT,
 	C: ProvideRuntimeApi<B>,
 	C::Api: EthereumRuntimeRPCApi<B>,
 	C: HeaderBackend<B> + 'static,
 	A: ChainApi<Block = B> + 'static,
+	RCG: RCGroup<<<A as ChainApi>::Block as BlockT>::Extrinsic, Error=<A as ChainApi>::Error> + 'static,
 {
 	fn create_filter(&self, filter_type: FilterType) -> RpcResult<U256> {
 		let block_number =
@@ -130,7 +131,7 @@ where
 }
 
 #[async_trait]
-impl<B, C, BE, A> EthFilterApiServer for EthFilter<B, C, BE, A>
+impl<B, C, BE, A, RCG> EthFilterApiServer for EthFilter<B, C, BE, A, RCG>
 where
 	B: BlockT,
 	C: ProvideRuntimeApi<B>,
@@ -138,6 +139,7 @@ where
 	C: HeaderBackend<B> + StorageProvider<B, BE> + 'static,
 	BE: Backend<B> + 'static,
 	A: ChainApi<Block = B> + 'static,
+	RCG: RCGroup<<<A as ChainApi>::Block as BlockT>::Extrinsic, Error=<A as ChainApi>::Error> + 'static,
 {
 	fn new_filter(&self, filter: Filter) -> RpcResult<U256> {
 		self.create_filter(FilterType::Log(filter))

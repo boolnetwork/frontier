@@ -19,14 +19,14 @@
 use ethereum_types::{H256, H64, U256};
 use jsonrpsee::core::RpcResult;
 // Substrate
-use sc_transaction_pool::ChainApi;
+use sc_transaction_pool::{ChainApi, RCGroup};
 use sp_runtime::traits::Block as BlockT;
 // Frontier
 use fc_rpc_core::types::*;
 
 use crate::eth::{Eth, EthConfig};
 
-impl<B: BlockT, C, P, CT, BE, A: ChainApi, EC: EthConfig<B, C>> Eth<B, C, P, CT, BE, A, EC> {
+impl<B: BlockT, C, P, CT, BE, A: ChainApi, EC: EthConfig<B, C>, RCG: RCGroup<<<A as ChainApi>::Block as BlockT>::Extrinsic, Error=<A as ChainApi>::Error>> Eth<B, C, P, CT, BE, A, EC, RCG> {
 	pub fn is_mining(&self) -> RpcResult<bool> {
 		Ok(self.is_authority)
 	}

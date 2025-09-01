@@ -9,7 +9,7 @@ use sc_client_api::{
 use sc_network::NetworkService;
 use sc_network_sync::SyncingService;
 use sc_rpc::SubscriptionTaskExecutor;
-use sc_transaction_pool::{ChainApi, Pool};
+use sc_transaction_pool::{ChainApi, Pool, RCGroup};
 use sc_transaction_pool_api::TransactionPool;
 use sp_api::{CallApiAt, ProvideRuntimeApi};
 use sp_block_builder::BlockBuilder as BlockBuilderApi;
@@ -23,13 +23,13 @@ pub use fc_storage::overrides_handle;
 use fp_rpc::{ConvertTransaction, ConvertTransactionRuntimeApi, EthereumRuntimeRPCApi};
 
 /// Extra dependencies for Ethereum compatibility.
-pub struct EthDeps<C, P, A: ChainApi, CT, B: BlockT> {
+pub struct EthDeps<C, P, A: ChainApi, CT, B: BlockT, RCG: RCGroup<<<A as ChainApi>::Block as BlockT>::Extrinsic, Error=<A as ChainApi>::Error>> {
 	/// The client instance to use.
 	pub client: Arc<C>,
 	/// Transaction pool instance.
 	pub pool: Arc<P>,
 	/// Graph pool instance.
-	pub graph: Arc<Pool<A>>,
+	pub graph: Arc<Pool<A, RCG>>,
 	/// Ethereum transaction converter.
 	pub converter: Option<CT>,
 	/// The Node authority flag
@@ -63,7 +63,7 @@ pub struct EthDeps<C, P, A: ChainApi, CT, B: BlockT> {
 	pub forced_parent_hashes: Option<BTreeMap<H256, H256>>,
 }
 
-impl<C, P, A: ChainApi, CT: Clone, B: BlockT> Clone for EthDeps<C, P, A, CT, B> {
+impl<C, P, A: ChainApi, CT: Clone, B: BlockT, RCG: RCGroup<<<A as ChainApi>::Block as BlockT>::Extrinsic, Error=<A as ChainApi>::Error>> Clone for EthDeps<C, P, A, CT, B, RCG> {
 	fn clone(&self) -> Self {
 		Self {
 			client: self.client.clone(),
@@ -89,9 +89,9 @@ impl<C, P, A: ChainApi, CT: Clone, B: BlockT> Clone for EthDeps<C, P, A, CT, B> 
 }
 
 /// Instantiate Ethereum-compatible RPC extensions.
-pub fn create_eth<C, BE, P, A, CT, B, EC: EthConfig<B, C>>(
+pub fn create_eth<C, BE, P, A, CT, B, EC: EthConfig<B, C>, RCG>(
 	mut io: RpcModule<()>,
-	deps: EthDeps<C, P, A, CT, B>,
+	deps: EthDeps<C, P, A, CT, B, RCG>,
 	subscription_task_executor: SubscriptionTaskExecutor,
 	pubsub_notification_sinks: Arc<
 		fc_mapping_sync::EthereumBlockNotificationSinks<
@@ -109,6 +109,7 @@ where
 	P: TransactionPool<Block = B> + 'static,
 	A: ChainApi<Block = B> + 'static,
 	CT: ConvertTransaction<<B as BlockT>::Extrinsic> + Send + Sync + 'static,
+	RCG: RCGroup<<<A as ChainApi>::Block as BlockT>::Extrinsic, Error=<A as ChainApi>::Error> + 'static,
 {
 	use fc_rpc::{
 		Eth, EthApiServer, EthDevSigner, EthFilter, EthFilterApiServer, EthPubSub,

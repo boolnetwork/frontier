@@ -11,6 +11,7 @@ use sc_executor::NativeExecutionDispatch;
 use sc_network_common::sync::warp::WarpSyncParams;
 use sc_service::{error::Error as ServiceError, Configuration, PartialComponents, TaskManager};
 use sc_telemetry::{Telemetry, TelemetryHandle, TelemetryWorker};
+use sc_transaction_pool::DefaultRCGroup;
 use sp_api::{ConstructRuntimeApi, TransactionFor};
 use sp_consensus_aura::sr25519::AuthorityPair as AuraPair;
 use sp_core::U256;
@@ -33,7 +34,7 @@ pub use crate::{
 };
 
 type BasicImportQueue<Client> = sc_consensus::DefaultImportQueue<Block, Client>;
-type FullPool<Client> = sc_transaction_pool::FullPool<Block, Client>;
+type FullPool<Client> = sc_transaction_pool::FullPool<Block, Client, DefaultRCGroup>;
 type FullSelectChain = sc_consensus::LongestChain<FullBackend, Block>;
 
 type GrandpaBlockImport<Client> =
