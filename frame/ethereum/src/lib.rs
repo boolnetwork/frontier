@@ -197,6 +197,8 @@ pub mod pallet {
 		type PostLogContent: Get<PostLogContent>;
 		/// The maximum length of the extra data in the Executed event.
 		type ExtraDataLength: Get<u32>;
+		/// Dispatch precompile call directly.
+		type DispatchPrecompile: DispatchPrecompile;
 	}
 
 	#[pallet::hooks]
@@ -222,7 +224,7 @@ pub mod pallet {
 					UniqueSaturatedInto::<u32>::unique_saturated_into(to_remove),
 				));
 			}
-			Pending::<T>::kill();
+			// Pending::<T>::kill();
 		}
 
 		fn on_initialize(_: T::BlockNumber) -> Weight {
@@ -288,13 +290,17 @@ pub mod pallet {
 			source: H160,
 		) -> DispatchResultWithPostInfo {
 			// let source = ensure_ethereum_transaction(origin)?;
-			// Disable transact functionality if PreLog exist.
-			assert!(
-				fp_consensus::find_pre_log(&frame_system::Pallet::<T>::digest()).is_err(),
-				"pre log already exists; block is invalid",
-			);
-
-			Self::apply_validated_transaction(source.clone(), source, transaction, false)
+			match T::DispatchPrecompile::dispatch_precompile_call(&transaction, &source)? {
+				Some(info) => Ok(info),
+				None => {
+					// Disable transact functionality if PreLog exist.
+					assert!(
+						fp_consensus::find_pre_log(&frame_system::Pallet::<T>::digest()).is_err(),
+						"pre log already exists; block is invalid",
+					);
+					Self::apply_validated_transaction(source.clone(), source, transaction, false)
+				},
+			}
 		}
 	}
 
@@ -323,6 +329,13 @@ pub mod pallet {
 	#[pallet::storage]
 	pub(super) type Pending<T: Config> =
 		StorageValue<_, Vec<(Transaction, TransactionStatus, Receipt)>, ValueQuery>;
+
+	#[pallet::storage]
+	pub(super) type PendingIndex<T: Config> = StorageValue<_, u32, ValueQuery>;
+
+	#[pallet::storage]
+	pub(super) type PendingMap<T: Config> =
+		StorageMap<_, Twox64Concat, u32, (Transaction, TransactionStatus, Receipt)>;
 
 	/// The current Ethereum block.
 	#[pallet::storage]
@@ -406,14 +419,15 @@ impl<T: Config> Pallet<T> {
 		let total_timer = std::time::Instant::now();
 		#[cfg(feature = "std")]
 		let tx_timer = std::time::Instant::now();
-		let pending_transactions = Pending::<T>::take();
-		let mut transactions = Vec::with_capacity(pending_transactions.len());
-		let mut statuses = Vec::with_capacity(pending_transactions.len());
-		let mut receipts = Vec::with_capacity(pending_transactions.len());
+		let pending_index = PendingIndex::<T>::take();
+		// let pending_transactions = Pending::<T>::take();
+		let mut transactions = Vec::with_capacity(pending_index as usize);
+		let mut statuses = Vec::with_capacity(pending_index as usize);
+		let mut receipts = Vec::with_capacity(pending_index as usize);
 		let mut logs_bloom = Bloom::default();
 		let mut cumulative_gas_used = U256::zero();
-		for transaction in pending_transactions {
-			let (transaction, status, receipt) = transaction;
+		for i in 0..pending_index {
+			let (transaction, status, receipt) = PendingMap::<T>::take(i).unwrap();
 			transactions.push(transaction);
 			statuses.push(status);
 			receipts.push(receipt.clone());
@@ -425,6 +439,19 @@ impl<T: Config> Pallet<T> {
 			cumulative_gas_used = used_gas;
 			Self::logs_bloom(logs, &mut logs_bloom);
 		}
+		// for transaction in pending_transactions {
+		// 	let (transaction, status, receipt) = transaction;
+		// 	transactions.push(transaction);
+		// 	statuses.push(status);
+		// 	receipts.push(receipt.clone());
+		// 	let (logs, used_gas) = match receipt {
+		// 		Receipt::Legacy(d) | Receipt::EIP2930(d) | Receipt::EIP1559(d) => {
+		// 			(d.logs.clone(), d.used_gas)
+		// 		}
+		// 	};
+		// 	cumulative_gas_used = used_gas;
+		// 	Self::logs_bloom(logs, &mut logs_bloom);
+		// }
 
 		#[cfg(feature = "std")]
 		let tx_time = tx_timer.elapsed().as_micros();
@@ -606,9 +633,10 @@ impl<T: Config> Pallet<T> {
 	) -> DispatchResultWithPostInfo {
 		let (to, _, info) = Self::execute(source, fee_source, &transaction, None)?;
 
-		let pending = Pending::<T>::get();
+		let pending_index = PendingIndex::<T>::get();
+		// let pending = Pending::<T>::get();
 		let transaction_hash = transaction.hash();
-		let transaction_index = pending.len() as u32;
+		let transaction_index = pending_index;
 
 		let (reason, status, weight_info, used_gas, dest, extra_data) = match info {
 			CallOrCreateInfo::Call(info) => (
@@ -685,7 +713,7 @@ impl<T: Config> Pallet<T> {
 			};
 			let logs_bloom = status.logs_bloom;
 			let logs = status.clone().logs;
-			let cumulative_gas_used = if let Some((_, _, receipt)) = pending.last() {
+			let cumulative_gas_used = if let Some((_, _, receipt)) = PendingMap::<T>::get(pending_index.saturating_sub(1)) {
 				match receipt {
 					Receipt::Legacy(d) | Receipt::EIP2930(d) | Receipt::EIP1559(d) => {
 						d.used_gas.saturating_add(used_gas.effective)
@@ -716,7 +744,9 @@ impl<T: Config> Pallet<T> {
 			}
 		};
 
-		Pending::<T>::append((transaction, status, receipt));
+		PendingMap::<T>::insert(pending_index, (transaction, status, receipt));
+		PendingIndex::<T>::put(pending_index + 1);
+		// Pending::<T>::append((transaction, status, receipt));
 
 		Self::deposit_event(Event::Executed {
 			from: source,
@@ -1088,4 +1118,8 @@ impl From<InvalidEvmTransactionError> for InvalidTransactionWrapper {
 			),
 		}
 	}
+}
+
+pub trait DispatchPrecompile {
+	fn dispatch_precompile_call(transaction: &Transaction, source: &H160) -> Result<Option<PostDispatchInfo>, sp_runtime::DispatchError>;
 }
