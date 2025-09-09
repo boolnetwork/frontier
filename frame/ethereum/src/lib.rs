@@ -291,7 +291,7 @@ pub mod pallet {
 		) -> DispatchResultWithPostInfo {
 			// let source = ensure_ethereum_transaction(origin)?;
 			match T::DispatchPrecompile::dispatch_precompile_call(&transaction, &source)? {
-				Some(_) => Ok(().into()),
+				Some(info) => Ok(info),
 				None => {
 					// Disable transact functionality if PreLog exist.
 					assert!(
@@ -1121,5 +1121,5 @@ impl From<InvalidEvmTransactionError> for InvalidTransactionWrapper {
 }
 
 pub trait DispatchPrecompile {
-	fn dispatch_precompile_call(transaction: &Transaction, source: &H160) -> Result<Option<()>, sp_runtime::DispatchError>;
+	fn dispatch_precompile_call(transaction: &Transaction, source: &H160) -> Result<Option<PostDispatchInfo>, sp_runtime::DispatchError>;
 }
