@@ -197,6 +197,8 @@ pub mod pallet {
 		type PostLogContent: Get<PostLogContent>;
 		/// The maximum length of the extra data in the Executed event.
 		type ExtraDataLength: Get<u32>;
+		/// Dispatch precompile call directly.
+		type DispatchPrecompile: DispatchPrecompile;
 	}
 
 	#[pallet::hooks]
@@ -288,13 +290,17 @@ pub mod pallet {
 			source: H160,
 		) -> DispatchResultWithPostInfo {
 			// let source = ensure_ethereum_transaction(origin)?;
-			// Disable transact functionality if PreLog exist.
-			assert!(
-				fp_consensus::find_pre_log(&frame_system::Pallet::<T>::digest()).is_err(),
-				"pre log already exists; block is invalid",
-			);
-
-			Self::apply_validated_transaction(source.clone(), source, transaction, false)
+			match T::DispatchPrecompile::dispatch_precompile_call(&transaction, &source)? {
+				Some(_) => Ok(().into()),
+				None => {
+					// Disable transact functionality if PreLog exist.
+					assert!(
+						fp_consensus::find_pre_log(&frame_system::Pallet::<T>::digest()).is_err(),
+						"pre log already exists; block is invalid",
+					);
+					Self::apply_validated_transaction(source.clone(), source, transaction, false)
+				},
+			}
 		}
 	}
 
@@ -1112,4 +1118,8 @@ impl From<InvalidEvmTransactionError> for InvalidTransactionWrapper {
 			),
 		}
 	}
+}
+
+pub trait DispatchPrecompile {
+	fn dispatch_precompile_call(transaction: &Transaction, source: &H160) -> Result<Option<()>, sp_runtime::DispatchError>;
 }
