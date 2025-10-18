@@ -38,6 +38,7 @@ use frame_support::{
 	traits::{ConstU32, ConstU8, FindAuthor, OnFinalize, OnTimestampSet},
 	weights::{constants::WEIGHT_REF_TIME_PER_MILLIS, ConstantMultiplier, IdentityFee, Weight},
 };
+use frame_support::dispatch::PostDispatchInfo;
 use pallet_grandpa::{
 	fg_primitives, AuthorityId as GrandpaId, AuthorityList as GrandpaAuthorityList,
 };
@@ -46,7 +47,7 @@ use pallet_transaction_payment::CurrencyAdapter;
 use fp_account::EthereumSignature;
 use fp_evm::weight_per_gas;
 use fp_rpc::TransactionStatus;
-use pallet_ethereum::{Call::transact, PostLogContent, Transaction as EthereumTransaction};
+use pallet_ethereum::{Call::transact, DispatchPrecompile, PostLogContent, Transaction as EthereumTransaction, Transaction};
 use pallet_evm::{
 	Account as EVMAccount, EnsureAccountId20, FeeCalculator, GasWeightMapping,
 	IdentityAddressMapping, Runner,
@@ -350,12 +351,17 @@ impl pallet_evm::Config for Runtime {
 parameter_types! {
 	pub const PostBlockAndTxnHashes: PostLogContent = PostLogContent::BlockAndTxnHashes;
 }
-
+impl DispatchPrecompile for Runtime {
+	fn dispatch_precompile_call(transaction: &Transaction, source: &H160) -> Result<Option<PostDispatchInfo>, sp_runtime::DispatchError> {
+		Ok(None)
+	}
+}
 impl pallet_ethereum::Config for Runtime {
 	type RuntimeEvent = RuntimeEvent;
 	type StateRoot = pallet_ethereum::IntermediateStateRoot<Self>;
 	type PostLogContent = PostBlockAndTxnHashes;
 	type ExtraDataLength = ConstU32<30>;
+	type DispatchPrecompile = Runtime;
 }
 
 parameter_types! {
