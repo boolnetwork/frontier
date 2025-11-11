@@ -47,6 +47,7 @@ use self::lru_cache::LRUCacheByteLimited;
 
 type WaitList<Hash, T> = HashMap<Hash, Vec<oneshot::Sender<Option<T>>>>;
 
+#[derive(Debug)]
 enum EthBlockDataCacheMessage<B: BlockT> {
 	RequestCurrentBlock {
 		block_hash: B::Hash,
@@ -201,6 +202,8 @@ impl<B: BlockT> EthBlockDataCacheTask<B> {
 			return;
 		}
 
+		log::warn!("request_current: not find in cache");
+
 		// Another request already triggered caching but the
 		// response is not known yet, we add the sender to the waiting
 		// list.
@@ -208,6 +211,7 @@ impl<B: BlockT> EthBlockDataCacheTask<B> {
 			waiting.push(response_tx);
 			return;
 		}
+		log::warn!("request_current: not find in wait_list");
 
 		// Data is neither cached nor already requested, so we start fetching
 		// the data.
@@ -220,6 +224,8 @@ impl<B: BlockT> EthBlockDataCacheTask<B> {
 				.unwrap_or(&overrides.fallback);
 
 			let message = handler_call(handler);
+			log::warn!("request_current: send message: {message:?}");
+
 			let _ = task_tx.send(message).await;
 		});
 	}

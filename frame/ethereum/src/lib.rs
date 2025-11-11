@@ -332,15 +332,15 @@ pub mod pallet {
 
 	/// The current Ethereum block.
 	#[pallet::storage]
-	pub type CurrentBlock<T: Config> = StorageValue<_, ethereum::BlockV2>;
+	pub type CurrentBlock<T: Config> = StorageMap<_, Twox128, U256, ethereum::BlockV2>;
 
 	/// The current Ethereum receipts.
 	#[pallet::storage]
-	pub type CurrentReceipts<T: Config> = StorageValue<_, Vec<Receipt>>;
+	pub type CurrentReceipts<T: Config> = StorageMap<_, Twox128, U256, Vec<Receipt>, ValueQuery>;
 
 	/// The current transaction statuses.
 	#[pallet::storage]
-	pub type CurrentTransactionStatuses<T: Config> = StorageValue<_, Vec<TransactionStatus>>;
+	pub type CurrentTransactionStatuses<T: Config> = StorageMap<_, Twox128, U256, Vec<TransactionStatus>, ValueQuery>;
 
 	// Mapping for block number and hashes.
 	#[pallet::storage]
@@ -488,9 +488,9 @@ impl<T: Config> Pallet<T> {
 
 		#[cfg(feature = "std")]
 		let block_time = block_timer.elapsed().as_micros();
-		CurrentBlock::<T>::put(block.clone());
-		CurrentReceipts::<T>::put(receipts.clone());
-		CurrentTransactionStatuses::<T>::put(statuses.clone());
+		CurrentBlock::<T>::insert(&block_number, block.clone());
+		CurrentReceipts::<T>::insert(&block_number, receipts.clone());
+		CurrentTransactionStatuses::<T>::insert(&block_number, statuses.clone());
 		BlockHash::<T>::insert(block_number, block.header.hash());
 
 		match post_log {
@@ -766,8 +766,8 @@ impl<T: Config> Pallet<T> {
 	}
 
 	/// Get current block hash
-	pub fn current_block_hash() -> Option<H256> {
-		<CurrentBlock<T>>::get().map(|block| block.header.hash())
+	pub fn current_block_hash(number: &U256) -> Option<H256> {
+		<CurrentBlock<T>>::get(number).map(|block| block.header.hash())
 	}
 
 	/// Execute an Ethereum transaction.

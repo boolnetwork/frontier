@@ -23,6 +23,7 @@ use serde::Deserialize;
 // Substrate
 use sp_api::ProvideRuntimeApi;
 use sp_blockchain::HeaderBackend;
+use sp_runtime::SaturatedConversion;
 use sp_runtime::traits::Block as BlockT;
 // Frontier
 use fp_rpc::EthereumRuntimeRPCApi;
@@ -83,10 +84,15 @@ where
 						.block_hash(ethereum_block_hash)?
 						.is_none()
 					{
+						let substrate_block_num = self
+							.client
+							.number(*substrate_block_hash)
+							.map_err(|e| format!("{:?}", e))?
+							.ok_or(format!("substrate block hash: {substrate_block_hash:?} query block number return none"))?;
 						let existing_transaction_hashes: Vec<H256> = if let Some(statuses) = self
 							.client
 							.runtime_api()
-							.current_transaction_statuses(*substrate_block_hash)
+							.current_transaction_statuses(*substrate_block_hash, substrate_block_num.saturated_into::<u128>().into())
 							.map_err(|e| format!("{:?}", e))?
 						{
 							statuses
@@ -141,10 +147,15 @@ where
 						.block_hash(ethereum_block_hash)?
 						.is_some()
 					{
+						let substrate_block_num = self
+							.client
+							.number(*substrate_block_hash)
+							.map_err(|e| format!("{:?}", e))?
+							.ok_or(format!("substrate block hash: {substrate_block_hash:?} query block number return none"))?;
 						let existing_transaction_hashes: Vec<H256> = if let Some(statuses) = self
 							.client
 							.runtime_api()
-							.current_transaction_statuses(*substrate_block_hash)
+							.current_transaction_statuses(*substrate_block_hash, substrate_block_num.saturated_into::<u128>().into())
 							.map_err(|e| format!("{:?}", e))?
 						{
 							statuses

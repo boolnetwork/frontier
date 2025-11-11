@@ -25,7 +25,7 @@ use scale_codec::{Decode, Encode};
 // Substrate
 use sc_client_api::backend::{Backend, StorageProvider};
 use sc_transaction_pool::{ChainApi, RCGroup};
-use sp_api::{ApiExt, CallApiAt, CallApiAtParams, ProvideRuntimeApi, StorageTransactionCache};
+use sp_api::{ApiExt, BlockId, CallApiAt, CallApiAtParams, ProvideRuntimeApi, StorageTransactionCache};
 use sp_block_builder::BlockBuilder as BlockBuilderApi;
 use sp_blockchain::HeaderBackend;
 use sp_core::ExecutionContext;
@@ -103,7 +103,7 @@ where
 			)
 		};
 
-		let (substrate_hash, api) = match frontier_backend_client::native_block_id::<B, C>(
+		let (substrate_hash, substrate_block_num, api) = match frontier_backend_client::native_block_id::<B, C>(
 			self.client.as_ref(),
 			self.backend.as_ref(),
 			number,
@@ -115,13 +115,21 @@ where
 					.client
 					.expect_block_hash_from_id(&id)
 					.map_err(|_| crate::err(JSON_RPC_ERROR_DEFAULT, "header not found", None))?;
-				(hash, self.client.runtime_api())
+				let num = match id {
+					BlockId::Hash(hash) => {
+						self.client.number(hash).map_err(|e| crate::err(JSON_RPC_ERROR_DEFAULT, e.to_string(), None))?
+							.ok_or(crate::err(JSON_RPC_ERROR_DEFAULT, "Block number not found", None))?
+					},
+					BlockId::Number(num) => num,
+				};
+				(hash, num, self.client.runtime_api())
 			}
 			None => {
 				// Not mapped in the db, assume pending.
 				let hash = self.client.info().best_hash;
+				let num = self.client.info().best_number;
 				let api = pending_runtime_api(self.client.as_ref(), self.graph.as_ref())?;
-				(hash, api)
+				(hash, num, api)
 			}
 		};
 
@@ -134,7 +142,7 @@ where
 		};
 
 		let block = if api_version > 1 {
-			api.current_block(substrate_hash)
+			api.current_block(substrate_hash, substrate_block_num.saturated_into::<u128>().into())
 				.map_err(|err| internal_err(format!("runtime error: {:?}", err)))?
 		} else {
 			#[allow(deprecated)]

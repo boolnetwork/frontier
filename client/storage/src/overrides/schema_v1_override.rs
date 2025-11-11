@@ -19,17 +19,18 @@
 use std::{marker::PhantomData, sync::Arc};
 
 use ethereum_types::{H160, H256, U256};
-use scale_codec::Decode;
+use scale_codec::{Decode, Encode};
 // Substrate
 use sc_client_api::backend::{Backend, StorageProvider};
 use sp_blockchain::HeaderBackend;
 use sp_runtime::{traits::Block as BlockT, Permill};
+use sp_runtime::SaturatedConversion;
 use sp_storage::StorageKey;
 // Frontier
 use fp_rpc::TransactionStatus;
 use fp_storage::*;
 
-use super::{blake2_128_extend, storage_prefix_build, StorageOverride};
+use super::{blake2_128_extend, storage_prefix_build, storage_map_prefix_build, StorageOverride};
 
 /// An override for runtimes that use Schema V1
 pub struct SchemaV1Override<B: BlockT, C, BE> {
@@ -89,11 +90,13 @@ where
 
 	/// Return the current block.
 	fn current_block(&self, block_hash: B::Hash) -> Option<ethereum::BlockV2> {
+		let block_num = self.client.number(block_hash).ok()??;
 		self.query_storage::<ethereum::BlockV0>(
 			block_hash,
-			&StorageKey(storage_prefix_build(
+			&StorageKey(storage_map_prefix_build(
 				PALLET_ETHEREUM,
 				ETHEREUM_CURRENT_BLOCK,
+				U256::from(block_num.saturated_into::<u128>()).encode().as_slice(),
 			)),
 		)
 		.map(Into::into)
@@ -101,11 +104,13 @@ where
 
 	/// Return the current receipt.
 	fn current_receipts(&self, block_hash: B::Hash) -> Option<Vec<ethereum::ReceiptV3>> {
+		let block_num = self.client.number(block_hash).ok()??;
 		self.query_storage::<Vec<ethereum::ReceiptV0>>(
 			block_hash,
-			&StorageKey(storage_prefix_build(
+			&StorageKey(storage_map_prefix_build(
 				PALLET_ETHEREUM,
 				ETHEREUM_CURRENT_RECEIPTS,
+				U256::from(block_num.saturated_into::<u128>()).encode().as_slice(),
 			)),
 		)
 		.map(|receipts| {
@@ -125,11 +130,13 @@ where
 
 	/// Return the current transaction status.
 	fn current_transaction_statuses(&self, block_hash: B::Hash) -> Option<Vec<TransactionStatus>> {
+		let block_num = self.client.number(block_hash).ok()??;
 		self.query_storage::<Vec<TransactionStatus>>(
 			block_hash,
-			&StorageKey(storage_prefix_build(
+			&StorageKey(storage_map_prefix_build(
 				PALLET_ETHEREUM,
 				ETHEREUM_CURRENT_TRANSACTION_STATUS,
+				U256::from(block_num.saturated_into::<u128>()).encode().as_slice(),
 			)),
 		)
 	}

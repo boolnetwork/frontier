@@ -197,14 +197,14 @@ sp_api::decl_runtime_apis! {
 		#[changed_in(2)]
 		fn current_block() -> Option<ethereum::BlockV0>;
 		/// Return the current block.
-		fn current_block() -> Option<ethereum::BlockV2>;
+		fn current_block(block_number: U256) -> Option<ethereum::BlockV2>;
 		/// Return the current receipt.
 		#[changed_in(4)]
 		fn current_receipts() -> Option<Vec<ethereum::ReceiptV0>>;
 		/// Return the current receipt.
-		fn current_receipts() -> Option<Vec<ethereum::ReceiptV3>>;
+		fn current_receipts(block_number: U256) -> Option<Vec<ethereum::ReceiptV3>>;
 		/// Return the current transaction status.
-		fn current_transaction_statuses() -> Option<Vec<TransactionStatus>>;
+		fn current_transaction_statuses(block_number: U256) -> Option<Vec<TransactionStatus>>;
 		/// Return all the current data for a block in a single runtime call. Legacy.
 		#[changed_in(2)]
 		fn current_all() -> (
@@ -219,7 +219,7 @@ sp_api::decl_runtime_apis! {
 			Option<Vec<ethereum::ReceiptV0>>,
 			Option<Vec<TransactionStatus>>
 		);
-		fn current_all() -> (
+		fn current_all(block_number: U256) -> (
 			Option<ethereum::BlockV2>,
 			Option<Vec<ethereum::ReceiptV3>>,
 			Option<Vec<TransactionStatus>>

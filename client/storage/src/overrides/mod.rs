@@ -22,8 +22,9 @@ use ethereum::BlockV2 as EthereumBlock;
 use ethereum_types::{H160, H256, U256};
 // Substrate
 use sp_api::{ApiExt, ProvideRuntimeApi};
+use sp_blockchain::HeaderBackend;
 use sp_io::hashing::{blake2_128, twox_128};
-use sp_runtime::{traits::Block as BlockT, Permill};
+use sp_runtime::{traits::Block as BlockT, Permill, SaturatedConversion};
 // Frontier
 use fp_rpc::{EthereumRuntimeRPCApi, TransactionStatus};
 use fp_storage::EthereumStorageSchema;
@@ -70,6 +71,13 @@ pub trait StorageOverride<Block: BlockT>: Send + Sync {
 fn storage_prefix_build(module: &[u8], storage: &[u8]) -> Vec<u8> {
 	[twox_128(module), twox_128(storage)].concat().to_vec()
 }
+// 2013754dd003840aea66b349f8241e25c8c156f8164e0465c74b8972ea68b4b3 cda7b154ae2c3eaced86ab0027c3683d
+
+// 2013754dd003840aea66b349f8241e25c8c156f8164e0465c74b8972ea68b4b3 b08361f2bb8322e27e61a4b8afa675fa
+fn storage_map_prefix_build(module: &[u8], storage: &[u8], encode_key: &[u8]) -> Vec<u8> {
+	[twox_128(module), twox_128(storage), twox_128(encode_key)].concat().to_vec()
+}
+
 
 fn blake2_128_extend(bytes: &[u8]) -> Vec<u8> {
 	let mut ext: Vec<u8> = blake2_128(bytes).to_vec();
@@ -96,7 +104,7 @@ impl<B: BlockT, C> RuntimeApiStorageOverride<B, C> {
 impl<Block, C> StorageOverride<Block> for RuntimeApiStorageOverride<Block, C>
 where
 	Block: BlockT,
-	C: ProvideRuntimeApi<Block> + Send + Sync,
+	C: ProvideRuntimeApi<Block> + Send + Sync + HeaderBackend<Block>,
 	C::Api: EthereumRuntimeRPCApi<Block>,
 {
 	/// For a given account address, returns pallet_evm::AccountCodes.
@@ -118,6 +126,7 @@ where
 	/// Return the current block.
 	fn current_block(&self, block_hash: Block::Hash) -> Option<ethereum::BlockV2> {
 		let api = self.client.runtime_api();
+		log::warn!("StorageOverride: call current_block");
 
 		let api_version = if let Ok(Some(api_version)) =
 			api.api_version::<dyn EthereumRuntimeRPCApi<Block>>(block_hash)
@@ -126,12 +135,20 @@ where
 		} else {
 			return None;
 		};
+		log::warn!("api_version: {api_version}");
+
 		if api_version == 1 {
 			#[allow(deprecated)]
 			let old_block = api.current_block_before_version_2(block_hash).ok()?;
 			old_block.map(|block| block.into())
 		} else {
-			api.current_block(block_hash).ok()?
+			log::warn!("StorageOverride: current_block: block_hash {block_hash:?}");
+			let number = self.client.number(block_hash).ok()??;
+			log::warn!("StorageOverride: current_block: number {number:?}");
+			let res = api.current_block(block_hash, number.saturated_into::<u128>().into()).ok()?;
+			log::warn!("StorageOverride: current_block: res:{res:?}");
+
+			res
 		}
 	}
 
@@ -163,9 +180,10 @@ where
 					.collect()
 			})
 		} else {
+			let number = self.client.number(block_hash).ok()??;
 			self.client
 				.runtime_api()
-				.current_receipts(block_hash)
+				.current_receipts(block_hash, number.saturated_into::<u128>().into())
 				.ok()?
 		}
 	}
@@ -175,9 +193,10 @@ where
 		&self,
 		block_hash: Block::Hash,
 	) -> Option<Vec<TransactionStatus>> {
+		let number = self.client.number(block_hash).ok()??;
 		self.client
 			.runtime_api()
-			.current_transaction_statuses(block_hash)
+			.current_transaction_statuses(block_hash, number.saturated_into::<u128>().into())
 			.ok()?
 	}
 

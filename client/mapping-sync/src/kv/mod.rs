@@ -29,6 +29,7 @@ use sc_client_api::backend::{Backend, StorageProvider};
 use sp_api::{ApiExt, ProvideRuntimeApi};
 use sp_blockchain::{Backend as _, HeaderBackend};
 use sp_consensus::SyncOracle;
+use sp_runtime::SaturatedConversion;
 use sp_runtime::traits::{Block as BlockT, Header as HeaderT, Zero};
 // Frontier
 use fc_storage::OverrideHandle;
@@ -128,7 +129,7 @@ where
 		let block = if api_version > 1 {
 			client
 				.runtime_api()
-				.current_block(substrate_block_hash)
+				.current_block(substrate_block_hash, (*header.number()).saturated_into::<u128>().into())
 				.map_err(|e| format!("{:?}", e))?
 		} else {
 			#[allow(deprecated)]

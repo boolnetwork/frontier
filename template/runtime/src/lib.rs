@@ -28,6 +28,8 @@ use sp_runtime::{
 };
 use sp_std::{marker::PhantomData, prelude::*};
 use sp_version::RuntimeVersion;
+use sp_runtime::SaturatedConversion;
+
 // Substrate FRAME
 #[cfg(feature = "with-paritydb-weights")]
 use frame_support::weights::constants::ParityDbWeight as RuntimeDbWeight;
@@ -609,7 +611,9 @@ impl_runtime_apis! {
 		fn apply_extrinsic(extrinsic: <Block as BlockT>::Extrinsic) -> ApplyExtrinsicResult {
 			Executive::apply_extrinsic(extrinsic)
 		}
-
+		fn apply_extrinsics(extrinsics: Vec<<Block as BlockT>::Extrinsic>, timeout: u128) -> sp_std::vec::Vec<ApplyExtrinsicResult> {
+			Executive::apply_extrinsics(extrinsics, timeout, None)
+		}
 		fn finalize_block() -> <Block as BlockT>::Header {
 			Executive::finalize_block()
 		}
@@ -633,6 +637,13 @@ impl_runtime_apis! {
 			block_hash: <Block as BlockT>::Hash,
 		) -> TransactionValidity {
 			Executive::validate_transaction(source, tx, block_hash)
+		}
+
+		fn validate_transactions(
+			txs: Vec<(TransactionSource, <Block as BlockT>::Extrinsic)>,
+			block_hash: <Block as BlockT>::Hash,
+		) -> Vec<TransactionValidity> {
+			Executive::validate_transactions(txs, block_hash)
 		}
 	}
 
@@ -841,27 +852,27 @@ impl_runtime_apis! {
 			).map_err(|err| err.error.into())
 		}
 
-		fn current_transaction_statuses() -> Option<Vec<TransactionStatus>> {
-			pallet_ethereum::CurrentTransactionStatuses::<Runtime>::get()
+		fn current_transaction_statuses(block_number: U256) -> Option<Vec<TransactionStatus>> {
+			Some(pallet_ethereum::CurrentTransactionStatuses::<Runtime>::get(&block_number))
 		}
 
-		fn current_block() -> Option<pallet_ethereum::Block> {
-			pallet_ethereum::CurrentBlock::<Runtime>::get()
+		fn current_block(block_number: U256) -> Option<pallet_ethereum::Block> {
+			pallet_ethereum::CurrentBlock::<Runtime>::get(&block_number)
 		}
 
-		fn current_receipts() -> Option<Vec<pallet_ethereum::Receipt>> {
-			pallet_ethereum::CurrentReceipts::<Runtime>::get()
+		fn current_receipts(block_number: U256) -> Option<Vec<pallet_ethereum::Receipt>> {
+			Some(pallet_ethereum::CurrentReceipts::<Runtime>::get(&block_number))
 		}
 
-		fn current_all() -> (
+		fn current_all(block_number: U256) -> (
 			Option<pallet_ethereum::Block>,
 			Option<Vec<pallet_ethereum::Receipt>>,
 			Option<Vec<TransactionStatus>>
 		) {
 			(
-				pallet_ethereum::CurrentBlock::<Runtime>::get(),
-				pallet_ethereum::CurrentReceipts::<Runtime>::get(),
-				pallet_ethereum::CurrentTransactionStatuses::<Runtime>::get()
+				pallet_ethereum::CurrentBlock::<Runtime>::get(&block_number),
+				Some(pallet_ethereum::CurrentReceipts::<Runtime>::get(&block_number)),
+				Some(pallet_ethereum::CurrentTransactionStatuses::<Runtime>::get(&block_number))
 			)
 		}
 
@@ -886,12 +897,12 @@ impl_runtime_apis! {
 			for ext in xts.into_iter() {
 				let _ = Executive::apply_extrinsic(ext);
 			}
-
-			Ethereum::on_finalize(System::block_number() + 1);
+			let block_number = System::block_number() + 1;
+			Ethereum::on_finalize(block_number);
 
 			(
-				pallet_ethereum::CurrentBlock::<Runtime>::get(),
-				pallet_ethereum::CurrentTransactionStatuses::<Runtime>::get()
+				pallet_ethereum::CurrentBlock::<Runtime>::get::<U256>(block_number.saturated_into::<u128>().into()),
+				Some(pallet_ethereum::CurrentTransactionStatuses::<Runtime>::get::<U256>(block_number.saturated_into::<u128>().into()))
 			)
 		}
 	}

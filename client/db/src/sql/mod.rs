@@ -229,7 +229,7 @@ where
 				// Read from the runtime and store the block metadata.
 				let ethereum_block = client
 					.runtime_api()
-					.current_block(substrate_genesis_hash)
+					.current_block(substrate_genesis_hash, Default::default())
 					.expect("runtime api reachable")
 					.expect("ethereum genesis block");
 

@@ -376,7 +376,7 @@ where
 						}
 					}
 				};
-
+				log::warn!("");
 				let status = statuses[index].clone();
 				let mut cumulative_receipts = receipts;
 				cumulative_receipts.truncate((status.transaction_index + 1) as usize);

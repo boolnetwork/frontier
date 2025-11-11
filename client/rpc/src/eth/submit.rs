@@ -27,7 +27,7 @@ use sp_api::{ApiExt, ProvideRuntimeApi};
 use sp_block_builder::BlockBuilder as BlockBuilderApi;
 use sp_blockchain::HeaderBackend;
 use sp_runtime::{
-	generic::BlockId, traits::Block as BlockT, transaction_validity::TransactionSource,
+	generic::BlockId, traits::Block as BlockT, transaction_validity::TransactionSource, SaturatedConversion,
 };
 // Frontier
 use fc_rpc_core::types::*;
@@ -81,12 +81,13 @@ where
 		};
 
 		let hash = self.client.info().best_hash;
+		let number = self.client.info().best_number;
 
 		let gas_price = request.gas_price;
 		let gas_limit = match request.gas {
 			Some(gas_limit) => gas_limit,
 			None => {
-				let block = self.client.runtime_api().current_block(hash);
+				let block = self.client.runtime_api().current_block(hash, number.saturated_into::<u128>().into());
 				if let Ok(Some(block)) = block {
 					block.header.gas_limit
 				} else {

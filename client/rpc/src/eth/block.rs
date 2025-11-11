@@ -128,7 +128,7 @@ where
 				let statuses = block_data_cache
 					.current_transaction_statuses(schema, substrate_hash)
 					.await;
-
+				log::warn!("block_by_number: substrate_hash: {substrate_hash:?}, block: {block:?}, statuses: {statuses:?}");
 				let base_fee = client.runtime_api().gas_price(substrate_hash).ok();
 
 				match (block, statuses) {
@@ -187,6 +187,7 @@ where
 					.map_err(|_| internal_err(format!("Runtime access error at {}", best_hash)))?;
 
 				let base_fee = api.gas_price(best_hash).ok();
+				log::warn!("block_by_number: best_hash: {best_hash:?}, block: {block:?}, statuses: {statuses:?}");
 
 				match (block, statuses) {
 					(Some(block), Some(statuses)) => Ok(Some(rich_block_build(
@@ -200,7 +201,10 @@ where
 					_ => Ok(None),
 				}
 			}
-			None => Ok(None),
+			None => {
+				log::warn!("block_by_number: none");
+				Ok(None)
+			},
 		}
 	}
 

@@ -14,6 +14,7 @@ targets = ["x86_64-unknown-linux-gnu"]
 ethereum = { workspace = true, features = ["with-codec"] }
 ethereum-types = { workspace = true }
 scale-codec = { package = "parity-scale-codec", workspace = true }
+log = { workspace = true }
 
 # Substrate
 sc-client-api = { workspace = true }
