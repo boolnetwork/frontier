@@ -67,6 +67,7 @@ where
 		let schema = fc_storage::onchain_storage_schema(client.as_ref(), substrate_hash);
 
 		let block = block_data_cache.current_block(schema, substrate_hash).await;
+		log::warn!("********block_by_hash: block: {block:?}");
 		let statuses = block_data_cache
 			.current_transaction_statuses(schema, substrate_hash)
 			.await;

@@ -414,6 +414,7 @@ impl<T: Config> Pallet<T> {
 		let tx_timer = std::time::Instant::now();
 		let pending_transactions = Pending::<T>::take();
 		let mut transactions = Vec::with_capacity(pending_transactions.len());
+		log::info!("store_block: transactions: {pending_transactions:?}");
 		let mut statuses = Vec::with_capacity(pending_transactions.len());
 		let mut receipts = Vec::with_capacity(pending_transactions.len());
 		let mut logs_bloom = Bloom::default();
