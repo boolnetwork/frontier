@@ -292,58 +292,7 @@ where
 						.map(EthSubscriptionResult::new_heads);
 					sink.pipe_from_stream(stream).await;
 				}
-				Kind::NewPendingTransactions => {
-					use sc_transaction_pool_api::InPoolTransaction;
-
-					let stream = pool
-						.import_notification_stream()
-						.filter_map(move |txhash| {
-							if let Some(xt) = pool.ready_transaction(&txhash) {
-								let best_block = client.info().best_hash;
-
-								let api = client.runtime_api();
-
-								let api_version = if let Ok(Some(api_version)) =
-									api.api_version::<dyn EthereumRuntimeRPCApi<B>>(best_block)
-								{
-									api_version
-								} else {
-									return futures::future::ready(None);
-								};
-
-								let xts = vec![xt.data().clone()];
-
-								let txs: Option<Vec<EthereumTransaction>> = if api_version > 1 {
-									api.extrinsic_filter(best_block, xts).ok()
-								} else {
-									#[allow(deprecated)]
-									if let Ok(legacy) =
-										api.extrinsic_filter_before_version_2(best_block, xts)
-									{
-										Some(legacy.into_iter().map(|tx| tx.into()).collect())
-									} else {
-										None
-									}
-								};
-
-								let res = match txs {
-									Some(txs) => {
-										if txs.len() == 1 {
-											Some(txs[0].clone())
-										} else {
-											None
-										}
-									}
-									_ => None,
-								};
-								futures::future::ready(res)
-							} else {
-								futures::future::ready(None)
-							}
-						})
-						.map(|transaction| PubSubResult::TransactionHash(transaction.hash()));
-					sink.pipe_from_stream(stream).await;
-				}
+				Kind::NewPendingTransactions => {}
 				Kind::Syncing => {
 					let client = Arc::clone(&client);
 					let sync = Arc::clone(&sync);
